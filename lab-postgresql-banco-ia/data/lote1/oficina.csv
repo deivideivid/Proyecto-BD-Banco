@@ -1,0 +1,88 @@
+oficina_id,codigo,nombre,municipio_codigo
+1,OF0001,"Oficina Bogotá, D.C. Centro",11001
+2,OF0002,"Oficina Bogotá, D.C. Norte",11001
+3,OF0003,"Oficina Bogotá, D.C. Sur",11001
+4,OF0004,"Oficina Bogotá, D.C. Oriente",11001
+5,OF0005,"Oficina Bogotá, D.C. Occidente",11001
+6,OF0006,"Oficina Bogotá, D.C. Principal",11001
+7,OF0007,"Oficina Bogotá, D.C. Plaza Mayor",11001
+8,OF0008,"Oficina Bogotá, D.C. Avenida Principal",11001
+9,OF0009,"Oficina Bogotá, D.C. Terminal",11001
+10,OF0010,"Oficina Bogotá, D.C. Aeropuerto",11001
+11,OF0011,"Oficina Bogotá, D.C. Zona Industrial",11001
+12,OF0012,"Oficina Bogotá, D.C. Universidad",11001
+13,OF0013,"Oficina Bogotá, D.C. Parque Central",11001
+14,OF0014,"Oficina Bogotá, D.C. Estadio",11001
+15,OF0015,"Oficina Bogotá, D.C. Zona Franca",11001
+16,OF0016,"Oficina Bogotá, D.C. Mercado",11001
+17,OF0017,"Oficina Bogotá, D.C. Salitre",11001
+18,OF0018,"Oficina Bogotá, D.C. Cedritos",11001
+19,OF0019,"Oficina Bogotá, D.C. Chapinero",11001
+20,OF0020,"Oficina Bogotá, D.C. Usaquén",11001
+21,OF0021,Oficina Medellín Centro,05001
+22,OF0022,Oficina Medellín Norte,05001
+23,OF0023,Oficina Medellín Sur,05001
+24,OF0024,Oficina Medellín Oriente,05001
+25,OF0025,Oficina Medellín Occidente,05001
+26,OF0026,Oficina Medellín Principal,05001
+27,OF0027,Oficina Bello,05088
+28,OF0028,Oficina Itagüí,05360
+29,OF0029,Oficina Envigado,05266
+30,OF0030,Oficina Rionegro,05615
+31,OF0031,Oficina Santiago de Cali Centro,76001
+32,OF0032,Oficina Santiago de Cali Norte,76001
+33,OF0033,Oficina Santiago de Cali Sur,76001
+34,OF0034,Oficina Santiago de Cali Oriente,76001
+35,OF0035,Oficina Santiago de Cali Occidente,76001
+36,OF0036,Oficina Santiago de Cali Principal,76001
+37,OF0037,Oficina Palmira,76520
+38,OF0038,Oficina Buenaventura,76109
+39,OF0039,Oficina Tuluá,76834
+40,OF0040,Oficina Barranquilla Centro,08001
+41,OF0041,Oficina Barranquilla Norte,08001
+42,OF0042,Oficina Barranquilla Sur,08001
+43,OF0043,Oficina Soledad Centro,08758
+44,OF0044,Oficina Soledad Norte,08758
+45,OF0045,Oficina Cartagena de Indias Centro,13001
+46,OF0046,Oficina Cartagena de Indias Norte,13001
+47,OF0047,Oficina Cartagena de Indias Sur,13001
+48,OF0048,Oficina Magangué,13430
+49,OF0049,Oficina San José de Cúcuta Centro,54001
+50,OF0050,Oficina San José de Cúcuta Norte,54001
+51,OF0051,Oficina Bucaramanga Centro,68001
+52,OF0052,Oficina Bucaramanga Norte,68001
+53,OF0053,Oficina Floridablanca,68276
+54,OF0054,Oficina Ibagué,73001
+55,OF0055,Oficina Villavicencio,50001
+56,OF0056,Oficina Santa Marta,47001
+57,OF0057,Oficina Valledupar,20001
+58,OF0058,Oficina Montería,23001
+59,OF0059,Oficina Pereira,66001
+60,OF0060,Oficina Dosquebradas,66170
+61,OF0061,Oficina Manizales,17001
+62,OF0062,Oficina Villamaría,17873
+63,OF0063,Oficina Chinchiná,17174
+64,OF0064,Oficina La Dorada,17380
+65,OF0065,Oficina Pasto,52001
+66,OF0066,Oficina Neiva,41001
+67,OF0067,Oficina Popayán,19001
+68,OF0068,Oficina Armenia,63001
+69,OF0069,Oficina Sincelejo,70001
+70,OF0070,Oficina Riohacha,44001
+71,OF0071,Oficina Tunja,15001
+72,OF0072,Oficina Duitama,15238
+73,OF0073,Oficina Sogamoso,15759
+74,OF0074,Oficina Florencia,18001
+75,OF0075,Oficina Yopal,85001
+76,OF0076,Oficina Chía,25175
+77,OF0077,Oficina Facatativá,25269
+78,OF0078,Oficina Cajicá,25126
+79,OF0079,Oficina Quibdó,27001
+80,OF0080,Oficina Arauca,81001
+81,OF0081,Oficina San José del Guaviare,95001
+82,OF0082,Oficina Mocoa,86001
+83,OF0083,Oficina San Andrés,88001
+84,OF0084,Oficina Leticia,91001
+85,OF0085,Oficina Inírida,94001
+86,OF0086,Oficina Mitú,97001
+87,OF0087,Oficina Puerto Carreño,99001

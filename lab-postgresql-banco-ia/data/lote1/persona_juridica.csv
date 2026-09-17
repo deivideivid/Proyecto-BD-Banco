@@ -1,0 +1,1501 @@
+cliente_id,razon_social,fecha_constitucion,actividad_economica
+4,Comercializadora Pérez y Zambrano S.A.S.,2010-11-04,4923
+5,Velásquez Consultores S.A.S.,1999-03-12,4711
+6,Inversiones Caro S.A.S.,2012-09-21,4923
+9,Comercializadora Mosquera y Mora S.A.S.,1985-12-31,4111
+14,Inversiones Mosquera S.A.S.,1998-05-11,7020
+24,Villamizar Alimentos S.A.S.,1986-12-07,4711
+29,Inversiones Becerra S.A.S.,1993-04-12,6201
+35,Inversiones Mendoza S.A.S.,2001-05-04,7020
+49,Inversiones Ramírez S.A.S.,1988-11-22,7020
+50,Marín Logística S.A.S.,2003-11-14,4923
+76,Comercializadora Duque y Rentería S.A.S.,1991-06-21,5611
+79,Comercializadora Carmona y Erazo S.A.S.,2002-04-05,6201
+80,Valderrama Transportes Ltda.,2012-06-04,6201
+83,Hernández Ingeniería S.A.,2010-04-28,4520
+85,Inversiones González S.A.S.,1986-03-29,4111
+90,Inversiones Valencia S.A.,2006-08-04,8621
+93,Comercializadora Leal y Durán Ltda.,1990-01-21,1081
+97,Comercializadora González y Zapata S.A.S.,2006-01-05,4711
+115,Comercializadora Arias y Castrillón S.A.S.,1997-10-25,8621
+116,Montoya Transportes Ltda.,2004-04-02,4520
+118,Comercializadora Cardozo y Martínez S.A.S.,2007-12-14,4111
+123,Inversiones Molina S.A.S.,2004-10-10,1081
+136,Comercializadora Rincón y Beltrán S.A.S.,1992-06-11,4111
+139,Comercializadora Nieto y Mendoza S.A.S.,2009-07-27,5611
+152,Inversiones López S.A.S.,2009-10-25,1081
+166,Inversiones Ruiz Ltda.,1992-08-18,4111
+167,Comercializadora Pineda y Díaz Ltda.,1995-08-25,7020
+170,Zuluaga Transportes S.A.S.,2000-06-22,4111
+171,Inversiones Escobar S.A.,2001-08-03,4520
+191,Buitrago Construcciones S.A.,2010-03-06,6201
+195,Henao Alimentos S.A.S.,1990-07-04,7020
+203,Comercializadora Pulido y Cantillo S.A.S.,2011-10-16,6920
+209,Inversiones Alfonso S.A.,2004-04-12,8621
+212,Rojas Consultores S.A.,1994-09-02,8621
+221,Comercializadora Barrios y Rojas S.A.S.,1997-11-26,1081
+234,Vega Transportes S.A.S.,2014-05-25,4111
+235,Comercializadora Rincón y Guerrero S.A.S.,1996-07-06,8621
+236,Comercializadora Muñoz y Gutiérrez S.A.S.,1997-06-27,7020
+241,Comercializadora García y Cano S.A.S.,2009-08-27,4111
+252,Comercializadora González y Martínez S.A.S.,1995-01-24,4520
+255,Inversiones Sánchez S.A.S.,1989-01-10,4923
+259,Comercializadora Rodríguez y López S.A.S.,1994-10-15,4111
+274,Inversiones Reyes S.A.,2002-12-28,6201
+286,Inversiones Vásquez S.A.S.,1996-11-12,4923
+287,Villegas Logística S.A.S.,2014-04-17,1081
+295,Inversiones Hernández S.A.S.,1994-03-31,8621
+312,Inversiones Morales S.A.S.,2011-06-20,4111
+318,Comercializadora Silva y Yepes S.A.S.,1996-01-01,4111
+330,Espitia Alimentos S.A.S.,2014-05-05,7020
+336,Caicedo Logística Ltda.,1995-08-28,6920
+346,Ocampo Soluciones S.A.S.,1991-05-28,4923
+347,Carvajal Distribuciones S.A.S.,2009-03-05,6920
+348,Comercializadora Sandoval y Pérez S.A.,1999-02-15,7020
+350,Mosquera Alimentos S.A.,2007-08-04,8621
+353,Pedraza Tecnología S.A.S.,2011-10-04,1081
+356,Cardona Soluciones S.A.S.,2015-01-10,8621
+361,Comercializadora Muñoz y Rojas S.A.S.,2003-09-25,1081
+362,Inversiones Sierra S.A.S.,1986-08-15,1081
+363,Comercializadora Rincón y Cruz S.A.S.,2006-05-19,8621
+368,Gutiérrez Logística Ltda.,1996-12-30,4923
+372,Martínez Tecnología S.A.S.,2015-08-02,1081
+381,Betancur Consultores S.A.,2008-02-02,6201
+382,Comercializadora Mejía y Vargas S.A.S.,2007-04-01,4111
+390,Comercializadora Hurtado y Duarte S.A.S.,2013-07-30,6920
+393,Beltrán Distribuciones S.A.S.,2001-04-03,4520
+396,Inversiones Triana S.A.S.,2012-09-28,6201
+399,Comercializadora Valderrama y Ayala S.A.S.,2007-09-11,4711
+402,Comercializadora López y Ordóñez S.A.S.,2000-07-15,7020
+406,Martínez Tecnología S.A.S.,2003-08-27,1081
+431,Rodríguez Logística S.A.S.,2004-07-25,4711
+441,Sánchez Servicios Médicos S.A.S.,2006-08-05,4923
+442,Comercializadora Méndez y Lara S.A.,1998-05-10,5611
+459,Comercializadora Agudelo y Bonilla S.A.S.,1994-07-29,4520
+460,Ariza Soluciones S.A.S.,1992-09-25,6920
+461,Comercializadora Polo y Jiménez S.A.S.,2006-08-19,6920
+465,Comercializadora Vargas y Salgado S.A.,2003-06-15,4923
+467,Beltrán Transportes S.A.S.,1991-05-09,1081
+482,Inversiones Rodríguez S.A.S.,1994-02-28,4520
+507,Comercializadora Vera y Sepúlveda S.A.,2001-12-13,1081
+518,Méndez Consultores S.A.S.,1993-07-23,7020
+530,Comercializadora Gómez y García Ltda.,1999-06-29,4111
+539,Vélez Logística S.A.S.,2007-10-30,7020
+557,Inversiones Nieto S.A.S.,1993-02-18,5611
+562,Inversiones Castro S.A.S.,1994-03-18,7020
+574,Inversiones Hurtado S.A.S.,2005-06-29,8621
+603,Comercializadora Rodríguez y Trujillo Ltda.,2011-12-22,5611
+609,Comercializadora Mosquera y Rincón S.A.S.,2003-04-10,4520
+610,Lozano Tecnología S.A.S.,1995-05-31,4923
+624,Inversiones Rojas S.A.S.,1987-06-27,4711
+639,Comercializadora Pinzón y Hernández S.A.S.,1995-05-08,4923
+645,Inversiones Rodríguez S.A.S.,1987-07-26,4520
+650,Córdoba Construcciones S.A.,2000-08-14,8621
+657,Comercializadora Martínez y Sánchez S.A.S.,1993-06-01,6920
+669,Fernández Servicios Médicos S.A.S.,1991-11-16,6920
+676,Inversiones Uribe S.A.S.,2006-06-06,6201
+702,Inversiones Suárez S.A.S.,1997-05-15,4111
+704,Comercializadora Díaz y Rendón S.A.S.,1988-11-07,4111
+711,Valencia Ingeniería S.A.S.,1989-12-23,4711
+715,Inversiones González S.A.S.,1988-08-01,6201
+725,Orozco Tecnología S.A.S.,1990-12-13,6201
+726,Comercializadora Angulo y Velasco Ltda.,1992-09-09,8621
+729,Díaz Transportes Ltda.,2008-04-22,4923
+740,Inversiones Hernández S.A.S.,1999-01-06,4711
+743,Inversiones Mantilla S.A.S.,1995-03-17,4711
+746,Correa Ingeniería S.A.S.,2003-06-21,7020
+764,Inversiones Figueroa S.A.S.,1990-02-25,4923
+765,Amaya Consultores S.A.S.,2013-07-28,4111
+770,Sierra Consultores S.A.S.,1996-08-15,4923
+773,Ramos Ingeniería S.A.S.,1996-07-21,7020
+777,Inversiones Pulido Ltda.,2004-09-07,6920
+782,Moreno Consultores S.A.,2015-10-20,4711
+785,Comercializadora Muñoz y Rivera S.A.S.,1997-07-19,6201
+798,Comercializadora Ramírez y Sánchez Ltda.,1994-10-27,5611
+807,Álvarez Logística Ltda.,1995-05-17,4923
+808,Guerrero Logística S.A.S.,1998-05-08,1081
+809,Comercializadora Lozano y Castro S.A.S.,2007-11-08,4923
+816,León Distribuciones S.A.S.,2012-09-11,5611
+833,Inversiones Hernández S.A.S.,2005-09-04,6920
+834,Comercializadora Marín y Mora S.A.S.,2012-06-12,4520
+836,Comercializadora López y Muñoz S.A.S.,2015-11-14,5611
+842,Comercializadora Naranjo y Cruz S.A.S.,2006-08-30,6920
+843,Inversiones Serna S.A.S.,2015-01-13,4520
+877,Cifuentes Logística S.A.S.,2001-03-30,4711
+886,Flórez Alimentos S.A.S.,1996-11-22,4923
+888,Inversiones Álvarez S.A.S.,1987-09-30,7020
+892,Quintero Construcciones S.A.S.,2001-04-23,4923
+916,Inversiones Rojas S.A.S.,2003-08-02,4111
+927,Inversiones Giraldo S.A.S.,2004-05-23,6920
+928,Ortega Soluciones S.A.S.,2015-09-29,4111
+938,Inversiones Castro S.A.S.,2009-07-06,1081
+948,Comercializadora Morales y Bermúdez Ltda.,1994-04-11,5611
+950,Comercializadora Lozano y Valencia S.A.S.,1994-09-26,8621
+964,Comercializadora González y Contreras S.A.S.,2004-05-24,5611
+965,Inversiones Soto S.A.S.,2007-08-02,1081
+987,Inversiones Sánchez S.A.S.,2011-07-02,7020
+991,Comercializadora Durán y Carvajal S.A.,1999-01-18,4111
+1006,Rivera Transportes S.A.,1996-11-13,8621
+1010,Comercializadora Martínez y Ramírez S.A.S.,2008-07-12,6920
+1022,Vásquez Logística S.A.S.,2015-07-17,4520
+1034,Puentes Soluciones S.A.S.,2013-06-03,6920
+1037,Inversiones Narváez S.A.S.,2013-11-23,6201
+1042,Romero Tecnología S.A.S.,2004-05-21,4111
+1047,Inversiones Gallego S.A.S.,1992-05-26,5611
+1049,López Distribuciones Ltda.,2013-05-30,6201
+1052,Comercializadora Rojas y Vallejo S.A.S.,1990-01-04,4711
+1068,Giraldo Logística S.A.S.,1993-12-17,8621
+1077,Inversiones Moreno S.A.S.,2012-04-04,4520
+1085,Comercializadora Vega y Silva S.A.S.,2017-03-05,8621
+1087,Inversiones Calderón S.A.S.,1998-07-27,4520
+1093,Vanegas Tecnología Ltda.,2011-11-20,4711
+1120,Inversiones López S.A.S.,1988-08-05,4923
+1124,Comercializadora Mendoza y Herrera S.A.S.,2011-09-14,4111
+1129,Comercializadora Díaz y Pérez S.A.S.,2008-01-20,4711
+1130,Rodríguez Ingeniería S.A.S.,1988-10-14,5611
+1140,Ortega Transportes S.A.S.,1994-10-11,4711
+1142,Inversiones Castillo S.A.S.,2002-10-20,1081
+1153,Comercializadora Pulido y Pérez S.A.S.,2002-03-31,4923
+1158,Inversiones Rengifo S.A.S.,2000-09-18,8621
+1159,Cruz Transportes S.A.S.,1998-11-19,8621
+1160,Londoño Servicios Médicos S.A.S.,2012-12-19,4711
+1163,Comercializadora Forero y Ortega S.A.S.,2003-12-05,4111
+1164,Comercializadora Castrillón y Murcia S.A.S.,2003-04-16,7020
+1173,Inversiones Palacios S.A.S.,2016-02-04,4111
+1175,León Ingeniería S.A.S.,2011-06-23,6920
+1176,Arias Alimentos S.A.S.,2009-11-22,4923
+1180,Inversiones Correa S.A.S.,1993-01-01,1081
+1183,Inversiones García S.A.,1988-07-07,6920
+1185,Franco Logística S.A.S.,2003-01-31,4111
+1186,Comercializadora Arango y García S.A.S.,1995-06-06,4711
+1190,Comercializadora Torres y López S.A.S.,2012-12-10,8621
+1194,Inversiones Rojas Ltda.,1997-10-13,6920
+1195,Inversiones Arévalo S.A.S.,2008-08-19,6920
+1209,Comercializadora Ruiz y Restrepo S.A.S.,1995-11-04,6201
+1212,Comercializadora López y Jaramillo S.A.S.,2009-07-27,7020
+1238,Inversiones Mora S.A.S.,1989-06-30,4520
+1251,Comercializadora Romero y Bejarano Ltda.,1996-11-19,4520
+1254,Restrepo Ingeniería S.A.S.,2004-11-06,4111
+1255,Inversiones García S.A.S.,2002-12-23,6201
+1264,Castro Consultores Ltda.,2016-11-26,8621
+1283,Comercializadora Solano y Perdomo Ltda.,2016-07-04,4520
+1289,Cruz Logística S.A.S.,2000-07-15,6201
+1293,Rodríguez Alimentos S.A.S.,1994-12-10,7020
+1294,Quiroga Ingeniería S.A.,1990-11-15,7020
+1301,Cardona Distribuciones S.A.S.,1996-08-26,8621
+1307,Sánchez Servicios Médicos Ltda.,1992-05-15,7020
+1321,Alzate Ingeniería S.A.S.,2010-10-04,8621
+1335,Comercializadora Correa y Bonilla S.A.S.,2010-12-14,8621
+1364,Comercializadora Jiménez y Palacios S.A.S.,2004-11-04,5611
+1367,López Logística S.A.,2016-08-01,4520
+1385,Inversiones Osorio S.A.S.,1988-10-25,4711
+1391,Inversiones Herrera S.A.S.,1993-06-06,8621
+1393,Comercializadora Ibarra y Méndez S.A.S.,1991-06-19,4923
+1396,Valencia Consultores S.A.S.,2015-03-09,6920
+1403,Sierra Construcciones S.A.S.,2009-08-21,7020
+1405,Comercializadora Rueda y Bautista S.A.S.,2011-09-06,5611
+1415,Inversiones Granados S.A.S.,2008-04-28,1081
+1417,Castaño Ingeniería S.A.S.,2000-06-19,1081
+1421,Mejía Tecnología S.A.,1999-09-25,4923
+1427,Castañeda Logística S.A.S.,2012-11-25,4520
+1428,Roa Ingeniería S.A.S.,2002-07-25,4520
+1440,Escobar Consultores S.A.S.,2009-07-22,7020
+1447,Inversiones Caicedo S.A.S.,1998-06-07,8621
+1477,Ángel Consultores S.A.S.,2011-09-02,5611
+1483,Inversiones García S.A.S.,2009-08-27,7020
+1486,Parra Transportes Ltda.,2013-07-25,5611
+1508,Comercializadora Pérez y Murillo S.A.,1999-01-11,8621
+1509,Inversiones Alarcón S.A.,2005-10-27,7020
+1513,Comercializadora Narváez y Vélez S.A.S.,2009-03-03,4711
+1514,Daza Servicios Médicos S.A.S.,2011-07-06,7020
+1529,Ospina Transportes S.A.S.,2014-02-10,4923
+1532,Comercializadora Rodríguez y Londoño Ltda.,2001-05-04,5611
+1536,Inversiones Hernández S.A.S.,2015-11-19,4111
+1537,Comercializadora Mosquera y Yepes S.A.S.,2000-03-17,5611
+1543,Comercializadora Obando y Garzón S.A.S.,1991-06-09,8621
+1548,Inversiones Angarita S.A.S.,1999-02-18,4923
+1560,Castro Consultores S.A.S.,2001-04-13,4711
+1563,Inversiones Gómez S.A.S.,2003-12-19,4711
+1573,Comercializadora Ardila y Osorio S.A.S.,2003-07-31,6920
+1575,Comercializadora Castaño y Mosquera S.A.S.,2003-01-22,4111
+1578,Inversiones Palacio S.A.S.,1991-01-02,4520
+1585,Inversiones Forero S.A.S.,2013-02-12,6920
+1589,Inversiones Gallego S.A.S.,1995-01-20,1081
+1600,Campo Logística S.A.S.,2000-05-03,6920
+1605,Comercializadora Cortés y Gómez S.A.S.,1989-10-04,7020
+1607,Bolívar Servicios Médicos S.A.S.,2007-02-04,4111
+1614,Comercializadora Solano y Mercado S.A.S.,2008-03-23,4111
+1617,Comercializadora Arenas y Vera S.A.S.,2002-02-12,8621
+1619,Inversiones Gómez Ltda.,2005-10-05,6920
+1628,Inversiones Angulo S.A.S.,1993-01-06,4711
+1629,Suárez Tecnología S.A.S.,1997-03-19,4520
+1630,Rodríguez Servicios Médicos S.A.S.,2015-03-20,7020
+1631,Vergara Servicios Médicos S.A.S.,2006-01-29,1081
+1647,Inversiones Cano S.A.S.,1993-01-29,1081
+1650,Inversiones Romero S.A.S.,1998-07-10,6920
+1670,Gómez Distribuciones S.A.S.,2010-04-03,4711
+1672,Comercializadora Rivera y Valencia S.A.S.,1989-06-26,6920
+1677,Inversiones Caicedo Ltda.,2010-03-13,4520
+1684,Inversiones Restrepo S.A.S.,2015-04-17,4711
+1691,Ramírez Consultores S.A.,2011-12-10,4923
+1692,Comercializadora Parra y Navarro S.A.S.,1996-10-20,7020
+1697,Perea Transportes S.A.S.,2007-11-01,4520
+1715,Comercializadora Carvajal y Rojas S.A.S.,2001-03-14,4520
+1723,Bedoya Ingeniería S.A.S.,1989-12-06,4111
+1745,Comercializadora Pulido y García S.A.S.,2008-10-23,6201
+1749,Inversiones Padilla S.A.,2007-10-31,4520
+1752,Contreras Consultores S.A.S.,2009-07-11,5611
+1764,Comercializadora Castro y Sierra S.A.S.,2012-05-15,7020
+1765,González Construcciones S.A.S.,2012-04-21,6920
+1770,Suárez Alimentos Ltda.,1992-08-17,6201
+1771,Inversiones Cárdenas S.A.S.,1996-10-04,4520
+1783,Inversiones Mora S.A.S.,2012-04-06,4923
+1791,Bustos Transportes S.A.S.,1994-04-05,4711
+1793,Muñoz Alimentos S.A.,1995-09-21,6920
+1794,Comercializadora Jiménez y Moreno S.A.S.,2005-11-27,8621
+1796,Comercializadora Guerrero y Ortiz S.A.S.,2011-01-11,4111
+1805,Inversiones Martínez S.A.,1991-09-30,4923
+1810,Comercializadora Delgado y Torres S.A.S.,1999-02-13,6201
+1817,Inversiones Martínez S.A.S.,2017-05-10,6920
+1835,Villamil Transportes S.A.S.,2015-04-15,4923
+1845,González Ingeniería Ltda.,2015-03-12,1081
+1849,Comercializadora Giraldo y Rodríguez S.A.S.,2007-09-05,1081
+1856,Inversiones González S.A.S.,1990-05-20,6920
+1867,López Consultores S.A.S.,2014-08-30,5611
+1868,Inversiones Buitrago S.A.S.,1997-02-06,6201
+1877,Inversiones Salazar S.A.S.,1990-11-17,6201
+1878,Comercializadora Rivas y Vargas S.A.S.,2015-09-07,6201
+1879,Inversiones Quintero S.A.S.,2002-02-27,7020
+1882,Cruz Servicios Médicos S.A.S.,1990-04-11,4520
+1889,Marín Logística S.A.S.,2011-11-01,4111
+1890,Murillo Consultores S.A.S.,2017-07-12,6201
+1908,Gómez Servicios Médicos S.A.S.,2015-08-03,7020
+1910,Murillo Transportes S.A.S.,2000-02-25,1081
+1922,Inversiones Sánchez S.A.S.,2014-11-01,4520
+1928,Inversiones Ardila S.A.S.,1990-09-23,8621
+1929,Comercializadora Perea y Mosquera S.A.S.,2006-04-18,4711
+1936,Inversiones Puentes S.A.S.,2004-08-15,4923
+1938,Valencia Distribuciones S.A.S.,2017-02-22,1081
+1939,Morales Alimentos Ltda.,2001-12-14,7020
+1940,Torres Transportes S.A.S.,2004-01-04,4520
+1957,Inversiones Vega S.A.,2004-08-16,6920
+1964,Comercializadora Medina y Quiroga S.A.,2013-08-06,1081
+1969,Comercializadora Castellanos y Arias S.A.S.,1994-05-12,4111
+1970,Pacheco Construcciones S.A.S.,2013-07-29,4923
+1976,Comercializadora Castillo y Ortega S.A.S.,2011-02-19,8621
+1982,Valencia Construcciones S.A.S.,2009-09-12,5611
+1985,Salcedo Ingeniería S.A.,1995-09-28,4711
+1987,Inversiones Pérez S.A.,1999-11-03,8621
+1991,Comercializadora Velásquez y Rosero S.A.S.,1993-06-29,7020
+1992,Comercializadora Duque y López S.A.S.,2017-11-06,6201
+1994,Serrano Tecnología S.A.S.,2010-09-25,7020
+2002,Pérez Construcciones S.A.S.,2016-06-18,6201
+2006,Pinzón Logística S.A.S.,2010-10-14,7020
+2016,Chávez Soluciones S.A.,2000-09-25,7020
+2019,Comercializadora Gómez y Tamayo S.A.S.,1991-09-10,4111
+2024,Inversiones García S.A.S.,1997-09-30,8621
+2026,Comercializadora Londoño y Pérez S.A.S.,1994-05-04,4923
+2034,González Servicios Médicos S.A.S.,1990-08-31,5611
+2036,Camacho Consultores S.A.S.,1990-10-22,4111
+2041,Comercializadora Ortiz y Mantilla S.A.S.,1994-05-28,8621
+2045,Inversiones Perea S.A.S.,2004-07-25,1081
+2047,Comercializadora Morales y Salazar S.A.,1996-06-05,5611
+2055,Vergara Construcciones S.A.S.,2018-04-15,5611
+2056,Comercializadora Soto y González S.A.S.,2011-01-06,8621
+2059,Bohórquez Soluciones S.A.S.,1998-05-22,4923
+2062,Mejía Consultores S.A.S.,1997-09-07,4711
+2065,Comercializadora Ramírez y Pérez S.A.S.,2011-04-24,4111
+2066,Inversiones Corredor S.A.S.,1993-12-31,8621
+2082,Comercializadora Ruiz y Chacón S.A.S.,2014-03-31,4923
+2088,Inversiones Acosta S.A.S.,2010-09-09,4520
+2100,Inversiones Escobar S.A.S.,2013-12-05,5611
+2107,Comercializadora Giraldo y Rendón S.A.S.,2008-09-28,6920
+2115,Inversiones Buitrago S.A.S.,2008-08-14,1081
+2125,Inversiones Cardona S.A.S.,1997-12-22,1081
+2127,Inversiones Benavides S.A.S.,1995-03-06,4111
+2143,Beltrán Tecnología S.A.,2012-08-21,4111
+2148,Inversiones Pardo S.A.S.,1993-05-18,4520
+2162,Guzmán Construcciones S.A.,2003-08-11,4711
+2168,Inversiones Cortés S.A.S.,2008-05-20,8621
+2173,Córdoba Distribuciones S.A.S.,2012-06-04,6920
+2174,López Alimentos S.A.S.,2014-07-18,6201
+2180,Comercializadora Medina y Lozano S.A.S.,2000-04-01,6201
+2199,Inversiones Rojas Ltda.,1994-07-10,8621
+2208,Inversiones Aguirre S.A.S.,2010-06-26,5611
+2213,Inversiones Escobar S.A.S.,2005-08-23,6201
+2217,Inversiones Rico S.A.S.,1991-02-11,8621
+2222,Comercializadora Meneses y Vargas S.A.S.,2015-11-26,6201
+2226,Delgado Logística S.A.S.,2016-11-10,1081
+2232,Figueroa Logística S.A.S.,2003-01-28,6920
+2235,Comercializadora Carrillo y Perea S.A.S.,1996-05-08,6920
+2250,Rodríguez Construcciones S.A.S.,1990-08-02,6920
+2254,Comercializadora Contreras y Villamizar S.A.S.,2017-09-29,4711
+2256,Inversiones Sánchez Ltda.,1994-08-09,4711
+2267,Comercializadora Amaya y Ávila S.A.S.,2011-08-16,4711
+2278,Inversiones Pardo S.A.S.,2010-10-19,6920
+2280,Comercializadora Giraldo y Castellanos S.A.S.,1998-06-10,5611
+2283,Inversiones Rendón S.A.S.,2007-11-24,4111
+2294,Inversiones Rodríguez S.A.,2008-09-03,6920
+2301,Inversiones Romero S.A.S.,2016-12-26,8621
+2305,Caballero Transportes S.A.S.,2015-10-21,6201
+2307,Comercializadora Agudelo y Martínez Ltda.,2011-09-16,5611
+2311,Rojas Consultores S.A.S.,2002-02-10,5611
+2313,Inversiones Pabón S.A.S.,2003-12-30,4711
+2314,Calderón Construcciones Ltda.,2007-10-17,4111
+2315,Comercializadora Páez y Bohórquez Ltda.,2001-01-16,6920
+2318,Espitia Construcciones S.A.S.,1993-06-29,4711
+2320,Inversiones Duque S.A.S.,2011-06-14,7020
+2324,Inversiones Aguirre S.A.S.,1995-12-11,4923
+2345,Comercializadora Moreno y Rincón S.A.S.,1996-09-22,4711
+2348,Comercializadora Caballero y Padilla S.A.S.,1997-11-24,7020
+2349,Comercializadora Moreno y Vásquez S.A.S.,1991-05-01,8621
+2377,Inversiones Medina S.A.S.,1999-06-13,5611
+2380,Zapata Transportes S.A.S.,2013-01-29,8621
+2381,López Consultores S.A.S.,1997-10-24,1081
+2391,Murillo Construcciones S.A.S.,1999-06-09,4711
+2407,Montenegro Alimentos S.A.S.,1990-06-07,4520
+2409,Inversiones Gómez Ltda.,2010-06-06,6201
+2419,Comercializadora Ariza y Escobar Ltda.,2009-03-16,1081
+2431,Comercializadora Ramírez y Vergara S.A.S.,2018-02-01,1081
+2433,Inversiones Rodríguez S.A.S.,1991-12-30,1081
+2435,Sánchez Tecnología Ltda.,2009-12-12,6201
+2444,Comercializadora Flórez y Rojas S.A.S.,1998-03-20,6920
+2445,Betancur Distribuciones S.A.S.,1998-07-15,4711
+2449,Inversiones Arteaga Ltda.,1997-07-12,4923
+2456,Castillo Servicios Médicos S.A.S.,1995-12-12,8621
+2475,Inversiones Ángel S.A.S.,1994-01-13,6920
+2476,Rodríguez Distribuciones S.A.S.,2016-10-09,7020
+2478,Sanabria Consultores S.A.S.,1998-03-15,4111
+2495,Inversiones Guzmán S.A.S.,2002-11-06,7020
+2506,Inversiones Benavides Ltda.,2012-09-20,6920
+2507,Comercializadora López y Contreras S.A.S.,1990-11-05,8621
+2511,Comercializadora Domínguez y García S.A.S.,1993-12-26,4520
+2527,Flórez Soluciones S.A.S.,2008-05-06,4520
+2532,Parra Distribuciones S.A.S.,2008-02-14,4111
+2536,Comercializadora Martínez y Vega S.A.S.,2009-04-14,4520
+2537,Villamizar Ingeniería S.A.S.,2002-11-06,5611
+2542,Comercializadora Rodríguez y Galvis S.A.S.,2006-08-26,4520
+2543,Inversiones Jaimes S.A.S.,1998-02-12,4111
+2547,Inversiones Mosquera S.A.S.,2013-10-13,7020
+2552,Cortés Construcciones S.A.S.,1994-03-02,5611
+2555,Mosquera Alimentos S.A.S.,2018-06-11,6201
+2558,Inversiones Díaz S.A.S.,2000-10-02,4711
+2561,Inversiones Portilla S.A.S.,2008-06-14,4711
+2562,Inversiones Castañeda S.A.S.,2012-03-13,4111
+2563,Inversiones Cuesta S.A.S.,1995-01-16,7020
+2571,Castro Servicios Médicos S.A.S.,2016-10-12,1081
+2576,Comercializadora Durán y Rojas S.A.S.,2004-06-09,4711
+2584,González Distribuciones S.A.S.,2019-03-24,4111
+2592,Inversiones Fernández S.A.S.,2019-09-01,6201
+2598,Rodríguez Alimentos S.A.S.,2008-11-07,8621
+2606,Inversiones Núñez S.A.S.,2008-02-21,4111
+2621,Comercializadora Acevedo y Cárdenas S.A.S.,2005-11-22,4923
+2623,Comercializadora Sierra y Quiroz S.A.S.,1994-12-12,1081
+2637,Ríos Soluciones S.A.S.,2012-01-17,1081
+2643,Inversiones Pérez S.A.S.,2018-06-27,4111
+2650,Comercializadora Lozano y Meneses S.A.S.,2005-04-19,6201
+2659,Comercializadora Acosta y Moreno S.A.,2014-06-22,4923
+2660,Comercializadora Ruiz y Morales S.A.,2002-02-25,6201
+2662,Inversiones Pedraza S.A.S.,2011-05-17,1081
+2677,Inversiones Hernández S.A.S.,2019-08-21,6201
+2697,Inversiones López S.A.S.,2005-06-07,8621
+2698,Comercializadora Bustos y Barrios S.A.S.,1992-10-02,4923
+2702,Comercializadora Ortega y Cifuentes S.A.S.,2013-01-17,8621
+2703,Comercializadora Hernández y Moreno S.A.S.,2012-11-11,8621
+2705,Orozco Soluciones S.A.S.,2014-12-05,4520
+2736,Inversiones Arenas S.A.S.,2019-08-12,8621
+2747,Comercializadora Jaramillo y Ramos S.A.,2008-02-09,1081
+2749,Galvis Consultores S.A.S.,1999-11-10,8621
+2757,Inversiones Ballesteros S.A.S.,2005-08-04,8621
+2764,Comercializadora Barrios y Guerrero S.A.S.,2010-11-13,5611
+2770,Rodríguez Distribuciones S.A.S.,1999-04-05,1081
+2782,Calderón Alimentos S.A.S.,2001-06-08,4923
+2787,Inversiones Carvajal S.A.S.,1997-11-16,5611
+2790,Meneses Soluciones S.A.S.,2018-05-31,4711
+2794,Inversiones Navarro S.A.S.,2015-06-12,1081
+2805,Bermúdez Soluciones S.A.S.,1994-05-27,1081
+2815,Inversiones Burbano S.A.S.,2002-03-08,4111
+2816,Martínez Logística S.A.S.,2016-03-15,5611
+2824,Correa Ingeniería S.A.S.,1999-02-16,1081
+2825,Comercializadora González y Rivera S.A.S.,2012-06-23,6201
+2826,Monroy Soluciones S.A.S.,2011-06-19,4923
+2828,Inversiones Bedoya S.A.S.,1991-04-02,5611
+2834,Hernández Tecnología S.A.S.,2018-12-26,4111
+2835,Comercializadora Flórez y Montes S.A.S.,2010-11-09,6920
+2860,Inversiones Pérez S.A.S.,1995-10-11,4111
+2864,Flórez Construcciones S.A.S.,2005-10-29,1081
+2874,Ortega Consultores Ltda.,2003-04-23,4111
+2879,Comercializadora Rodríguez y Hernández S.A.S.,2016-08-06,6920
+2882,Martínez Servicios Médicos S.A.S.,2010-02-09,6201
+2885,Inversiones Díaz S.A.S.,2007-12-18,8621
+2892,Comercializadora Vargas y Jiménez Ltda.,2005-01-09,1081
+2910,Comercializadora Castro y Cano S.A.S.,2004-07-03,7020
+2912,Perdomo Logística S.A.S.,2019-07-20,6920
+2914,Inversiones López S.A.S.,2015-07-28,6920
+2916,Sánchez Logística Ltda.,2019-06-08,4520
+2917,Ramírez Logística Ltda.,2019-12-24,5611
+2925,Guerrero Construcciones S.A.S.,2014-04-24,7020
+2926,Inversiones González S.A.,1996-10-10,1081
+2942,Comercializadora Guerrero y Díaz S.A.S.,1991-05-01,8621
+2945,Comercializadora Duque y Molina S.A.S.,2000-11-14,4111
+2954,Inversiones Hernández S.A.S.,1995-03-03,4520
+2962,Comercializadora Arévalo y Rodríguez S.A.S.,2004-07-09,4520
+2963,Comercializadora Vargas y Díaz S.A.S.,1995-07-31,6201
+2965,Comercializadora Palacios y Rojas Ltda.,2003-07-22,4111
+2971,Comercializadora Uribe y Giraldo S.A.S.,1993-06-16,4111
+2975,Comercializadora Fonseca y Duque S.A.,2004-06-10,6920
+2980,Comercializadora Duarte y Soto Ltda.,2004-12-12,4111
+2982,Inversiones Herrera S.A.S.,2001-05-19,6201
+2984,Inversiones Silva S.A.S.,2004-10-14,6920
+2989,Inversiones Mena Ltda.,2018-10-21,7020
+2991,Inversiones Toro S.A.S.,2014-09-09,4520
+2993,Inversiones Restrepo S.A.S.,2011-01-01,7020
+3005,Rodríguez Logística S.A.S.,2008-05-20,6201
+3006,Orozco Distribuciones S.A.S.,2003-04-29,6920
+3010,Fuentes Logística S.A.,2011-11-25,6201
+3012,Inversiones Mejía S.A.S.,1991-12-27,4923
+3013,Caballero Servicios Médicos S.A.S.,1991-02-04,4111
+3016,Aguirre Servicios Médicos S.A.S.,2016-01-20,4711
+3021,Comercializadora Quintero y Rivera S.A.S.,1992-09-16,4923
+3027,Comercializadora Polo y Gómez S.A.S.,2000-09-25,6201
+3029,Comercializadora Sánchez y Pardo S.A.S.,2002-08-29,1081
+3033,Comercializadora García y Ortega S.A.S.,2016-07-14,6920
+3034,Inversiones Ruiz S.A.S.,2017-11-10,4111
+3037,Comercializadora Núñez y Castillo S.A.S.,2003-12-25,4923
+3041,Giraldo Transportes S.A.S.,2000-08-07,5611
+3052,Henao Construcciones S.A.S.,2016-08-18,4520
+3055,Inversiones Hoyos Ltda.,2015-10-07,8621
+3060,Inversiones Molano S.A.S.,1998-08-24,8621
+3065,Comercializadora Molano y Fernández S.A.S.,2016-09-29,1081
+3066,Inversiones Mejía S.A.S.,1994-06-21,4923
+3078,Comercializadora Gómez y Restrepo S.A.S.,1992-10-16,6920
+3079,Comercializadora Toro y González S.A.,2018-05-30,1081
+3087,Inversiones Maldonado S.A.S.,1993-12-08,8621
+3088,Comercializadora Cardozo y Campo S.A.,2001-03-22,6201
+3093,Rendón Servicios Médicos S.A.,1997-11-09,6201
+3094,Comercializadora Delgado y Salcedo S.A.S.,2004-03-20,4520
+3098,Inversiones Ramos S.A.S.,1994-12-25,4923
+3099,Inversiones Londoño S.A.S.,2006-03-18,6920
+3107,Comercializadora Gutiérrez y Castro S.A.S.,2000-11-26,6201
+3112,Comercializadora Leal y Durán S.A.,2000-01-27,7020
+3113,Salas Construcciones S.A.S.,1994-10-11,4923
+3130,Mosquera Soluciones S.A.S.,1995-11-17,4711
+3135,Inversiones Castillo S.A.,2020-03-20,8621
+3145,Valencia Logística S.A.S.,2018-12-27,6201
+3152,Comercializadora Gómez y Vásquez S.A.S.,2015-10-29,4711
+3153,Inversiones Rincón S.A.S.,1994-04-13,8621
+3166,Rico Tecnología S.A.S.,2017-08-30,8621
+3169,Vargas Ingeniería S.A.S.,1998-12-08,4111
+3173,Comercializadora Hurtado y Camacho S.A.S.,2000-05-11,8621
+3174,Inversiones Vanegas S.A.S.,1991-11-15,8621
+3177,Montenegro Tecnología S.A.S.,1992-09-22,5611
+3196,Inversiones Yepes S.A.S.,2013-12-28,4111
+3209,Inversiones Vega S.A.S.,2018-09-04,6201
+3234,Inversiones Bravo S.A.S.,2004-03-23,4711
+3251,Comercializadora Loaiza y Rincón S.A.S.,2009-08-14,4111
+3269,Comercializadora Henao y Hurtado Ltda.,1995-02-21,4923
+3290,Comercializadora Sánchez y Vega S.A.S.,2013-11-24,5611
+3308,Comercializadora Gómez y Ortiz S.A.S.,2014-08-26,4711
+3317,Comercializadora Garzón y Hoyos S.A.S.,1992-12-21,7020
+3334,Inversiones Vargas S.A.S.,2014-01-21,4520
+3338,Inversiones Vásquez S.A.S.,2005-10-29,1081
+3341,Comercializadora Acosta y Hernández S.A.S.,2010-08-01,6920
+3343,Comercializadora Moreno y Patiño S.A.S.,1999-12-02,1081
+3349,Inversiones Agudelo S.A.S.,2016-01-03,8621
+3358,Comercializadora Sánchez y Pinzón S.A.S.,2014-09-30,5611
+3359,Comercializadora Rojas y Carvajal S.A.S.,2001-06-14,1081
+3379,Comercializadora Muñoz y Pérez S.A.S.,2001-05-09,4520
+3398,Comercializadora Bedoya y García S.A.S.,2002-12-16,4711
+3410,Inversiones Gaviria S.A.S.,1992-03-24,8621
+3422,Martínez Alimentos S.A.S.,1999-09-29,6201
+3423,Comercializadora Bustamante y Rivera Ltda.,1999-10-25,8621
+3425,Acevedo Tecnología S.A.S.,2003-09-13,6920
+3431,Inversiones Salazar S.A.S.,1998-09-26,4111
+3433,Comercializadora Padilla y Reyes S.A.S.,2008-03-01,4520
+3468,Inversiones Pérez S.A.S.,2008-10-06,7020
+3469,Inversiones Alfonso S.A.S.,2015-10-01,6201
+3472,Comercializadora Rosero y Castro S.A.S.,2012-08-30,4520
+3481,Inversiones Prada S.A.S.,2009-10-17,4923
+3488,Sierra Soluciones S.A.S.,2002-11-05,1081
+3498,Pedraza Distribuciones S.A.S.,2008-11-05,8621
+3503,Comercializadora Luna y Londoño S.A.S.,1993-10-14,4520
+3504,Inversiones Saavedra Ltda.,2002-02-23,7020
+3516,Comercializadora Bedoya y Perdomo S.A.S.,2019-02-10,4711
+3531,Inversiones Salazar S.A.S.,2012-12-27,7020
+3540,Comercializadora Rodríguez y Serna S.A.,1995-05-30,6201
+3541,Comercializadora Rodríguez y Díaz S.A.S.,1995-08-22,5611
+3547,Comercializadora Fajardo y Loaiza S.A.,2011-07-01,7020
+3550,Rodríguez Tecnología S.A.S.,2005-03-30,8621
+3551,Inversiones Hurtado S.A.S.,2000-06-01,5611
+3558,Loaiza Consultores S.A.S.,2015-01-07,6201
+3563,Inversiones Pulido S.A.S.,2013-09-10,6201
+3576,Inversiones Sánchez S.A.S.,2008-03-27,5611
+3577,Ruiz Tecnología S.A.S.,2008-10-22,4111
+3603,Comercializadora Calderón y Fernández S.A.S.,2013-04-09,4711
+3609,Comercializadora Jiménez y Ramos Ltda.,2007-11-23,5611
+3623,Comercializadora Escobar y Miranda S.A.S.,2008-05-30,7020
+3626,Rojas Soluciones S.A.S.,1993-05-24,5611
+3627,Comercializadora Montoya y Torres S.A.S.,2006-07-01,4711
+3629,Sierra Transportes S.A.S.,2015-05-26,6201
+3637,Inversiones Romero S.A.S.,1992-05-01,4923
+3649,Comercializadora Hurtado y Martínez S.A.,2017-05-11,4923
+3652,Comercializadora Restrepo y Silva S.A.S.,2001-01-04,4520
+3665,Mercado Tecnología S.A.,1993-06-24,6201
+3669,Castaño Construcciones Ltda.,2005-08-12,7020
+3676,Comercializadora Pérez y López S.A.S.,1993-03-19,4520
+3678,Rivera Ingeniería S.A.S.,2003-08-29,4111
+3680,Moreno Distribuciones S.A.S.,2001-04-08,4711
+3683,Galvis Construcciones S.A.S.,2002-09-30,8621
+3692,Comercializadora Torres y Parra S.A.S.,2014-02-26,4520
+3705,Inversiones Castro S.A.S.,2016-05-19,7020
+3706,Inversiones García S.A.S.,1996-07-18,5611
+3707,Vargas Servicios Médicos S.A.S.,2002-03-20,7020
+3710,Arenas Alimentos S.A.S.,2020-05-18,8621
+3718,Inversiones Arias S.A.S.,2016-01-22,6201
+3737,Comercializadora Cabrera y Camacho Ltda.,2008-12-14,4111
+3743,Inversiones Pérez S.A.S.,1996-11-05,6920
+3745,Inversiones Rodríguez S.A.S.,2007-11-16,6201
+3752,Inversiones Salazar S.A.S.,2013-09-12,4520
+3753,Inversiones Rodríguez S.A.S.,2007-03-30,7020
+3769,Comercializadora Pérez y Ardila S.A.S.,2009-07-18,4520
+3772,Osorio Distribuciones S.A.S.,2005-03-06,4711
+3786,Valencia Tecnología S.A.S.,1994-10-13,1081
+3789,Comercializadora Muñoz y González S.A.,1998-01-28,7020
+3798,Comercializadora Pinzón y Ariza S.A.S.,1999-10-14,5611
+3801,Inversiones Serrano S.A.S.,1992-03-21,1081
+3803,Inversiones Ramos S.A.S.,2011-12-10,6201
+3804,Inversiones Díaz S.A.S.,2015-08-30,7020
+3822,Comercializadora Bonilla y Jaramillo Ltda.,2016-02-16,4111
+3825,Fernández Consultores S.A.S.,2004-11-10,7020
+3829,Inversiones Molina S.A.,2014-09-17,5611
+3831,Comercializadora Soto y Guzmán S.A.S.,2010-11-03,5611
+3845,Angarita Logística Ltda.,2001-11-03,4520
+3852,Inversiones Mosquera Ltda.,2007-05-09,6201
+3855,Castellanos Alimentos S.A.S.,2019-01-14,8621
+3856,Estrada Alimentos S.A.S.,1999-07-02,4711
+3864,Duque Logística S.A.S.,1999-02-25,6920
+3871,Inversiones Rodríguez Ltda.,2011-11-18,5611
+3872,Inversiones López S.A.,2018-04-07,4923
+3883,Inversiones Rodríguez S.A.S.,2015-09-30,6201
+3885,Comercializadora Mendoza y Méndez S.A.S.,2004-04-24,6201
+3890,Inversiones Cruz Ltda.,2007-08-03,6201
+3893,Inversiones Rojas S.A.S.,2007-09-10,6920
+3903,Rentería Ingeniería S.A.,1997-05-29,6920
+3906,Comercializadora Espitia y Hernández S.A.S.,2010-01-14,6920
+3907,Comercializadora Torres y González Ltda.,2020-12-24,4520
+3923,Inversiones Bolaños S.A.S.,2007-07-14,4923
+3933,Inversiones Pinzón Ltda.,1993-08-15,4711
+3935,Comercializadora Contreras y Luna S.A.S.,2014-06-20,4711
+3949,Comercializadora Ramírez y Muñoz S.A.S.,2005-03-17,6201
+3952,Caicedo Consultores S.A.,2019-03-27,6920
+3968,Rojas Logística S.A.S.,2005-02-10,4923
+3969,Posada Ingeniería S.A.S.,2001-07-15,4711
+3975,Martínez Tecnología S.A.S.,1996-06-07,6201
+3985,Inversiones Correa Ltda.,2021-09-22,4923
+3993,Comercializadora Méndez y Mora S.A.S.,2001-04-28,4711
+3995,Comercializadora Salamanca y Córdoba S.A.S.,2007-12-27,8621
+4004,Comercializadora Mantilla y Ceballos S.A.S.,2015-07-05,4711
+4007,Vásquez Alimentos S.A.S.,1995-06-08,4923
+4011,Benavides Consultores S.A.S.,1996-09-23,5611
+4027,Moreno Consultores S.A.S.,2016-12-06,4923
+4060,López Construcciones S.A.S.,2019-11-25,6920
+4084,Comercializadora López y Gómez S.A.S.,2012-12-21,4923
+4089,Rosero Servicios Médicos Ltda.,2011-10-04,6920
+4090,Inversiones Ramírez S.A.S.,2019-07-04,5611
+4092,Comercializadora Moreno y Arango S.A.S.,1999-05-01,7020
+4109,Domínguez Ingeniería S.A.S.,2020-08-13,4111
+4112,López Consultores S.A.S.,1994-10-04,6920
+4118,Murcia Ingeniería S.A.S.,1998-04-09,6920
+4125,Inversiones Torres S.A.S.,2017-08-17,4111
+4140,Comercializadora Moreno y Martínez S.A.S.,2011-01-11,4111
+4146,Inversiones Torres S.A.S.,2014-11-06,5611
+4148,Inversiones Bonilla S.A.S.,2017-09-17,6201
+4149,Inversiones Villegas Ltda.,2015-08-11,4520
+4160,Garzón Consultores S.A.S.,1999-03-11,4520
+4161,Inversiones Moreno S.A.,2000-06-17,4923
+4194,Comercializadora Sierra y Quintero S.A.S.,2001-07-02,4923
+4195,Comercializadora Rivera y Mejía Ltda.,1995-08-10,4111
+4206,Gómez Transportes S.A.S.,2002-03-12,1081
+4207,Comercializadora Suárez y Muñoz S.A.S.,2020-12-30,4923
+4210,Naranjo Logística S.A.S.,2004-08-11,4711
+4211,Morales Tecnología S.A.S.,2008-11-03,6201
+4213,Comercializadora Vélez y Murcia S.A.S.,2020-02-26,4923
+4225,Comercializadora Pinzón y Londoño S.A.S.,2001-06-09,6920
+4228,Romero Distribuciones Ltda.,1998-09-08,5611
+4236,Inversiones López S.A.,2012-02-12,4111
+4241,Comercializadora Padilla y Pacheco S.A.S.,1993-12-19,8621
+4244,Comercializadora Fernández y Sepúlveda S.A.S.,2002-07-17,1081
+4252,Inversiones Hernández S.A.S.,2022-01-27,8621
+4257,Inversiones Álvarez S.A.S.,2015-08-20,6201
+4261,Inversiones Figueroa S.A.,2010-02-09,7020
+4262,Inversiones Martínez S.A.S.,2007-02-17,7020
+4270,Comercializadora Mendoza y García S.A.S.,1998-12-16,6201
+4272,Comercializadora Cortés y Arroyo S.A.S.,1999-08-30,4923
+4273,Ospina Soluciones S.A.S.,2006-06-12,6201
+4286,Inversiones Jiménez S.A.S.,2017-12-04,5611
+4287,Inversiones Álvarez S.A.S.,2016-11-24,4520
+4295,Inversiones Guerrero S.A.S.,1994-08-04,8621
+4296,Inversiones González S.A.S.,2020-08-06,4711
+4298,Arias Servicios Médicos S.A.S.,1994-05-10,6201
+4299,Comercializadora Oviedo y Restrepo S.A.S.,2019-07-27,5611
+4305,Inversiones Romero S.A.S.,2013-04-22,6201
+4314,Inversiones Fuentes S.A.S.,1993-02-15,5611
+4316,Inversiones Velasco S.A.S.,2017-08-24,4711
+4321,Jiménez Tecnología S.A.S.,2017-05-07,8621
+4325,Gallego Distribuciones Ltda.,2005-04-20,7020
+4331,Inversiones Suárez Ltda.,2008-10-11,4111
+4338,Inversiones Campo S.A.S.,2009-06-26,4111
+4351,Reyes Tecnología S.A.S.,2010-10-22,4923
+4353,Comercializadora Castro y Restrepo S.A.,2016-03-28,4923
+4355,Fuentes Transportes S.A.S.,2009-11-07,6201
+4365,Suárez Construcciones S.A.S.,1995-07-25,8621
+4367,Comercializadora González y Ortega S.A.S.,1994-10-21,8621
+4392,Comercializadora Soto y Valencia Ltda.,2019-01-01,4923
+4395,Inversiones Mejía S.A.S.,2019-11-12,6201
+4399,Inversiones Chávez S.A.S.,2002-01-12,4520
+4414,Salazar Distribuciones S.A.,2014-01-15,6201
+4423,Ávila Construcciones S.A.S.,2013-02-07,7020
+4425,Inversiones Hernández S.A.S.,2007-04-26,1081
+4429,Inversiones Moreno S.A.S.,2015-02-25,1081
+4448,Rentería Soluciones S.A.S.,2009-07-30,4520
+4449,Comercializadora Hernández y Rodríguez S.A.,1999-02-23,4923
+4450,Inversiones Castro S.A.S.,1999-04-04,7020
+4458,González Ingeniería S.A.S.,2013-02-18,6201
+4460,Comercializadora Mejía y Ayala S.A.,1999-09-28,5611
+4462,Comercializadora Alfonso y Díaz S.A.S.,2021-04-24,4711
+4465,Álvarez Alimentos S.A.S.,2013-07-19,4520
+4467,Comercializadora González y Bermúdez S.A.S.,2010-08-26,5611
+4468,Comercializadora Herrera y Aguirre S.A.S.,1994-06-10,4923
+4470,Barreto Transportes S.A.S.,1995-01-19,4520
+4475,Comercializadora Alvarado y González S.A.S.,2016-12-27,6920
+4481,Navarro Soluciones S.A.,2013-12-01,1081
+4484,Inversiones Bedoya S.A.S.,2011-09-24,4711
+4501,Martínez Ingeniería Ltda.,2011-07-02,8621
+4503,Castellanos Ingeniería S.A.S.,2018-10-14,4923
+4505,Arroyo Consultores S.A.S.,1993-05-21,1081
+4508,Miranda Servicios Médicos S.A.,2012-02-03,6920
+4516,Ruiz Transportes S.A.S.,2009-05-09,1081
+4517,Inversiones Rodríguez S.A.S.,2022-02-11,6201
+4519,Inversiones Giraldo S.A.S.,2011-12-15,6201
+4541,Comercializadora Peña y López S.A.S.,1999-09-04,4711
+4542,Vergara Consultores S.A.S.,2001-01-04,4111
+4551,Fajardo Distribuciones S.A.S.,2007-02-10,4923
+4566,Comercializadora Pérez y Herrera S.A.S.,2005-10-18,6201
+4572,Comercializadora Sánchez y Barreto S.A.S.,2012-12-06,4520
+4574,Marín Ingeniería S.A.S.,2008-06-10,4520
+4581,Inversiones Anaya S.A.S.,2016-02-18,4711
+4583,Manrique Ingeniería S.A.S.,2017-08-09,4923
+4593,Medina Construcciones S.A.S.,2016-09-16,4520
+4599,Inversiones Restrepo S.A.S.,2011-02-15,4711
+4600,Inversiones Arroyo S.A.,1994-10-03,4111
+4608,Inversiones Gutiérrez S.A.,1994-12-28,1081
+4616,Inversiones Nieto S.A.S.,2006-07-28,1081
+4621,Inversiones Roa S.A.S.,2006-09-30,1081
+4622,Hoyos Ingeniería S.A.,2012-08-16,4520
+4625,Escobar Distribuciones S.A.,2005-06-08,4711
+4632,Bonilla Logística S.A.S.,1993-09-03,8621
+4635,Comercializadora Sarmiento y Giraldo S.A.S.,2000-06-23,7020
+4636,Inversiones Rojas S.A.S.,2001-11-09,4711
+4659,Comercializadora Romero y Castro S.A.S.,2004-04-11,6201
+4665,Comercializadora Pérez y Rueda S.A.,2014-09-22,4711
+4672,Pardo Consultores S.A.S.,2017-09-02,1081
+4696,Comercializadora Sierra y Morales S.A.S.,2021-12-22,7020
+4700,Mendoza Soluciones S.A.S.,1995-01-01,6201
+4707,Rincón Consultores S.A.S.,1995-09-04,8621
+4715,Gómez Transportes S.A.S.,1995-03-11,8621
+4725,Comercializadora González y Sánchez S.A.S.,2015-11-13,5611
+4730,Inversiones Rivera S.A.S.,2015-03-09,7020
+4732,Díaz Tecnología S.A.S.,2016-02-23,4711
+4744,Inversiones Ríos S.A.S.,2021-10-23,6201
+4747,Comercializadora Córdoba y Delgado Ltda.,2018-02-09,6201
+4751,Inversiones González S.A.S.,2007-11-14,1081
+4752,Inversiones González S.A.S.,2016-04-23,6201
+4757,Fajardo Soluciones S.A.S.,2006-11-06,8621
+4766,Comercializadora Castro y Romero S.A.S.,2020-07-26,4923
+4775,Comercializadora Arévalo y Rodríguez S.A.,1999-03-16,6920
+4778,Inversiones Parada Ltda.,2018-04-20,5611
+4792,Comercializadora García y Rueda Ltda.,2005-10-10,4923
+4796,Henao Servicios Médicos S.A.S.,2007-11-14,6201
+4798,Loaiza Tecnología S.A.S.,1994-01-09,5611
+4804,Comercializadora Osorio y Ochoa S.A.S.,2013-09-01,8621
+4818,Inversiones Narváez S.A.,2018-07-12,5611
+4825,Figueroa Transportes S.A.S.,2012-06-13,4923
+4827,Guerrero Distribuciones Ltda.,1994-07-14,6920
+4831,Comercializadora Jiménez y Rodríguez S.A.,2013-11-30,6201
+4836,Inversiones Torres S.A.S.,2003-08-07,4923
+4841,Ramírez Tecnología Ltda.,2006-05-01,6201
+4857,Inversiones Rodríguez S.A.S.,2010-02-01,4111
+4860,Inversiones García S.A.S.,2017-08-14,4520
+4866,Inversiones Hernández S.A.S.,2000-09-18,7020
+4870,Mejía Alimentos S.A.S.,2004-03-15,4923
+4881,Inversiones Díaz S.A.S.,2017-07-22,5611
+4888,Mesa Tecnología S.A.S.,2017-04-17,7020
+4893,Comercializadora Martínez y Cardona S.A.S.,1996-04-07,4111
+4902,Inversiones Rodríguez Ltda.,2001-02-20,6920
+4921,Comercializadora Ospina y Salamanca S.A.S.,2013-07-25,4520
+4926,Comercializadora Parra y Ramírez Ltda.,2010-03-10,4711
+4933,Rico Construcciones S.A.S.,1998-05-01,4923
+4937,Inversiones Perdomo S.A.S.,2006-05-20,6920
+4945,Inversiones Gómez S.A.S.,2020-10-20,5611
+4946,Comercializadora Cortés y Vargas S.A.S.,2016-08-19,6920
+4947,González Consultores S.A.S.,2008-11-16,8621
+4965,Comercializadora Gómez y García S.A.,2003-08-14,4111
+4986,Inversiones Salazar S.A.S.,2008-10-15,6201
+4998,Cardona Alimentos S.A.S.,2004-02-17,7020
+5000,Comercializadora Peña y Ceballos S.A.,2015-09-19,4711
+5006,Inversiones Guzmán S.A.S.,1996-02-08,8621
+5015,Arévalo Distribuciones S.A.S.,2010-04-20,4923
+5020,Comercializadora Martínez y Rincón S.A.S.,1996-10-07,6201
+5022,Inversiones Vélez S.A.S.,2007-06-27,6201
+5025,Ríos Ingeniería S.A.S.,1999-12-29,1081
+5033,Inversiones Morales S.A.S.,2021-07-15,6201
+5038,Comercializadora Restrepo y Ruiz S.A.S.,2012-03-26,4520
+5046,Inversiones Rivera S.A.,2016-09-28,8621
+5047,Inversiones Salas S.A.S.,2001-05-12,6920
+5049,Vargas Tecnología S.A.S.,2010-04-17,4111
+5060,Rodríguez Tecnología S.A.S.,2009-08-03,4520
+5063,Inversiones Sánchez S.A.,1998-09-05,4111
+5070,Pedraza Distribuciones S.A.S.,2011-05-25,8621
+5084,Comercializadora Duarte y Torres S.A.S.,2004-10-15,6201
+5095,Agudelo Soluciones S.A.S.,2013-10-21,8621
+5098,Comercializadora Meza y López S.A.,2003-03-28,8621
+5102,Inversiones Arias S.A.S.,1995-09-20,1081
+5113,Inversiones Córdoba S.A.S.,2009-05-05,6920
+5114,Comercializadora Álvarez y Castro S.A.S.,2005-09-14,6201
+5115,Comercializadora Jaramillo y Ortiz S.A.S.,1997-10-03,6201
+5139,Arias Soluciones S.A.S.,1997-04-14,4923
+5146,Pérez Soluciones S.A.S.,2001-01-13,1081
+5149,Inversiones Cruz S.A.S.,1998-03-13,6201
+5150,Zambrano Tecnología S.A.S.,2010-12-17,5611
+5163,Comercializadora Posada y Romero S.A.S.,2019-04-18,4111
+5165,Inversiones Martínez S.A.S.,2022-01-31,8621
+5172,Saavedra Ingeniería S.A.,2007-01-18,1081
+5177,Inversiones Ruiz S.A.S.,1993-12-18,1081
+5183,Inversiones Martínez Ltda.,2017-10-08,5611
+5192,Palacio Soluciones S.A.,2008-10-27,4711
+5193,Comercializadora Salcedo y Flórez S.A.,2001-05-05,4111
+5197,Ospina Alimentos S.A.S.,2016-08-04,6201
+5198,Quintero Construcciones S.A.S.,2019-04-19,4711
+5199,Inversiones Ramos S.A.S.,2015-08-19,7020
+5202,Inversiones Marín S.A.S.,2006-03-06,4111
+5209,Comercializadora Martínez y Molina Ltda.,1995-08-13,4711
+5220,Comercializadora Romero y Hernández S.A.S.,2005-03-09,5611
+5226,Chacón Tecnología S.A.S.,2007-04-23,4520
+5228,Inversiones Álvarez S.A.,2021-02-02,6201
+5233,Comercializadora Sandoval y Álvarez S.A.S.,2000-10-03,6920
+5234,Carmona Soluciones Ltda.,2002-03-11,6920
+5238,Monsalve Consultores S.A.S.,1993-12-10,8621
+5239,Chacón Transportes S.A.S.,2009-11-18,6201
+5247,Inversiones Castañeda S.A.S.,2001-04-11,4711
+5250,Comercializadora Rodríguez y Valencia S.A.S.,2012-09-22,4923
+5253,Ortiz Servicios Médicos S.A.S.,2009-04-13,4711
+5257,Inversiones Gallego S.A.S.,2006-04-03,6920
+5262,Narváez Transportes S.A.,2005-04-11,6201
+5272,Comercializadora Toro y Duarte S.A.S.,2002-08-28,1081
+5308,Inversiones Gil S.A.S.,2013-05-10,4711
+5312,Inversiones Pérez Ltda.,2005-08-26,4711
+5314,Carmona Alimentos S.A.S.,2004-03-01,6201
+5315,Inversiones Camargo Ltda.,2015-07-07,5611
+5322,Ariza Transportes S.A.S.,2001-10-20,5611
+5333,Comercializadora Carvajal y Martínez S.A.S.,2022-07-10,7020
+5340,Comercializadora Moreno y Meneses S.A.S.,1995-10-01,6920
+5346,Comercializadora Cifuentes y Salazar S.A.S.,2018-03-01,4923
+5355,Inversiones Toro S.A.S.,2012-02-09,6201
+5359,Comercializadora Morales y Díaz S.A.S.,2017-06-04,8621
+5361,Inversiones Zapata S.A.S.,2009-04-06,8621
+5367,Comercializadora Díaz y Lozano S.A.S.,2018-05-30,6201
+5375,Inversiones Pérez Ltda.,2014-10-15,1081
+5377,Comercializadora Galvis y Durán S.A.S.,2005-06-27,4520
+5393,Inversiones Pérez S.A.S.,1999-03-19,6201
+5394,Comercializadora Vanegas y Rico S.A.S.,2007-03-12,4111
+5404,Muñoz Transportes S.A.S.,2020-05-04,1081
+5407,Inversiones Zambrano S.A.S.,2003-01-20,6920
+5410,Inversiones Ortiz Ltda.,2003-06-15,1081
+5417,Inversiones Martínez S.A.S.,2015-12-21,6201
+5421,Inversiones Cruz S.A.S.,2012-08-17,6201
+5429,Comercializadora Castillo y Herrera S.A.,2016-12-12,8621
+5434,Calderón Logística S.A.S.,1998-07-13,8621
+5438,Comercializadora Peña y Loaiza S.A.S.,1995-10-07,8621
+5451,Inversiones Fajardo S.A.S.,2023-03-17,5611
+5452,Hernández Servicios Médicos S.A.S.,2020-05-02,4711
+5475,Inversiones Meneses S.A.S.,2003-03-27,5611
+5477,Comercializadora Díaz y Murillo S.A.S.,2000-02-13,1081
+5491,Ortiz Servicios Médicos S.A.S.,2001-09-19,4711
+5500,Comercializadora Delgado y Salgado S.A.S.,2012-12-02,4111
+5503,Comercializadora Muñoz y Zuluaga S.A.S.,2011-04-12,4923
+5509,Comercializadora Bejarano y Gómez S.A.S.,2020-07-28,6201
+5515,Inversiones Zambrano Ltda.,2007-12-23,8621
+5532,Inversiones García S.A.S.,2006-10-30,5611
+5534,Inversiones Polo S.A.S.,2018-02-18,5611
+5535,Inversiones Murillo S.A.S.,1998-11-20,4111
+5551,Comercializadora Martínez y Duque S.A.S.,1994-07-23,8621
+5558,Inversiones Martínez S.A.,2005-08-21,4923
+5566,Inversiones Mena S.A.S.,2013-10-25,1081
+5586,Comercializadora Arévalo y Acevedo S.A.S.,2010-11-09,5611
+5597,Solano Ingeniería Ltda.,2008-07-17,4923
+5600,Comercializadora González y Gómez Ltda.,2015-04-01,8621
+5601,Pérez Servicios Médicos S.A.S.,1994-12-06,4520
+5607,Comercializadora Ayala y Torres S.A.S.,2011-07-28,7020
+5615,Molina Alimentos S.A.S.,2011-11-15,5611
+5633,Inversiones Ruiz S.A.S.,2016-05-22,7020
+5638,Comercializadora Castro y Gómez S.A.S.,2021-01-08,6201
+5645,Inversiones Castañeda S.A.S.,2001-09-04,6201
+5649,Inversiones Niño S.A.,1994-10-29,4520
+5652,Reyes Logística S.A.,2015-08-30,4923
+5656,Castro Construcciones S.A.S.,2003-08-21,4111
+5659,Ruiz Logística S.A.S.,2022-08-06,5611
+5662,Ramírez Alimentos S.A.S.,2022-03-29,1081
+5665,Inversiones Monsalve S.A.S.,2005-06-03,5611
+5667,Inversiones Mendoza S.A.S.,2012-12-20,4923
+5670,Flórez Construcciones S.A.S.,1997-11-26,5611
+5682,Comercializadora Fajardo y Álvarez S.A.S.,2005-01-31,5611
+5690,Inversiones Alzate S.A.S.,2007-12-02,4111
+5696,Comercializadora Alzate y Rivera S.A.S.,1999-05-28,7020
+5697,Moreno Servicios Médicos S.A.,2012-04-04,7020
+5698,Inversiones Gamboa S.A.S.,1995-07-24,4520
+5699,Vásquez Soluciones S.A.S.,2021-12-26,4520
+5702,Quintero Ingeniería S.A.S.,2013-07-22,8621
+5705,Inversiones Díaz S.A.S.,2003-10-13,7020
+5710,Inversiones Ávila S.A.S.,2000-03-17,4111
+5711,Inversiones Quintero S.A.S.,2001-09-11,6920
+5717,Inversiones Torres S.A.S.,2016-02-21,5611
+5720,Comercializadora Velásquez y Pérez S.A.S.,2007-02-05,4711
+5723,Comercializadora Ardila y Rincón S.A.S.,2001-11-09,8621
+5730,Sandoval Consultores S.A.S.,2022-12-02,4923
+5732,Gómez Transportes S.A.S.,2014-10-04,5611
+5749,Inversiones Moreno S.A.S.,2013-10-30,4520
+5765,Inversiones Triana S.A.S.,2007-06-06,4520
+5773,Comercializadora Restrepo y Jiménez S.A.S.,1996-07-04,1081
+5778,Yepes Alimentos Ltda.,2018-01-24,5611
+5779,Comercializadora Benítez y Mora S.A.S.,2013-07-10,8621
+5792,Aguirre Distribuciones Ltda.,1994-10-23,4923
+5796,Inversiones Osorio S.A.S.,2006-11-16,7020
+5797,Comercializadora López y Quintero Ltda.,2015-11-26,1081
+5822,Inversiones Arias S.A.S.,2023-05-20,4520
+5828,Comercializadora Cortés y Bolaños S.A.S.,1996-05-17,5611
+5830,Giraldo Construcciones S.A.,2012-01-25,4711
+5834,Comercializadora Tamayo y Peña S.A.S.,2010-09-15,4111
+5842,Comercializadora Suárez y Montenegro S.A.S.,2015-12-17,6920
+5847,Comercializadora Mesa y Agudelo S.A.S.,2005-04-08,1081
+5849,Caicedo Consultores S.A.,1995-02-24,1081
+5850,Torres Consultores S.A.S.,2013-04-29,6920
+5853,Contreras Soluciones S.A.S.,2004-05-12,6201
+5859,Comercializadora García y González S.A.,2014-02-26,4520
+5866,Garzón Construcciones S.A.,2024-02-03,6920
+5872,Inversiones Ospina Ltda.,2004-06-21,4111
+5887,Ortiz Servicios Médicos S.A.S.,2022-09-06,4923
+5890,Villamizar Distribuciones S.A.S.,2023-02-09,4711
+5902,Pinto Soluciones S.A.,2007-05-17,6201
+5928,Comercializadora Carmona y Hernández S.A.S.,2002-03-14,8621
+5929,Comercializadora Morales y Sanabria S.A.S.,2013-11-20,4520
+5937,Inversiones Rodríguez Ltda.,2017-09-19,4520
+5939,Inversiones Gaitán S.A.S.,2016-05-22,4520
+5950,Muñoz Transportes S.A.S.,2005-12-25,7020
+5960,Inversiones Monroy S.A.S.,1997-07-19,7020
+5964,Comercializadora Velandia y González Ltda.,2012-06-18,6920
+5975,Vergara Alimentos S.A.S.,1995-09-15,6201
+5981,Inversiones Salazar S.A.S.,1998-12-18,7020
+5990,Comercializadora Jiménez y Correa S.A.S.,2011-07-07,4711
+5991,Comercializadora López y Garcés S.A.S.,2008-02-23,5611
+5992,Comercializadora Escobar y Torres S.A.,2001-05-20,1081
+5999,López Ingeniería S.A.S.,1996-11-12,4923
+6007,Comercializadora Márquez y Álvarez S.A.,2001-10-16,1081
+6009,Palacio Distribuciones S.A.S.,2019-01-18,4923
+6019,Pardo Servicios Médicos S.A.S.,2020-07-12,5611
+6034,Parra Distribuciones S.A.S.,2019-01-21,4111
+6041,Luna Ingeniería S.A.S.,2004-10-19,7020
+6045,Comercializadora Torres y Pineda S.A.S.,2007-12-05,4111
+6058,Inversiones Jaimes S.A.S.,2022-07-14,4111
+6075,Ballesteros Ingeniería S.A.S.,2021-06-13,1081
+6081,Inversiones Quintero S.A.S.,1996-05-22,4711
+6082,Comercializadora Espitia y Jaramillo S.A.S.,2023-05-21,6920
+6084,Inversiones Salgado S.A.S.,2003-09-22,5611
+6101,Comercializadora Naranjo y Morales S.A.S.,1997-04-08,8621
+6103,Inversiones Acosta S.A.S.,2000-10-29,4520
+6111,Inversiones Caicedo Ltda.,2016-10-17,4520
+6112,González Tecnología S.A.S.,1995-09-09,4711
+6124,Comercializadora Contreras y Rivera S.A.S.,2005-04-26,5611
+6129,Comercializadora Mosquera y Cardona S.A.,2013-09-19,8621
+6137,Vergara Ingeniería S.A.S.,2013-10-31,6201
+6159,Inversiones Valencia Ltda.,2012-12-11,4111
+6160,Jiménez Logística S.A.S.,2009-12-01,7020
+6161,Inversiones Yepes S.A.S.,2006-02-15,7020
+6162,Inversiones Silva S.A.S.,1998-10-05,4923
+6171,Inversiones Durán S.A.S.,2016-06-20,4711
+6175,Inversiones Garzón S.A.S.,2003-04-23,4711
+6177,Moreno Alimentos Ltda.,2000-07-23,4923
+6180,Reyes Servicios Médicos Ltda.,2019-06-17,8621
+6181,Inversiones Hernández S.A.S.,2007-09-28,1081
+6183,Sánchez Transportes S.A.S.,2010-10-30,8621
+6189,Inversiones Bernal S.A.S.,2018-05-25,4923
+6194,Inversiones Salazar S.A.S.,2015-01-09,4711
+6195,Inversiones Guerra S.A.S.,2014-07-02,8621
+6213,Inversiones Fonseca S.A.S.,1996-11-26,6920
+6218,Comercializadora Betancur y Mora S.A.S.,2001-11-19,4711
+6228,Ortiz Logística S.A.S.,2014-05-14,4923
+6238,Angulo Soluciones S.A.S.,2005-01-15,5611
+6253,Comercializadora Pérez y Romero S.A.S.,2012-10-15,5611
+6265,Inversiones Pinto S.A.S.,1996-05-29,7020
+6266,Comercializadora Flórez y Pérez Ltda.,2009-12-28,4111
+6270,Comercializadora Beltrán y Castellanos S.A.S.,2013-12-25,6201
+6285,Herrera Alimentos S.A.,2005-06-26,6920
+6287,Comercializadora Aguilar y Fernández S.A.S.,2013-02-04,4520
+6288,Quiroga Servicios Médicos S.A.S.,2020-03-08,4711
+6300,Anaya Ingeniería S.A.S.,2001-07-20,7020
+6307,Inversiones Aguilar S.A.,2004-07-23,4520
+6320,Comercializadora García y Paz S.A.S.,2014-05-25,4520
+6323,Inversiones Gallego S.A.S.,2013-09-09,6920
+6328,Inversiones Ortiz S.A.S.,2013-09-18,6201
+6334,Inversiones Mora S.A.S.,1997-02-27,6920
+6337,Inversiones Uribe S.A.S.,2015-11-12,4711
+6342,Inversiones López Ltda.,2000-04-15,4111
+6346,Inversiones Fonseca S.A.S.,1998-09-29,6201
+6358,Inversiones Méndez S.A.S.,2010-08-04,4923
+6360,Inversiones Cárdenas S.A.S.,2014-03-29,6201
+6361,Comercializadora Prieto y Ochoa S.A.S.,2000-08-17,4111
+6363,Fernández Servicios Médicos S.A.S.,2008-05-21,4923
+6365,Inversiones Gutiérrez S.A.S.,2016-08-09,4520
+6377,Mejía Transportes S.A.S.,2005-03-03,8621
+6379,Inversiones Murillo S.A.S.,2020-09-24,7020
+6387,Inversiones García S.A.S.,2011-03-29,5611
+6388,Inversiones Pérez S.A.S.,2003-01-08,6201
+6391,Comercializadora Jaramillo y Burbano S.A.S.,2003-07-05,4520
+6397,Comercializadora Vega y Torres S.A.S.,2007-05-22,1081
+6407,Flórez Alimentos S.A.S.,2020-01-13,8621
+6408,Henao Consultores S.A.S.,2013-01-24,5611
+6413,Comercializadora Giraldo y Bonilla S.A.S.,2022-07-19,5611
+6416,Inversiones Pérez S.A.S.,2020-01-24,1081
+6417,Comercializadora Rojas y Ortiz S.A.,2019-03-04,4923
+6420,Sánchez Tecnología Ltda.,2012-02-11,7020
+6424,Comercializadora Uribe y Ávila S.A.S.,2022-01-07,6201
+6427,Comercializadora Rojas y Vargas S.A.,1995-10-16,4711
+6429,Comercializadora Jiménez y Prada S.A.S.,2001-01-04,4111
+6436,Comercializadora Rojas y Muñoz S.A.S.,2008-04-06,1081
+6456,Rodríguez Consultores S.A.S.,2016-08-07,8621
+6472,Comercializadora Padilla y Ortiz S.A.,2022-09-24,4520
+6475,Inversiones Rodríguez S.A.S.,2019-12-01,5611
+6478,Mena Tecnología S.A.S.,2020-02-04,6201
+6486,Inversiones Ariza S.A.,2020-11-23,6201
+6488,Inversiones Salazar S.A.S.,2019-11-30,5611
+6492,Mercado Soluciones S.A.S.,2024-06-06,6920
+6504,Comercializadora Martínez y López S.A.S.,2011-03-03,8621
+6505,Inversiones Ayala S.A.S.,2017-04-03,7020
+6518,Comercializadora Parra y Pérez S.A.S.,2024-06-20,6201
+6522,Comercializadora Peña y García S.A.S.,2018-09-27,5611
+6524,Inversiones Perdomo S.A.S.,2020-07-10,6920
+6529,Bautista Alimentos S.A.S.,2016-08-13,7020
+6532,Inversiones Pérez S.A.S.,1999-04-04,4111
+6538,Comercializadora Zuluaga y Martínez S.A.S.,2002-04-03,4520
+6548,Molina Tecnología S.A.S.,2021-07-01,4711
+6554,Inversiones Delgado S.A.S.,1997-02-08,4711
+6582,Cruz Consultores Ltda.,1998-12-18,6920
+6620,Inversiones Arango S.A.S.,1996-03-17,4520
+6623,Inversiones Rodríguez S.A.,2005-02-28,6201
+6624,Pérez Soluciones S.A.S.,2015-08-19,8621
+6626,Guzmán Servicios Médicos S.A.S.,2016-03-18,4111
+6628,Reyes Ingeniería S.A.,1996-11-28,6201
+6641,Inversiones Montoya S.A.S.,2023-07-16,8621
+6646,Acevedo Construcciones S.A.S.,2003-01-04,4923
+6651,Londoño Ingeniería S.A.S.,2021-03-28,4520
+6657,Comercializadora Chávez y Salamanca S.A.S.,1999-04-02,4111
+6662,Murillo Consultores S.A.S.,2023-12-23,7020
+6667,Quintero Soluciones S.A.S.,2007-08-09,4111
+6668,Parra Servicios Médicos S.A.S.,2000-05-21,7020
+6669,Palacios Servicios Médicos S.A.S.,2015-08-10,6201
+6677,Comercializadora Hernández y Muñoz S.A.S.,2011-06-23,6201
+6694,Inversiones Amaya S.A.,2014-06-28,4520
+6710,Loaiza Distribuciones S.A.S.,2009-09-10,1081
+6736,Rodríguez Distribuciones S.A.,2012-09-18,8621
+6737,Comercializadora Naranjo y Rojas S.A.S.,1998-07-22,4711
+6741,Comercializadora Rivera y Rojas S.A.,1999-08-09,6201
+6745,Comercializadora Páez y Parra S.A.S.,2001-05-25,5611
+6771,Inversiones Arias S.A.S.,2023-01-14,6920
+6779,Mosquera Servicios Médicos S.A.S.,1998-09-29,4923
+6792,Inversiones Pulido S.A.S.,2001-03-23,7020
+6805,Inversiones Álvarez S.A.S.,2021-05-10,7020
+6816,Soto Ingeniería S.A.,2002-01-06,4111
+6853,Inversiones Moreno S.A.S.,2009-09-01,6201
+6855,Comercializadora Mejía y Morales S.A.S.,2008-11-30,8621
+6857,Moreno Tecnología S.A.S.,2002-03-24,6920
+6862,Inversiones Rodríguez S.A.S.,2010-05-20,4520
+6870,Comercializadora García y García S.A.S.,2021-03-25,5611
+6871,Inversiones Blanco Ltda.,2024-07-05,1081
+6872,Comercializadora Gómez y Escobar S.A.S.,2024-01-11,6920
+6873,Inversiones Gil S.A.S.,2006-05-29,6201
+6875,Velásquez Ingeniería S.A.S.,1995-08-15,7020
+6876,Comercializadora Parada y Bernal S.A.S.,2006-05-16,6920
+6878,Sepúlveda Transportes S.A.S.,1995-08-09,1081
+6880,Comercializadora Torres y Guzmán S.A.S.,2004-04-03,4111
+6884,Martínez Construcciones S.A.S.,1995-10-27,4711
+6894,Espinosa Soluciones S.A.S.,2009-04-11,4520
+6895,Camacho Soluciones S.A.S.,2011-02-04,4111
+6897,Comercializadora García y Carrillo S.A.S.,2014-05-20,6201
+6898,Inversiones Fajardo S.A.S.,2010-02-14,7020
+6907,Inversiones Duarte Ltda.,2010-05-16,4923
+6910,Inversiones Rojas S.A.S.,2023-04-08,8621
+6911,Marín Consultores S.A.S.,2018-08-18,7020
+6915,Inversiones Rodríguez S.A.S.,1996-02-17,4711
+6917,Comercializadora Osorio y Parra S.A.S.,1995-12-22,1081
+6928,Mendoza Logística S.A.S.,2003-05-17,8621
+6931,Duarte Soluciones S.A.S.,2008-09-17,5611
+6948,Arboleda Tecnología S.A.S.,2002-09-21,6920
+6950,Inversiones Hernández S.A.S.,2021-08-26,4520
+6953,Moreno Servicios Médicos S.A.S.,2016-08-04,7020
+6955,Comercializadora García y Solano S.A.S.,2024-01-21,4923
+6957,Comercializadora González y Morales S.A.S.,2020-05-04,7020
+6962,Comercializadora Arrieta y Salamanca S.A.S.,2017-07-27,5611
+6977,Inversiones Ruiz S.A.S.,1999-11-30,6920
+6985,Inversiones Valencia S.A.S.,2016-02-18,5611
+6994,Londoño Alimentos S.A.S.,2008-05-23,8621
+7004,Álvarez Consultores S.A.S.,2016-02-05,4520
+7015,Inversiones Paz S.A.,2011-12-20,7020
+7036,Comercializadora Ospina y Zambrano S.A.S.,2001-09-15,4111
+7055,Hernández Distribuciones S.A.S.,1996-10-13,6920
+7060,Comercializadora Ramos y Osorio S.A.S.,2007-12-17,7020
+7062,Inversiones Barrios S.A.S.,2010-06-06,6201
+7072,Inversiones Figueroa S.A.S.,2013-10-26,5611
+7076,Comercializadora Pérez y Díaz S.A.,2001-03-02,6201
+7102,Comercializadora Acosta y Corredor S.A.S.,2005-09-22,6201
+7111,Inversiones Martínez S.A.S.,2001-04-27,6920
+7113,Comercializadora Gómez y Mendoza S.A.S.,2015-09-29,4923
+7124,Comercializadora Padilla y Patiño S.A.S.,2000-09-07,4520
+7139,Inversiones Ramírez S.A.S.,2024-04-11,4111
+7144,Comercializadora Marín y Sierra S.A.S.,1996-07-16,5611
+7145,Santos Ingeniería S.A.,2021-07-10,8621
+7151,Inversiones Perea S.A.S.,2007-01-23,6201
+7176,Inversiones Sánchez S.A.S.,2023-09-26,1081
+7178,Comercializadora Delgado y Pérez S.A.S.,1998-11-01,6201
+7184,Inversiones Sánchez S.A.,2005-04-23,4923
+7189,Restrepo Logística Ltda.,2006-04-16,5611
+7197,Comercializadora Rojas y Acosta S.A.S.,2004-05-09,6201
+7212,Inversiones Murillo S.A.S.,2024-05-03,6201
+7219,Cifuentes Alimentos Ltda.,2020-04-20,4923
+7226,Inversiones Valderrama S.A.S.,2010-04-03,6201
+7236,Inversiones Castellanos S.A.S.,2005-04-09,4520
+7240,Comercializadora García y Murcia S.A.S.,2006-07-05,7020
+7248,Comercializadora Tovar y Rodríguez S.A.S.,2005-04-30,7020
+7252,Hernández Servicios Médicos S.A.S.,2001-05-17,4111
+7277,Comercializadora Vega y Ortega S.A.S.,2020-01-27,7020
+7299,Comercializadora Benítez y Bautista Ltda.,2015-12-15,5611
+7300,Vega Transportes S.A.S.,2004-06-04,5611
+7321,Inversiones León S.A.S.,2004-04-26,5611
+7328,Vergara Tecnología S.A.,1998-02-27,1081
+7329,Comercializadora Puentes y Duque S.A.,2004-07-20,7020
+7330,Inversiones Muñoz S.A.S.,2017-09-19,7020
+7334,Medina Tecnología S.A.S.,2001-08-14,7020
+7337,García Construcciones S.A.S.,2024-05-07,4923
+7341,Inversiones Ortiz S.A.S.,1998-08-24,4111
+7355,Comercializadora Rincón y Pérez Ltda.,2011-12-20,1081
+7370,Comercializadora León y Barreto S.A.S.,1995-08-01,1081
+7371,Ramírez Ingeniería S.A.S.,2013-07-17,4711
+7372,Comercializadora Montoya y Amaya S.A.S.,2019-01-07,4923
+7379,Comercializadora López y Quintero Ltda.,2010-04-01,6201
+7382,Martínez Alimentos S.A.S.,2010-02-17,6201
+7387,Velandia Alimentos S.A.S.,2002-03-13,1081
+7389,García Transportes S.A.S.,2004-01-12,4520
+7394,Comercializadora Naranjo y Suárez S.A.S.,2005-07-07,4923
+7407,Escobar Logística S.A.,2019-02-27,1081
+7419,Inversiones García S.A.S.,2023-05-12,8621
+7425,Núñez Soluciones S.A.S.,2017-10-19,4111
+7430,Comercializadora Mosquera y Cortés S.A.S.,2009-03-12,4520
+7433,Inversiones Bonilla S.A.S.,1997-06-10,6201
+7441,Inversiones Mantilla S.A.S.,2019-03-07,5611
+7446,Arteaga Servicios Médicos S.A.S.,2020-03-02,7020
+7447,Comercializadora Vega y Pérez S.A.,2010-04-14,5611
+7477,Gaitán Consultores S.A.S.,1999-05-04,4923
+7481,Inversiones Burbano S.A.S.,2013-11-27,4711
+7482,Comercializadora Rueda y González S.A.S.,2018-05-23,6201
+7486,Inversiones Pérez S.A.S.,2023-03-16,6201
+7504,Comercializadora Ortega y Martínez S.A.S.,2020-10-19,5611
+7508,Comercializadora Marín y Guzmán Ltda.,2002-03-16,8621
+7509,Inversiones Murcia Ltda.,2002-08-03,4923
+7515,Osorio Construcciones S.A.S.,1996-07-23,5611
+7518,Comercializadora Duarte y Silva S.A.,2022-08-01,8621
+7531,Inversiones Betancur S.A.S.,1996-03-15,6201
+7535,Inversiones Acosta S.A.S.,2021-10-01,6920
+7548,Inversiones Arrieta S.A.S.,1998-12-09,4111
+7554,Beltrán Soluciones S.A.S.,2018-01-25,1081
+7559,Álvarez Servicios Médicos S.A.S.,2020-07-01,4111
+7562,López Logística S.A.,2016-10-27,6201
+7567,Inversiones Rodríguez Ltda.,2020-02-20,5611
+7569,Inversiones Mora Ltda.,2010-05-14,4923
+7574,Portilla Construcciones S.A.S.,2015-02-19,1081
+7585,Fajardo Alimentos S.A.S.,2000-08-26,6920
+7594,Ayala Alimentos S.A.S.,2005-04-29,4711
+7605,Mejía Logística S.A.S.,2023-04-23,4520
+7606,Inversiones Romero S.A.S.,1997-02-08,6201
+7621,Comercializadora Caballero y Castillo S.A.,2017-03-01,8621
+7628,Guzmán Construcciones S.A.S.,2003-01-13,4923
+7629,Parra Soluciones S.A.,1999-12-17,6201
+7642,Fernández Consultores S.A.,1997-06-07,6201
+7644,Comercializadora Aguirre y Gutiérrez S.A.S.,1995-10-18,5611
+7655,Inversiones Jaramillo S.A.S.,2001-07-12,4111
+7658,Inversiones Pérez S.A.S.,2012-06-21,4923
+7660,Rojas Soluciones S.A.S.,2015-04-03,8621
+7666,Comercializadora García y Obando S.A.S.,2000-06-30,1081
+7668,Cantillo Servicios Médicos S.A.S.,1999-04-28,1081
+7676,Salcedo Logística S.A.S.,2004-12-12,1081
+7683,Inversiones Mena S.A.S.,2001-10-05,6201
+7685,Inversiones Rosero S.A.S.,2011-12-16,6920
+7688,Comercializadora Silva y Romero S.A.S.,2009-03-02,8621
+7689,Comercializadora Rodríguez y Ortiz S.A.S.,1997-04-22,4711
+7692,Comercializadora Arias y Zambrano S.A.S.,2024-12-03,4111
+7694,Comercializadora Moreno y García S.A.S.,2023-05-24,8621
+7696,Vega Logística S.A.S.,2013-08-16,4711
+7698,Ramírez Construcciones S.A.,2019-02-16,7020
+7707,Comercializadora Ramírez y González Ltda.,2004-01-27,7020
+7709,Inversiones Benítez S.A.S.,2022-01-31,1081
+7712,Inversiones Jaramillo S.A.S.,2000-08-17,6201
+7718,Inversiones Álvarez S.A.S.,1997-08-19,8621
+7723,Comercializadora Ochoa y García S.A.S.,2019-05-24,6920
+7727,Comercializadora Ramos y Muñoz S.A.S.,2023-06-15,6920
+7729,Inversiones Peña S.A.S.,2002-09-11,5611
+7731,García Consultores S.A.S.,2023-11-25,6920
+7739,Inversiones Restrepo S.A.S.,2015-02-15,7020
+7746,Comercializadora Nieto y Mejía S.A.S.,2023-05-10,4923
+7752,Acevedo Logística S.A.S.,2010-03-16,4111
+7755,Inversiones Fonseca S.A.S.,1998-09-10,7020
+7761,Inversiones Sanabria S.A.S.,1997-05-28,8621
+7762,Inversiones González S.A.S.,2023-07-24,4711
+7764,Inversiones Roa S.A.S.,2015-02-14,8621
+7765,Inversiones Ruiz S.A.S.,2018-10-13,6920
+7771,Prada Alimentos Ltda.,2004-09-13,7020
+7779,Inversiones Angulo S.A.S.,2018-05-11,4520
+7785,Comercializadora Sánchez y García Ltda.,2000-04-07,4711
+7793,Inversiones Quintero S.A.S.,2022-04-11,4711
+7795,Lozano Consultores S.A.S.,2009-08-25,4923
+7796,Comercializadora Herrera y Sepúlveda S.A.S.,1998-01-13,4520
+7811,Comercializadora Orozco y Henao S.A.,2016-02-20,6920
+7817,Comercializadora Flórez y Villa S.A.S.,2015-12-26,4711
+7823,Inversiones Giraldo S.A.S.,2016-09-08,6201
+7826,Comercializadora Nieto y Agudelo S.A.S.,2014-02-26,6920
+7847,Inversiones Leal S.A.S.,2011-01-30,4711
+7852,Inversiones Delgado S.A.S.,2018-08-04,6920
+7874,García Logística S.A.S.,1999-03-14,1081
+7886,Comercializadora González y Agudelo S.A.S.,2020-09-22,1081
+7904,Pérez Transportes Ltda.,1996-01-13,4111
+7905,Álvarez Ingeniería S.A.S.,1997-12-27,6920
+7914,Inversiones Pinzón S.A.S.,2011-01-28,8621
+7918,Triana Tecnología S.A.,2020-03-18,7020
+7919,Álvarez Soluciones S.A.S.,2009-09-26,6920
+7920,Ceballos Construcciones Ltda.,2008-09-09,5611
+7921,Vallejo Ingeniería Ltda.,2019-05-12,4111
+7924,Comercializadora Valencia y Pinto S.A.S.,2000-07-08,4520
+7936,Comercializadora Silva y García S.A.S.,2005-10-19,1081
+7947,Ramírez Logística S.A.S.,2009-04-28,4711
+7949,Comercializadora Valencia y Caicedo S.A.S.,2003-11-17,8621
+7955,Inversiones Pérez S.A.S.,2016-06-03,4923
+7963,Comercializadora Cruz y Castañeda S.A.S.,1996-07-13,6201
+7975,Inversiones Guerra S.A.S.,1999-09-07,8621
+7977,Sepúlveda Servicios Médicos S.A.S.,2003-01-03,4711
+7982,Inversiones Jiménez S.A.,2010-01-15,4711
+7993,Reyes Ingeniería S.A.S.,2003-06-18,8621
+7998,Giraldo Tecnología S.A.,2000-03-14,4923
+8001,Comercializadora Restrepo y Rodríguez S.A.S.,2003-04-25,8621
+8002,Inversiones Luna S.A.S.,2014-06-15,1081
+8009,Comercializadora Osorio y Mesa S.A.S.,2002-09-30,4923
+8011,Inversiones Gómez S.A.S.,2008-09-06,5611
+8015,Hurtado Consultores S.A.S.,2010-05-29,4711
+8017,Comercializadora Sánchez y Becerra S.A.S.,2014-03-30,4520
+8019,Inversiones Zambrano S.A.S.,2010-09-04,8621
+8020,Zapata Construcciones S.A.S.,2014-11-18,4923
+8034,Inversiones Benavides S.A.S.,1999-07-29,4111
+8058,Comercializadora Murillo y Velásquez S.A.S.,2001-10-11,7020
+8059,Comercializadora Peña y Andrade S.A.,2014-04-06,1081
+8060,Comercializadora Álvarez y Murillo S.A.S.,2018-11-19,4711
+8063,García Soluciones S.A.S.,2012-10-01,1081
+8069,Comercializadora Rojas y Bolívar S.A.S.,1997-02-16,7020
+8075,Parada Tecnología S.A.S.,2003-01-24,1081
+8084,Ortiz Logística S.A.S.,2011-02-08,1081
+8104,Inversiones Vargas S.A.S.,2013-09-30,7020
+8111,Comercializadora Montes y Amaya S.A.S.,2011-12-06,4923
+8118,Álvarez Ingeniería S.A.S.,2010-11-08,4520
+8121,Comercializadora Montoya y Suárez S.A.S.,2019-07-02,6201
+8124,Comercializadora Moreno y Montes S.A.S.,2019-08-19,6920
+8145,Díaz Consultores S.A.S.,2012-11-04,5611
+8152,Jiménez Consultores S.A.S.,2004-04-28,6920
+8153,Comercializadora Muñoz y Gómez S.A.,2007-03-20,7020
+8163,Caballero Soluciones S.A.S.,2021-01-16,1081
+8178,Inversiones Vargas S.A.S.,2018-08-31,5611
+8182,Inversiones Ortiz S.A.S.,2005-11-04,6920
+8184,Comercializadora Oviedo y Martínez S.A.S.,2000-10-21,5611
+8191,Pérez Transportes S.A.S.,2018-06-07,8621
+8195,Inversiones Parada S.A.S.,2014-08-31,1081
+8196,Melo Construcciones S.A.S.,2008-06-11,6920
+8208,Manrique Servicios Médicos S.A.S.,2016-07-04,5611
+8210,Inversiones Flórez S.A.S.,2022-12-20,7020
+8215,Comercializadora Marín y Gómez S.A.S.,2011-07-16,8621
+8216,Comercializadora Narváez y Arias S.A.S.,2019-03-09,1081
+8217,Inversiones Gómez S.A.S.,2021-01-21,1081
+8221,Ordóñez Transportes S.A.S.,2024-12-23,4111
+8236,Comercializadora Camacho y Sandoval S.A.S.,2010-02-23,4111
+8239,Murillo Logística S.A.S.,2015-09-01,4923
+8242,Inversiones Castro S.A.S.,2003-10-01,6920
+8247,Comercializadora Rodríguez y Londoño S.A.S.,2019-09-09,5611
+8257,Comercializadora Vega y Rentería S.A.S.,2019-02-23,7020
+8259,Inversiones Torres Ltda.,2013-01-17,4111
+8262,Moreno Consultores S.A.,2007-01-20,6920
+8267,Comercializadora Osorio y Sánchez S.A.S.,1999-09-09,4111
+8271,Manrique Alimentos S.A.S.,2020-10-04,5611
+8299,Mena Ingeniería S.A.S.,2021-04-01,6201
+8312,Morales Alimentos S.A.S.,2012-02-23,1081
+8315,Agudelo Logística Ltda.,2024-03-25,6201
+8321,Comercializadora Ortega y Mendoza S.A.S.,2016-11-22,1081
+8323,Inversiones Suárez S.A.S.,2016-02-08,6920
+8324,Inversiones Gaitán S.A.S.,2001-05-28,4711
+8330,Comercializadora Ramírez y López S.A.S.,2011-11-24,1081
+8343,Pineda Consultores S.A.S.,2023-08-20,1081
+8347,Inversiones Mesa S.A.S.,1998-08-15,7020
+8349,Inversiones Sandoval S.A.,2024-12-29,4711
+8355,Comercializadora Ávila y Camacho S.A.S.,2023-03-22,1081
+8361,Mosquera Consultores S.A.S.,2018-02-08,4923
+8376,Inversiones Vélez S.A.S.,2015-09-10,4111
+8378,Comercializadora Reyes y Castillo S.A.S.,2019-05-30,6201
+8384,Inversiones Castañeda S.A.S.,2001-12-26,6920
+8419,Inversiones Pérez S.A.S.,2015-09-30,8621
+8433,Soto Ingeniería S.A.S.,2010-03-25,4923
+8438,Inversiones Mosquera S.A.S.,2017-09-02,4923
+8444,Comercializadora Castillo y Hoyos S.A.S.,2019-05-26,6201
+8462,Comercializadora Medina y Moreno S.A.S.,2014-03-20,4111
+8472,Comercializadora Palacios y Pérez S.A.S.,2005-12-17,8621
+8473,Inversiones Caballero S.A.S.,2008-07-18,6920
+8482,Comercializadora Bravo y Marín S.A.S.,2001-01-23,4923
+8483,Comercializadora Carmona y Serna S.A.S.,2014-11-21,1081
+8497,Comercializadora Rodríguez y Torres S.A.S.,2001-08-27,6920
+8505,Patiño Alimentos S.A.S.,2001-09-10,4111
+8506,Inversiones Mora S.A.S.,2022-12-26,1081
+8510,Inversiones Vargas S.A.S.,2024-11-23,7020
+8516,Comercializadora Jiménez y Hurtado Ltda.,2000-10-29,6920
+8522,Comercializadora Hernández y Córdoba S.A.S.,2019-07-28,6920
+8523,Inversiones Aguirre S.A.S.,1998-08-25,6201
+8524,Salazar Alimentos S.A.S.,1999-01-24,7020
+8528,Inversiones Valderrama S.A.S.,2008-09-10,7020
+8535,Comercializadora Alarcón y Valencia S.A.S.,2015-02-03,6201
+8558,Comercializadora Herrera y González S.A.S.,2009-04-11,4111
+8559,Comercializadora Toro y Gil S.A.S.,1996-05-07,5611
+8562,Jaramillo Ingeniería S.A.S.,2012-04-20,4711
+8566,Comercializadora López y Álvarez S.A.,2002-03-21,1081
+8570,Contreras Transportes S.A.S.,1998-03-13,7020
+8574,Comercializadora Suárez y Gómez S.A.S.,2017-04-25,6920
+8585,Vergara Soluciones S.A.S.,2024-03-11,8621
+8589,Núñez Ingeniería S.A.S.,2014-12-21,4923
+8590,Inversiones Gonzáles S.A.S.,2003-01-09,8621
+8592,Inversiones Castillo S.A.S.,1997-01-10,4520
+8600,Cáceres Soluciones Ltda.,2022-12-20,4923
+8602,Inversiones Mora S.A.,2007-08-19,6920
+8621,Comercializadora Acosta y Garzón S.A.,2008-02-07,4520
+8638,Inversiones Arias S.A.S.,2008-09-25,4520
+8640,Patiño Distribuciones S.A.S.,2010-11-01,4923
+8641,Inversiones Escobar S.A.S.,2015-05-03,6201
+8647,Comercializadora Ramírez y Escobar S.A.S.,2012-05-04,4923
+8650,Parra Servicios Médicos S.A.,2000-01-23,8621
+8660,Inversiones Rojas S.A.S.,2012-08-06,4923
+8667,Inversiones Rico S.A.S.,2004-08-27,6920
+8687,Inversiones Bolaños S.A.,2002-05-22,7020
+8689,Inversiones Cortés S.A.S.,2004-02-01,6201
+8700,Inversiones Gómez S.A.S.,2013-08-10,6920
+8704,Rincón Soluciones S.A.S.,2006-07-28,7020
+8705,Comercializadora Rodríguez y Hernández S.A.S.,2011-09-12,7020
+8708,Ramírez Logística Ltda.,1996-04-20,6920
+8723,Comercializadora Arango y Martínez S.A.S.,2004-07-28,1081
+8749,Sánchez Servicios Médicos S.A.S.,2023-04-15,4711
+8751,Inversiones González S.A.S.,2005-01-27,8621
+8755,Inversiones Jiménez S.A.,2016-02-24,7020
+8759,Acosta Servicios Médicos S.A.S.,2021-03-25,5611
+8771,Comercializadora Guerra y Suárez S.A.S.,2012-02-26,8621
+8780,García Consultores S.A.,2012-09-20,4923
+8781,Vera Distribuciones S.A.,2001-08-15,6201
+8790,Inversiones Galindo S.A.,2016-07-29,8621
+8794,Comercializadora Rodríguez y García S.A.S.,2023-06-21,1081
+8800,Giraldo Distribuciones S.A.S.,2014-01-04,1081
+8801,Inversiones Uribe S.A.,2014-09-10,5611
+8807,Comercializadora Hernández y Gómez S.A.S.,2010-04-05,6201
+8812,Sánchez Transportes S.A.S.,2002-03-29,1081
+8813,Arenas Servicios Médicos S.A.S.,2013-04-26,6920
+8817,Comercializadora Díaz y Bernal S.A.S.,1997-11-06,6201
+8824,Comercializadora Cano y Sánchez Ltda.,2022-12-06,6920
+8825,Guerrero Logística S.A.S.,2002-03-18,4711
+8826,Comercializadora Ortega y Díaz S.A.,2005-03-04,7020
+8834,Inversiones Rodríguez S.A.S.,2012-07-12,4520
+8836,Inversiones Quintero Ltda.,2019-06-27,4923
+8838,Comercializadora Sánchez y Herrera S.A.S.,2017-04-04,7020
+8839,Inversiones Cruz S.A.S.,2016-12-06,4711
+8840,Silva Transportes S.A.S.,2004-08-27,4111
+8844,Maldonado Construcciones Ltda.,2023-06-16,4923
+8861,Arenas Ingeniería S.A.S.,2020-06-13,4520
+8865,Alvarado Transportes S.A.S.,2003-03-15,8621
+8869,Comercializadora Cruz y Duque S.A.S.,2002-01-10,1081
+8870,Muñoz Logística S.A.S.,2015-10-15,4711
+8873,Orozco Soluciones S.A.,2004-06-20,5611
+8879,Ballesteros Alimentos Ltda.,2018-03-12,1081
+8899,Comercializadora Muñoz y Tamayo S.A.S.,2014-05-02,4520
+8901,Barrera Consultores S.A.S.,2020-01-06,6201
+8902,Inversiones Salgado Ltda.,2023-04-10,6201
+8922,Comercializadora Sandoval y Gutiérrez S.A.S.,2025-09-11,4923
+8924,Comercializadora Cardona y Mendoza Ltda.,2011-04-07,4923
+8946,Prada Soluciones S.A.S.,2000-04-04,6201
+8956,Comercializadora Galindo y Vargas S.A.S.,2014-10-20,4711
+8965,Comercializadora Ramírez y Díaz S.A.S.,2017-05-24,1081
+8967,Mendoza Alimentos S.A.S.,2013-05-15,6201
+8976,Inversiones Hernández S.A.S.,2020-11-23,1081
+8977,Correa Alimentos Ltda.,2012-02-24,4923
+8981,Mendoza Transportes S.A.S.,2014-07-07,4111
+8998,Rojas Servicios Médicos S.A.S.,2013-09-27,1081
+9005,Inversiones Osorio S.A.S.,2018-07-03,6920
+9012,Inversiones Padilla S.A.S.,2003-01-31,4111
+9015,Comercializadora Barrera y Posada S.A.S.,2009-01-24,5611
+9016,Rodríguez Transportes S.A.S.,2020-09-06,6920
+9020,Romero Tecnología S.A.S.,2021-08-03,4923
+9025,Quintero Alimentos S.A.,2024-12-04,4923
+9029,Comercializadora Morales y Vargas S.A.S.,2003-06-07,6201
+9032,Castro Transportes S.A.S.,2021-03-24,1081
+9042,Mendoza Soluciones S.A.S.,2023-11-28,6201
+9045,Blanco Tecnología S.A.S.,2000-08-18,7020
+9062,Maldonado Alimentos S.A.,2002-03-09,4111
+9090,Comercializadora Soto y Trujillo S.A.S.,2003-02-22,4111
+9091,Comercializadora Melo y Valderrama S.A.,2020-01-11,5611
+9094,Comercializadora Álvarez y Navarro S.A.S.,2001-04-15,7020
+9096,Comercializadora Correa y Pardo S.A.,2007-09-13,4923
+9104,Morales Construcciones S.A.,2001-03-11,8621
+9113,Comercializadora Giraldo y Ayala S.A.S.,1998-09-30,4711
+9117,Inversiones Rodríguez Ltda.,2008-07-03,4520
+9122,Comercializadora Parada y Díaz S.A.S.,2016-04-06,6920
+9124,Inversiones Giraldo S.A.S.,2024-01-20,5611
+9125,Correa Consultores S.A.S.,1998-09-02,6201
+9129,Inversiones Martínez S.A.,2019-11-11,6201
+9133,Comercializadora Rodríguez y García S.A.S.,1999-08-15,1081
+9143,Anaya Logística S.A.S.,2021-11-07,5611
+9147,Inversiones Londoño S.A.,2023-02-16,8621
+9150,Comercializadora Mendoza y Londoño S.A.S.,2025-09-25,4711
+9151,Cano Ingeniería Ltda.,2016-10-30,8621
+9157,Molina Transportes Ltda.,2010-05-03,6201
+9160,Romero Alimentos S.A.S.,2005-08-14,8621
+9182,Inversiones Hernández S.A.S.,2016-01-21,7020
+9190,Inversiones Jiménez S.A.S.,1996-06-03,5611
+9207,Inversiones Barreto S.A.S.,2019-01-15,5611
+9218,Luna Logística S.A.S.,2024-08-22,4520
+9219,Barragán Servicios Médicos S.A.S.,2001-09-09,5611
+9221,Inversiones Rodríguez Ltda.,2024-02-08,8621
+9222,Puentes Servicios Médicos S.A.S.,2022-05-02,4923
+9237,Gómez Ingeniería S.A.S.,2023-04-10,7020
+9245,Inversiones Quintero S.A.S.,2004-05-23,6201
+9247,Comercializadora García y Rivas S.A.,2005-01-16,4711
+9256,Gallego Construcciones S.A.S.,2018-02-06,1081
+9259,Comercializadora Flórez y Muñoz S.A.S.,2021-10-29,7020
+9264,Inversiones Rodríguez S.A.S.,2003-08-01,7020
+9270,Inversiones Orozco S.A.S.,2004-09-07,4520
+9273,Peña Servicios Médicos S.A.S.,2000-12-04,4711
+9281,González Soluciones S.A.,2004-10-21,6920
+9284,Comercializadora González y Gutiérrez S.A.S.,2001-06-20,4520
+9290,Comercializadora Pérez y Silva S.A.S.,2011-06-15,4711
+9292,Inversiones Gil S.A.S.,2025-01-27,6920
+9293,Pulido Transportes S.A.S.,2015-06-14,4923
+9311,Serna Alimentos S.A.S.,2002-12-27,5611
+9312,Comercializadora Valencia y Ramírez S.A.S.,2021-06-20,7020
+9334,Toro Logística S.A.S.,2018-02-06,6920
+9338,Ballesteros Consultores Ltda.,2007-01-06,7020
+9346,Comercializadora Romero y Caballero S.A.S.,2008-11-04,7020
+9359,Comercializadora Moreno y Castellanos S.A.S.,2001-05-18,6920
+9365,Comercializadora Prada y Yepes S.A.S.,2007-05-29,4111
+9374,Castro Transportes S.A.S.,2003-07-13,5611
+9375,Comercializadora Fajardo y Mesa S.A.S.,2004-03-02,4520
+9386,Comercializadora Saavedra y Trujillo S.A.S.,2007-07-03,6201
+9392,Anaya Logística S.A.S.,2003-04-13,5611
+9397,Inversiones Arias S.A.S.,2024-03-04,4111
+9408,Acevedo Alimentos S.A.S.,2000-08-16,5611
+9418,Hoyos Transportes S.A.,1996-11-04,1081
+9431,Inversiones Rivera S.A.S.,2020-06-19,4711
+9434,Inversiones García S.A.S.,2015-02-08,4923
+9435,Inversiones Pérez S.A.,2003-11-05,5611
+9440,Comercializadora Cano y Ordóñez S.A.S.,2001-01-06,7020
+9444,Comercializadora Delgado y Gallego S.A.S.,2016-02-01,6920
+9452,Inversiones Castañeda S.A.,1999-08-28,8621
+9470,Inversiones Ruiz S.A.S.,2003-01-08,4711
+9471,Inversiones Hernández S.A.S.,2002-03-18,1081
+9473,Inversiones Giraldo S.A.S.,2011-10-23,6920
+9476,Inversiones Ortega S.A.S.,2001-06-24,8621
+9478,Inversiones Martínez S.A.S.,2018-08-10,8621
+9480,Parra Ingeniería S.A.,2008-12-14,4711
+9484,Estrada Transportes S.A.,2006-12-11,4520
+9489,Comercializadora Sanabria y Castillo S.A.S.,2016-08-30,6920
+9490,Comercializadora Castro y Soto S.A.S.,2019-08-03,8621
+9497,González Servicios Médicos S.A.S.,2023-12-14,8621
+9500,Comercializadora Rojas y Márquez S.A.S.,2019-08-09,6201
+9503,Yepes Transportes S.A.S.,2023-09-16,4711
+9506,Comercializadora Duque y Vargas S.A.S.,2013-01-26,5611
+9520,Buitrago Logística S.A.S.,2008-04-14,7020
+9521,Inversiones Uribe S.A.S.,2016-08-27,7020
+9522,Inversiones Ramírez S.A.S.,2016-08-25,5611
+9530,Inversiones Torres S.A.S.,2001-07-17,4520
+9550,Comercializadora Molina y Perdomo Ltda.,2011-11-06,6920
+9551,Giraldo Construcciones S.A.S.,2019-04-29,4711
+9556,Comercializadora Gil y Cuéllar S.A.S.,2021-10-04,1081
+9557,Comercializadora Giraldo y Rangel S.A.S.,2018-01-03,6920
+9559,Comercializadora Chávez y Chacón Ltda.,2001-07-29,5611
+9561,Comercializadora Becerra y Pérez S.A.S.,2023-03-20,4711
+9567,Comercializadora Peña y Martínez S.A.S.,2006-04-26,4923
+9579,Sánchez Logística S.A.S.,1997-11-22,4711
+9584,Gómez Transportes S.A.S.,2008-07-23,4711
+9586,Comercializadora Morales y Castillo S.A.,2000-05-12,4520
+9590,Inversiones Hernández S.A.S.,2018-01-26,7020
+9597,Inversiones Ramírez S.A.S.,2020-12-23,4711
+9603,Inversiones Fuentes Ltda.,2017-02-06,5611
+9610,Inversiones García S.A.S.,2001-01-09,1081
+9613,Comercializadora Rentería y Ruiz S.A.S.,2009-07-13,6920
+9615,Comercializadora Arias y Muñoz S.A.S.,2020-09-03,4711
+9627,Inversiones Hernández S.A.S.,2009-05-06,7020
+9634,Restrepo Construcciones S.A.S.,2024-01-19,5611
+9640,Inversiones Prieto S.A.S.,2006-06-01,6920
+9641,Toro Tecnología Ltda.,2004-12-31,8621
+9642,Inversiones Mosquera S.A.S.,2012-02-07,4111
+9658,Hernández Transportes S.A.S.,2013-03-03,8621
+9678,Inversiones Zapata S.A.S.,2006-12-22,5611
+9682,Gil Consultores S.A.S.,2006-06-14,1081
+9689,Inversiones Zambrano S.A.S.,2013-05-27,4520
+9700,Comercializadora Jiménez y Bohórquez S.A.S.,2000-12-08,1081
+9702,Inversiones Hurtado Ltda.,2010-10-10,1081
+9706,Comercializadora Mercado y García S.A.S.,1998-12-19,4111
+9708,Comercializadora Chávez y García S.A.S.,2000-05-21,4923
+9726,Caro Servicios Médicos S.A.S.,2004-09-19,8621
+9728,Inversiones Cabrera S.A.S.,2019-02-24,7020
+9736,Inversiones Alfonso S.A.S.,2007-08-15,7020
+9737,Inversiones Serna S.A.,2024-06-03,6920
+9738,Comercializadora Méndez y Parra S.A.S.,2022-10-01,7020
+9740,Comercializadora Angarita y Arenas S.A.S.,2005-08-02,8621
+9750,Díaz Tecnología S.A.,2009-12-16,7020
+9757,Prada Tecnología S.A.S.,2018-12-08,4711
+9758,Comercializadora Ramírez y Hernández S.A.S.,2010-07-26,4111
+9759,Camacho Consultores S.A.S.,2001-12-18,4711
+9767,Ortega Servicios Médicos S.A.,1997-06-06,4923
+9768,Inversiones Acevedo S.A.S.,2010-07-02,6920
+9769,Flórez Soluciones S.A.S.,2007-12-15,6201
+9780,Comercializadora Angulo y Hernández S.A.S.,2015-07-27,4111
+9783,Comercializadora Cortés y Muñoz S.A.S.,2009-04-18,5611
+9801,Martínez Consultores S.A.,2007-03-08,4111
+9804,Inversiones Londoño S.A.S.,2014-05-27,6201
+9806,Comercializadora Pineda y Escobar S.A.S.,1996-11-08,4711
+9809,Inversiones Monroy S.A.S.,2002-08-23,6201
+9815,Comercializadora Cruz y Bernal S.A.S.,2026-01-23,6201
+9838,Comercializadora Rodríguez y Peña S.A.,2021-07-08,4520
+9839,Comercializadora López y Ramírez S.A.S.,2010-04-14,4520
+9847,Méndez Consultores S.A.S.,2017-10-18,6201
+9850,Orjuela Soluciones S.A.S.,2019-04-18,4520
+9855,Quintero Logística S.A.,2018-12-31,6201
+9862,Comercializadora Martínez y Romero Ltda.,2020-02-28,4520
+9874,Sandoval Transportes S.A.S.,2003-05-06,4520
+9885,Inversiones Riascos S.A.S.,2009-06-08,4520
+9886,Inversiones Correa Ltda.,2007-11-29,1081
+9897,Inversiones Martínez S.A.S.,2007-06-03,7020
+9906,Inversiones Montoya S.A.S.,2009-12-31,6920
+9917,Inversiones Vergara S.A.S.,2016-08-26,4711
+9922,Inversiones Gutiérrez S.A.S.,2017-11-24,8621
+9924,Inversiones Patiño S.A.S.,1997-11-14,6920
+9930,Ocampo Alimentos S.A.S.,2004-03-30,7020
+9934,Comercializadora Garzón y Escobar S.A.S.,2017-07-08,4711
+9941,Garcés Construcciones S.A.S.,2017-08-01,6201
+9949,Cardona Construcciones Ltda.,2009-11-02,4711
+9959,Inversiones Gómez S.A.,2003-07-29,4520
+9961,Comercializadora Ardila y Guzmán S.A.S.,2019-12-27,5611
+9979,Amaya Servicios Médicos S.A.S.,2004-10-28,6920
+9981,Inversiones Rivera S.A.S.,2022-09-14,8621
+9984,Comercializadora Rendón y Calderón S.A.S.,2024-02-17,1081

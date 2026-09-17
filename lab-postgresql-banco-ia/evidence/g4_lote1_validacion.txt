@@ -1,0 +1,77 @@
+                        control                        | esperado | obtenido | resultado 
+-------------------------------------------------------+----------+----------+-----------
+ Clientes                                              |    10000 |    10000 | PASS
+ Personas naturales                                    |     8500 |     8500 | PASS
+ Personas jurídicas                                    |     1500 |     1500 | PASS
+ Cuentas                                               |    50000 |    50000 | PASS
+ RN-02 clientes sin subtipo o con ambos                |        0 |        0 | PASS
+ RN-08 titulares menores de 18 años al abrir           |        0 |        0 | PASS
+ RN-13 cuentas no cerradas sin exactamente 1 principal |        0 |        0 | PASS
+ RN-14/15 producto no permitido para el titular        |        0 |        0 | PASS
+ RN-16 cuentas con más titulares que el máximo         |        0 |        0 | PASS
+ RN-17 sobregiro fuera de CORRIENTE                    |        0 |        0 | PASS
+ RN-23 primer evento distinto de CREACION              |        0 |        0 | PASS
+ RN-25 estado distinto del último evento               |        0 |        0 | PASS
+ RN-27 límite distinto del último cambio               |        0 |        0 | PASS
+ RN-28 desbloqueo/cierre/cambio sin SUPERVISOR         |        0 |        0 | PASS
+ RN-48 saldo distinto de 0 sin asientos contables      |        0 |        0 | PASS
+ RN-54 usuarios que también son clientes               |        0 |        0 | PASS
+ Apertura anterior a la vinculación                    |        0 |        0 | PASS
+ Clientes sin ninguna cuenta como titular principal    |        0 |        0 | PASS
+ Clientes INACTIVO con titularidad vigente             |        0 |        0 | PASS
+ Personas naturales con más de 1 cuenta NOMINA         |        0 |        0 | PASS
+(20 rows)
+
+ estado_cuenta | cuentas | porcentaje 
+---------------+---------+------------
+ ACTIVA        |   43557 |       87.1
+ CERRADA       |    2364 |        4.7
+ INACTIVA      |    2090 |        4.2
+ BLOQUEADA     |    1989 |        4.0
+(4 rows)
+
+ producto_codigo | cuentas 
+-----------------+---------
+ AHORROS         |   20547
+ CORRIENTE       |   16033
+ EMPRESARIAL     |   10686
+ NOMINA          |    2734
+(4 rows)
+
+ tipo_cliente | clientes | cuentas | promedio | mediana | p95 | maximo 
+--------------+----------+---------+----------+---------+-----+--------
+ JURIDICA     |     1500 |   21866 |    14.58 |       8 |  51 |    300
+ NATURAL      |     8500 |   28134 |     3.31 |       3 |   9 |     12
+(2 rows)
+
+    departamento    | clientes 
+--------------------+----------
+ Bogotá, D.C.       |     2902
+ Antioquia          |     1354
+ Valle del Cauca    |     1173
+ Atlántico          |      695
+ Bolívar            |      510
+ Santander          |      324
+ Risaralda          |      300
+ Norte de Santander |      266
+ Caldas             |      220
+ Meta               |      212
+(10 rows)
+
+ anio | clientes_vinculados 
+------+---------------------
+ 2015 |                 327
+ 2016 |                 344
+ 2017 |                 439
+ 2018 |                 565
+ 2019 |                 610
+ 2020 |                 716
+ 2021 |                 726
+ 2022 |                 762
+ 2023 |                 834
+ 2024 |                1119
+ 2025 |                1956
+ 2026 |                1602
+(12 rows)
+
+
