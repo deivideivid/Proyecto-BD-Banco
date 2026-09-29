@@ -1,0 +1,22 @@
+# Lote 2: CSV de más de 100 MB (GitHub los rechaza).
+# Se regeneran idénticos con: python src/generate_transactions.py
+lab-postgresql-banco-ia/data/lote2/
+
+# Credenciales: nunca subir contraseñas ni cadenas de conexión
+.env
+*.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Respaldos de base de datos
+*.dump
+*.backup
+
+# Archivos del sistema
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,188 @@
+== python src/generate_transactions.py
+Semilla: 20260909
+Solicitudes simuladas: 1,048,389 · removidas para el objetivo: 1,359
+  PENDING_APPROVAL          74
+  POSTED             1,000,000
+  REJECTED              24,104
+  AJUSTE        PENDING_APPROVAL          74
+  AJUSTE        POSTED                 4,255
+  AJUSTE        REJECTED                 127
+  CONSIGNACION  POSTED               244,023
+  CREDITO       POSTED               189,145
+  DEBITO        POSTED               194,653
+  DEBITO        REJECTED               8,516
+  RETIRO        POSTED                78,850
+  RETIRO        REJECTED               7,753
+  REVERSO       POSTED                 9,530
+  REVERSO       REJECTED                 197
+  TRANSFERENCIA POSTED               279,544
+  TRANSFERENCIA REJECTED               7,511
+archivo                          filas       MB  sha256
+asiento_contable.csv         2,000,000    135.2  1c68ae9b3d8ca2c0
+transaccion_financiera.csv   1,024,178    156.3  8fcf2ec17bc357e3
+
+== psql -f sql/load/carga_lote2_transacciones.sql  (PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1), base nueva con lote 1 cargado)
+Timing is on.
+SET
+Time: 0.186 ms
+SET
+Time: 0.062 ms
+BEGIN
+Time: 0.036 ms
+DO
+Time: 4.147 ms
+COPY 1024178
+Time: 28214.108 ms (00:28.214)
+COPY 2000000
+Time: 26123.125 ms (00:26.123)
+UPDATE 37884
+Time: 893.730 ms
+ setval  
+---------
+ 1024178
+(1 row)
+
+Time: 0.781 ms
+COMMIT
+Time: 2.352 ms
+VACUUM
+Time: 128.286 ms
+ANALYZE
+Time: 345.220 ms
+SELECT 112145
+Time: 104.459 ms
+CREATE INDEX
+Time: 23.416 ms
+SELECT 53018
+Time: 31.734 ms
+CREATE INDEX
+Time: 14.980 ms
+SELECT 1279544
+Time: 987.785 ms
+ANALYZE
+Time: 192.505 ms
+                           control                           | esperado | obtenido | resultado 
+-------------------------------------------------------------+----------+----------+-----------
+ S5 transacciones POSTED                                     |  1000000 |  1000000 | PASS
+ Asientos contables (2 por transacción POSTED)               |  2000000 |  2000000 | PASS
+ RN-45 REJECTED/PENDING con asientos                         |        0 |        0 | PASS
+ RN-46 POSTED sin débito o sin crédito                       |        0 |        0 | PASS
+ RN-47 transacciones descuadradas (Σ D ≠ Σ C)                |        0 |        0 | PASS
+ Asientos cuyo valor ≠ monto de la transacción               |        0 |        0 | PASS
+ RN-48 saldo almacenado ≠ saldo según asientos               |        0 |        0 | PASS
+ RN-31 momentos con saldo por debajo del cupo de sobregiro   |        0 |        0 | PASS
+ RN-32/33 transferencias a la misma cuenta u otra moneda     |        0 |        0 | PASS
+ RN-34 débitos POSTED sobre cuenta no ACTIVA                 |        0 |        0 | PASS
+ RN-35 créditos POSTED sobre cuenta no ACTIVA/BLOQUEADA      |        0 |        0 | PASS
+ RN-36 movimientos antes de la apertura o después del cierre |        0 |        0 | PASS
+ RN-37 cuenta-día con retiros sobre el límite vigente        |        0 |        0 | PASS
+ RN-41 reversos con monto o cuentas distintos a la original  |        0 |        0 | PASS
+ RN-41 asientos del reverso que no espejan la original       |        0 |        0 | PASS
+ RN-42 reversos de un reverso                                |        0 |        0 | PASS
+ RN-44 ajustes POSTED sin aprobación de otro SUPERVISOR      |        0 |        0 | PASS
+ RN-51 reversos registrados por usuario sin rol SUPERVISOR   |        0 |        0 | PASS
+ RN-20 cuentas CERRADA con saldo distinto de 0               |        0 |        0 | PASS
+ RN-54 operaciones sobre cuentas donde el usuario es titular |        0 |        0 | PASS
+ Solicitudes fuera de la ventana 2024-09-01 a 2026-08-31     |        0 |        0 | PASS
+ fecha_contable ≠ día de contabilización (hora Colombia)     |        0 |        0 | PASS
+ Movimientos en los 180 días previos a una inactivación      |        0 |        0 | PASS
+ Cuentas con saldo que viola el cupo de sobregiro hoy        |        0 |        0 | PASS
+(24 rows)
+
+Time: 11143.964 ms (00:11.144)
+  tipo_codigo  |  estado_codigo   | transacciones 
+---------------+------------------+---------------
+ AJUSTE        | PENDING_APPROVAL |            74
+ AJUSTE        | POSTED           |          4255
+ AJUSTE        | REJECTED         |           127
+ AJUSTE        |                  |          4456
+ CONSIGNACION  | POSTED           |        244023
+ CONSIGNACION  |                  |        244023
+ CREDITO       | POSTED           |        189145
+ CREDITO       |                  |        189145
+ DEBITO        | POSTED           |        194653
+ DEBITO        | REJECTED         |          8516
+ DEBITO        |                  |        203169
+ RETIRO        | POSTED           |         78850
+ RETIRO        | REJECTED         |          7753
+ RETIRO        |                  |         86603
+ REVERSO       | POSTED           |          9530
+ REVERSO       | REJECTED         |           197
+ REVERSO       |                  |          9727
+ TRANSFERENCIA | POSTED           |        279544
+ TRANSFERENCIA | REJECTED         |          7511
+ TRANSFERENCIA |                  |        287055
+               |                  |       1024178
+(21 rows)
+
+Time: 190.066 ms
+                  motivo_rechazo                   | rechazadas 
+---------------------------------------------------+------------
+ Fondos insuficientes                              |      17842
+ Cuenta bloqueada: no puede originar débitos       |       5239
+ Excede el límite diario de retiro                 |        699
+ Cuenta bloqueada: el reverso no puede debitarla   |        191
+ Rechazado por el supervisor: soporte insuficiente |        127
+ Fondos insuficientes para el reverso              |          6
+(6 rows)
+
+Time: 61.565 ms
+   mes   | posted 
+---------+--------
+ 2024-09 |  20955
+ 2024-10 |  27148
+ 2024-11 |  27934
+ 2024-12 |  39278
+ 2025-01 |  27322
+ 2025-02 |  29089
+ 2025-03 |  31652
+ 2025-04 |  34078
+ 2025-05 |  35962
+ 2025-06 |  37572
+ 2025-07 |  38152
+ 2025-08 |  37878
+ 2025-09 |  39407
+ 2025-10 |  42923
+ 2025-11 |  39964
+ 2025-12 |  60264
+ 2026-01 |  40914
+ 2026-02 |  43801
+ 2026-03 |  48939
+ 2026-04 |  52124
+ 2026-05 |  53607
+ 2026-06 |  62398
+ 2026-07 |  63572
+ 2026-08 |  65067
+(24 rows)
+
+Time: 233.006 ms
+       tipo_dia        | promedio_diario 
+-----------------------+-----------------
+ quincena / fin de mes |            2087
+ resto de días         |            1194
+(2 rows)
+
+Time: 561.400 ms
+ cuentas_con_movimientos | promedio | mediana | p95 | maximo 
+-------------------------+----------+---------+-----+--------
+                   39103 |     32.7 |      12 | 121 |   2339
+(1 row)
+
+Time: 514.597 ms
+ tamano_base 
+-------------
+ 571 MB
+(1 row)
+
+Time: 0.972 ms
+           tabla            | tamano_total 
+----------------------------+--------------
+ fin.asiento_contable       | 223 MB
+ fin.transaccion_financiera | 199 MB
+ core.evento_cuenta         | 16 MB
+ core.cuenta                | 16 MB
+ core.titularidad_cuenta    | 6792 kB
+ core.cliente               | 2336 kB
+(6 rows)
+
+Time: 2.039 ms

@@ -1,0 +1,9 @@
+# Finales de línea iguales para todo el grupo (LF), sin importar Windows o Mac.
+# Así los CSV generados tienen el mismo hash en todos los computadores (G4).
+* text=auto
+*.csv text eol=lf
+*.sql text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf
+*.png binary
