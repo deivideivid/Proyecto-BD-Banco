@@ -1,0 +1,50 @@
+== G0 · Evidencia del entorno · Banco Andino Colombia ==
+Cliente psql: PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit
+
+                           servidor_postgresql                           
+-------------------------------------------------------------------------
+ PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit
+(1 fila)
+
+ base_de_datos | usuario  |          fecha_hora           
+---------------+----------+-------------------------------
+ postgres      | postgres | 2026-09-29 18:20:16.727302-05
+(1 fila)
+
+ server_version 
+----------------
+ 18.6
+(1 fila)
+
+    TimeZone    
+----------------
+ America/Bogota
+(1 fila)
+
+ data_checksums 
+----------------
+ on
+(1 fila)
+
+ server_encoding 
+-----------------
+ UTF8
+(1 fila)
+
+ prueba_sql 
+------------
+          2
+(1 fila)
+
+== Versiones complementarias (registradas en PowerShell) ==
+Python: Python 3.13.14   (comando: python --version)
+Repositorio: https://github.com/deivideivid/Proyecto-BD-Banco (clonado con GitHub Desktop)
+
+== Resultado G0 ==
+Criterio: PostgreSQL responde, el repositorio existe y se ejecuta SQL de prueba.
+PostgreSQL responde ............ PASS (18.6, cumple 16+)
+SQL de prueba (1 + 1 = 2) ...... PASS
+Repositorio existe ............. PASS
+Versiones registradas .......... PASS (PostgreSQL 18.6, psql 18.6, Python 3.13.14)
+QUALITY GATE G0 = PASS
+Generado con: sql/00_g0_environment.sql (fecha 2026-09-29, zona America/Bogota)

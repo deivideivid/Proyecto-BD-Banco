@@ -1,6 +1,6 @@
 # Banco Andino Colombia · Laboratorio PostgreSQL aumentado con IA
 
-Base de datos OLTP de un banco ficticio en **PostgreSQL 16**, construida por quality gates (G0–G8).
+Base de datos OLTP de un banco ficticio en **PostgreSQL 16 o superior** (el equipo usa 18.6), construida por quality gates (G0–G8).
 Todos los datos son **100 % sintéticos**: no hay información de personas reales.
 
 ## Estructura
@@ -23,11 +23,11 @@ lab-postgresql-banco-ia/
 | 1 | 10.000 clientes · 50.000 cuentas · titularidades · eventos | 20/20 PASS |
 | 2 | 1.000.000 transacciones POSTED (+ rechazadas y pendientes) · 2.000.000 asientos | 24/24 PASS |
 
-La base completa pesa cerca de **571 MB**, así que se trabaja en **PostgreSQL 16 local** y no en el plan gratis de Supabase (límite de 500 MB).
+La base completa pesa cerca de **571 MB**, así que se trabaja en **PostgreSQL local** y no en el plan gratis de Supabase (límite de 500 MB).
 
 ## Cómo montar la base (Windows)
 
-Requisitos: PostgreSQL 16 (incluye `psql`) y Python 3.10 o superior.
+Requisitos: PostgreSQL 16 o superior (incluye `psql`) y Python 3.10 a 3.13.
 Todos los comandos se ejecutan **desde la carpeta `lab-postgresql-banco-ia`**, porque las rutas de carga son relativas.
 
 ```powershell
@@ -53,7 +53,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 
 ## Estado por gates
 
-- [x] **G0** Entorno
+- [x] **G0** Entorno: PostgreSQL 18.6 + Python 3.13 → `evidence/g0_environment.txt`
 - [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (adoptados por el equipo, no consultados con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
 - [ ] **G2** Modelo lógico (`docs/02_modelo_logico.md`)
 - [ ] **G3** Construcción SQL: funciones, triggers, roles y pruebas (las 28 tablas ya están)
