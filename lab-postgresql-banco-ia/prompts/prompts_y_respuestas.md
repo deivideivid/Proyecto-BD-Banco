@@ -2,10 +2,10 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G1 |
+| Gates cubiertos | G0–G2 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
-| Última actualización | 2026-09-17 |
-| Matriz de decisiones | [`../docs/matriz_decisiones_ia.md`](../docs/matriz_decisiones_ia.md) |
+| Última actualización | 2026-09-29 |
+| Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
 
 ## Reglas de uso aplicadas
 
@@ -23,6 +23,7 @@
 | [P-04](#p-04--entendimiento-del-negocio-y-reglas) | 2026-09-17 | G1 | Entender el negocio y proponer al menos 30 reglas verificables. | IA-03, IA-05 a IA-09 |
 | [P-05](#p-05--selección-de-supuestos-y-documentación-de-g1) | 2026-09-17 | G1 | Seleccionar los 5 supuestos y documentar los puntos pendientes de G1. | IA-05 a IA-09 |
 | [Prompt 1 del laboratorio](#prompt-1-del-laboratorio--analizar-el-caso) | 2026-09-17 | G1 | Correspondencia entre el Prompt 1 oficial y los resultados obtenidos. | — |
+| [P-06](#p-06--prompt-2a-del-laboratorio--auditor-del-modelo) | 2026-09-29 | G2 | Auditar el modelo relacional implementado (Prompt 2A oficial). | IA-12 a IA-16 |
 
 ---
 
@@ -279,13 +280,40 @@ Las salidas exigidas por este prompt se obtuvieron en las sesiones P-01, P-04 y 
 
 | Salida exigida | Ubicación en la entrega |
 |---|---|
-| 1) Actores y procesos | [Especificación §2](../docs/01_especificacion.md#2-actores-y-procesos) |
-| 2) Entidades y propósito | [Especificación §3](../docs/01_especificacion.md#3-entidades-y-propósito) |
-| 3) Atributos esenciales | [Especificación §3](../docs/01_especificacion.md#3-entidades-y-propósito) y [ERD](../docs/01_erd.md) |
-| 4) Relaciones y cardinalidades | [Especificación §5](../docs/01_especificacion.md#5-relaciones-y-cardinalidades) |
-| 5) Catálogos y estados | [Especificación §6](../docs/01_especificacion.md#6-catálogos-y-estados) |
-| 6) Mínimo 30 reglas verificables | [Especificación §8](../docs/01_especificacion.md#8-reglas-de-negocio-verificables) (54 reglas) |
-| 7) Riesgos de consistencia | [Especificación §9](../docs/01_especificacion.md#9-riesgos-de-consistencia) |
-| 8) Decisiones que requieren validación humana | [Especificación §10](../docs/01_especificacion.md#10-decisiones-que-requieren-validación-humana) |
-| 9) ERD Mermaid | [01_erd.md](../docs/01_erd.md) |
-| Autocrítica | [Especificación §11](../docs/01_especificacion.md#11-autocrítica-del-diseño) |
+| 1) Actores y procesos | [Especificación §2](../docs/01_especificacion.md#a2-actores-y-procesos) |
+| 2) Entidades y propósito | [Especificación §3](../docs/01_especificacion.md#a3-entidades-y-propósito) |
+| 3) Atributos esenciales | [Especificación §3](../docs/01_especificacion.md#a3-entidades-y-propósito) y [ERD](../docs/01_especificacion.md#anexo-b--diagrama-entidad-relación) |
+| 4) Relaciones y cardinalidades | [Especificación §5](../docs/01_especificacion.md#a5-relaciones-y-cardinalidades) |
+| 5) Catálogos y estados | [Especificación §6](../docs/01_especificacion.md#a6-catálogos-y-estados) |
+| 6) Mínimo 30 reglas verificables | [Especificación §8](../docs/01_especificacion.md#a8-reglas-de-negocio-verificables) (54 reglas) |
+| 7) Riesgos de consistencia | [Especificación §9](../docs/01_especificacion.md#a9-riesgos-de-consistencia) |
+| 8) Decisiones que requieren validación humana | [Especificación §10](../docs/01_especificacion.md#a10-decisiones-que-requieren-validación-humana) |
+| 9) ERD Mermaid | [Anexo B de la especificación](../docs/01_especificacion.md#anexo-b--diagrama-entidad-relación) y [`01_erd.png`](../docs/01_erd.png) |
+| Autocrítica | [Especificación §11](../docs/01_especificacion.md#a11-autocrítica-del-diseño) |
+
+---
+
+## P-06 · Prompt 2A del laboratorio · Auditor del modelo
+
+**Fecha:** 2026-09-29 · **Gate:** G2
+
+**Prompt (texto oficial del laboratorio):**
+
+```
+Audita el modelo relacional propuesto para Banco Andino Colombia.
+Evalúa 1FN, 2FN y 3FN; PK, FK y N:M; nulabilidad; unicidad; tipos; catálogos; trazabilidad; histórico; riesgos de anomalías INSERT/UPDATE/DELETE.
+No rediseñes silenciosamente. Devuelve una tabla: hallazgo | severidad | evidencia | impacto | corrección propuesta.
+Después entrega el modelo lógico corregido, indicando cada cambio realizado.
+```
+
+**Contexto entregado a la IA:** `sql/tablas_banco_andino.sql` (28 tablas) y la base cargada con los lotes 1 y 2 (10.000 clientes, 50.000 cuentas, 1.000.000 de transacciones POSTED), para verificar cada hallazgo contra datos reales.
+
+**Respuesta relevante (resumen):** 12 hallazgos (1 alta, 6 media, 5 baja). El hallazgo alto (H-06) mostró que la clave primaria con vigencia de `titularidad_cuenta` permitía que el mismo cliente quedara dos veces vigente en una cuenta. Propuso 3 restricciones nuevas, identificó 8 redundancias que deben documentarse como excepciones a 3FN, y separó las reglas entre tablas que corresponden a funciones y triggers de G3. La tabla completa está en [`docs/02_modelo_logico.md`, sección 8](../docs/02_modelo_logico.md#8-auditoría-del-modelo-con-ia-prompt-2a).
+
+**Revisión y verificación:**
+
+- Ningún cambio se aplicó sin prueba: el DDL corregido se ejecutó desde cero, se recargaron los datos (lote 1 = 20/20 PASS, lote 2 = 24/24 PASS) y cada restricción nueva se probó con un caso que debe fallar.
+- La propuesta de agregar la moneda a cada asiento (H-10) se **modificó**: sería una redundancia, porque la moneda depende de la cuenta.
+- La propuesta de cambiar el CHECK de documentos del usuario por una FK compuesta (H-05) se **rechazó**: no mejora ninguna regla.
+
+**Decisiones derivadas:** IA-12 a IA-16 (sección 13 del modelo lógico).

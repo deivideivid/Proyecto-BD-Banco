@@ -7,7 +7,7 @@ Todos los datos son **100 % sintéticos**: no hay información de personas reale
 
 ```
 lab-postgresql-banco-ia/
-├── docs/        Especificación (G1), diagrama ER y decisiones
+├── docs/        Especificación (G1), modelo lógico (G2), diagramas ER y decisiones
 ├── prompts/     Registro de prompts y respuestas de la IA
 ├── sql/         Tablas (tablas_banco_andino.sql) y scripts de carga (sql/load)
 ├── src/         Generadores de datos sintéticos (Python)
@@ -55,7 +55,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 
 - [x] **G0** Entorno: PostgreSQL 18.6 + Python 3.13 → `evidence/g0_environment.txt`
 - [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (adoptados por el equipo, no consultados con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
-- [ ] **G2** Modelo lógico (`docs/02_modelo_logico.md`)
+- [x] **G2** Modelo lógico: 3FN con 8 excepciones justificadas, ERD final de 28 tablas, 13 decisiones → `docs/02_modelo_logico.md`, `docs/02_erd.png`
 - [ ] **G3** Construcción SQL: funciones, triggers, roles y pruebas (las 28 tablas ya están)
 - [ ] **G4** Datos sintéticos: generadores y validaciones listos; falta el perfil de datos
 - [ ] **G5** 30 consultas

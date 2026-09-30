@@ -1,0 +1,82 @@
+== G2 · Validación del modelo corregido (sql/tablas_banco_andino.sql con hallazgos H-06, H-07, H-08)
+Servidor: PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+Fecha: 2026-09-29
+
+== 1. DDL desde cero en base nueva: sin errores
+
+== 2. Recarga de datos
+Lote 1:
+                        control                        | esperado | obtenido | resultado 
+-------------------------------------------------------+----------+----------+-----------
+ Clientes                                              |    10000 |    10000 | PASS
+ Personas naturales                                    |     8500 |     8500 | PASS
+ Personas jurídicas                                    |     1500 |     1500 | PASS
+ Cuentas                                               |    50000 |    50000 | PASS
+ RN-02 clientes sin subtipo o con ambos                |        0 |        0 | PASS
+ RN-08 titulares menores de 18 años al abrir           |        0 |        0 | PASS
+ RN-13 cuentas no cerradas sin exactamente 1 principal |        0 |        0 | PASS
+ RN-14/15 producto no permitido para el titular        |        0 |        0 | PASS
+ RN-16 cuentas con más titulares que el máximo         |        0 |        0 | PASS
+ RN-17 sobregiro fuera de CORRIENTE                    |        0 |        0 | PASS
+ RN-23 primer evento distinto de CREACION              |        0 |        0 | PASS
+ RN-25 estado distinto del último evento               |        0 |        0 | PASS
+ RN-27 límite distinto del último cambio               |        0 |        0 | PASS
+ RN-28 desbloqueo/cierre/cambio sin SUPERVISOR         |        0 |        0 | PASS
+ RN-48 saldo distinto de 0 sin asientos contables      |        0 |        0 | PASS
+ RN-54 usuarios que también son clientes               |        0 |        0 | PASS
+ Apertura anterior a la vinculación                    |        0 |        0 | PASS
+ Clientes sin ninguna cuenta como titular principal    |        0 |        0 | PASS
+ Clientes INACTIVO con titularidad vigente             |        0 |        0 | PASS
+ Personas naturales con más de 1 cuenta NOMINA         |        0 |        0 | PASS
+(20 rows)
+
+Lote 2:
+                           control                           | esperado | obtenido | resultado 
+-------------------------------------------------------------+----------+----------+-----------
+ S5 transacciones POSTED                                     |  1000000 |  1000000 | PASS
+ Asientos contables (2 por transacción POSTED)               |  2000000 |  2000000 | PASS
+ RN-45 REJECTED/PENDING con asientos                         |        0 |        0 | PASS
+ RN-46 POSTED sin débito o sin crédito                       |        0 |        0 | PASS
+ RN-47 transacciones descuadradas (Σ D ≠ Σ C)                |        0 |        0 | PASS
+ Asientos cuyo valor ≠ monto de la transacción               |        0 |        0 | PASS
+ RN-48 saldo almacenado ≠ saldo según asientos               |        0 |        0 | PASS
+ RN-31 momentos con saldo por debajo del cupo de sobregiro   |        0 |        0 | PASS
+ RN-32/33 transferencias a la misma cuenta u otra moneda     |        0 |        0 | PASS
+ RN-34 débitos POSTED sobre cuenta no ACTIVA                 |        0 |        0 | PASS
+ RN-35 créditos POSTED sobre cuenta no ACTIVA/BLOQUEADA      |        0 |        0 | PASS
+ RN-36 movimientos antes de la apertura o después del cierre |        0 |        0 | PASS
+ RN-37 cuenta-día con retiros sobre el límite vigente        |        0 |        0 | PASS
+ RN-41 reversos con monto o cuentas distintos a la original  |        0 |        0 | PASS
+ RN-41 asientos del reverso que no espejan la original       |        0 |        0 | PASS
+ RN-42 reversos de un reverso                                |        0 |        0 | PASS
+ RN-44 ajustes POSTED sin aprobación de otro SUPERVISOR      |        0 |        0 | PASS
+ RN-51 reversos registrados por usuario sin rol SUPERVISOR   |        0 |        0 | PASS
+ RN-20 cuentas CERRADA con saldo distinto de 0               |        0 |        0 | PASS
+ RN-54 operaciones sobre cuentas donde el usuario es titular |        0 |        0 | PASS
+ Solicitudes fuera de la ventana 2024-09-01 a 2026-08-31     |        0 |        0 | PASS
+ fecha_contable ≠ día de contabilización (hora Colombia)     |        0 |        0 | PASS
+ Movimientos en los 180 días previos a una inactivación      |        0 |        0 | PASS
+ Cuentas con saldo que viola el cupo de sobregiro hoy        |        0 |        0 | PASS
+(24 rows)
+
+== 3. Pruebas negativas de las restricciones nuevas (cada una debe fallar)
+BEGIN
+ERROR:  duplicate key value violates unique constraint "uq_titularidad_cliente_vigente"
+ROLLBACK
+BEGIN
+ERROR:  new row for relation "transaccion_financiera" violates check constraint "ck_tx_fechas_solo_posted"
+ROLLBACK
+BEGIN
+ERROR:  new row for relation "transaccion_financiera" violates check constraint "ck_tx_aprobador_solo_ajuste"
+ROLLBACK
+
+== 4. Verificaciones de redundancias controladas sobre los datos cargados
+                            control                            | obtenido 
+---------------------------------------------------------------+----------
+ Columnas float/real/money en el modelo                        |        0
+ D-03 cuentas con fecha_cierre distinta del evento CIERRE      |        0
+ D-07 asientos de depósito sin cuenta o no depósito con cuenta |        0
+ D-07 asientos con cuenta contable distinta del producto       |        0
+(4 rows)
+
+QUALITY GATE G2 = PASS
