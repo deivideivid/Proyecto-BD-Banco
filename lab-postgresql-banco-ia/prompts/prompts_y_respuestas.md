@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G4 |
+| Gates cubiertos | G0–G5 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
 | Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
@@ -26,6 +26,7 @@
 | [P-06](#p-06--prompt-2a-del-laboratorio--auditor-del-modelo) | 2026-09-29 | G2 | Auditar el modelo relacional implementado (Prompt 2A oficial). | IA-12 a IA-16 |
 | [P-07](#p-07--prompt-2b-del-laboratorio--generar-sql-profesional) | 2026-09-30 | G3 | Construir la implementación completa y probarla (Prompt 2B oficial). | IA-17 a IA-21 |
 | [P-08](#p-08--prompt-3-del-laboratorio--generar-10k50k1m) | 2026-09-17 a 2026-09-30 | G4 | Generar, cargar y perfilar los datos sintéticos (Prompt 3 oficial). | IA-22 a IA-27 |
+| [P-09](#p-09--prompt-4-del-laboratorio--30-consultas) | 2026-09-30 | G5 | Proponer, escribir, validar y explicar las 30 consultas (basado en el Prompt 4). | IA-28 a IA-31 |
 
 ---
 
@@ -381,3 +382,29 @@ Entrega: generate_data.py, requirements.txt, README, configuración, estrategia 
 - Reportó el tamaño de la base como 571 MB; incluía tablas temporales. El real es 475 MB (IA-25).
 
 **Decisiones derivadas:** IA-22 a IA-27 ([sección 8 del documento de datos](../docs/04_datos_sinteticos.md#8-matriz-ia-nuevas-entradas-de-g4)).
+
+---
+
+## P-09 · Prompt 4 del laboratorio · 30 consultas
+
+**Fecha:** 2026-09-30 · **Gate:** G5
+
+**Prompt oficial del laboratorio (modo tutor):**
+
+```
+Actúa como tutor SQL PostgreSQL. A partir del esquema Banco Andino, propón 30 problemas: 10 básicos, 10 intermedios y 10 avanzados.
+Para cada problema entrega: objetivo de negocio, tablas necesarias, conceptos SQL evaluados y criterio para validar el resultado. NO entregues la solución inicialmente.
+Cuando reciba la consulta del estudiante, evalúala por: corrección, legibilidad, eficiencia, robustez ante NULL/duplicados y semántica de negocio. Da pistas antes de mostrar una solución alternativa.
+```
+
+**Cómo se usó (transparencia):** el equipo pidió a la IA los 30 problemas **con su solución**, sus resultados sobre el millón de transacciones y una explicación en lenguaje sencillo de cada uno, en lugar del modo tutor paso a paso. Para cumplir el criterio de G5 ("el estudiante puede explicar el resultado de cada una"), `evidence/g5_results.md` incluye la sección **"Cómo explicarla"** en cada consulta, y el equipo se reparte las 30 para practicarlas en pgAdmin 4. El texto oficial del Prompt 4 se puede usar después en modo tutor para repasar.
+
+**Respuesta relevante (resumen):** `sql/19_demo_queries.sql` con 30 consultas (objetivo, tablas, conceptos y criterio de validación en cada una) y 7 validaciones cruzadas; `evidence/g5_results.md` con el resultado real, el tiempo y la explicación de cada consulta.
+
+**Errores detectados al ejecutar sobre los datos reales:**
+
+- I06 tardó 2 min 39 s por una subconsulta correlacionada que recalculaba un promedio 50.000 veces (IA-28).
+- A07 comparaba con el límite actual y mostraba días "al 180 %" que en realidad cumplían RN-37 (IA-29).
+- VC1 sumaba pesos y dólares en la misma validación (IA-30).
+
+**Decisiones derivadas:** IA-28 a IA-31 ([`evidence/g5_results.md`](../evidence/g5_results.md#matriz-ia-nuevas-entradas-de-g5)).

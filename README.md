@@ -48,6 +48,9 @@ psql -U postgres -d banco_andino_lab -f sql/load/carga_lote2_transacciones.sql
 
 # 4. Perfil de datos de G4 (48 métricas; guarda evidence/g4_data_profile.csv)
 psql -U postgres -d banco_andino_lab -f sql/load/perfil_datos_g4.sql
+
+# 5. Las 30 consultas de G5 (unos 10 s)
+psql -U postgres -d banco_andino_lab -f sql/19_demo_queries.sql
 ```
 
 > Si PowerShell dice que `psql` no se reconoce, use **SQL Shell (psql)**: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`, `\i sql/load/carga_lote1.sql`, etc. O agregue `C:\Program Files\PostgreSQL\18\bin` al PATH de Windows.
@@ -66,7 +69,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 - [x] **G2** Modelo lógico: 3FN con 8 excepciones justificadas, ERD final de 28 tablas, 13 decisiones → `docs/02_modelo_logico.md`, `docs/02_erd.png`
 - [x] **G3** Construcción: scripts 00–20, 17 operaciones seguras, 32 triggers, 5 roles, 49 pruebas + 5 de concurrencia → `docs/03_construccion.md`, `evidence/g3_tests.txt`
 - [x] **G4** Datos sintéticos: 10K clientes · 50K cuentas · 1M transacciones, reproducibles, perfil de 48 métricas → `docs/04_datos_sinteticos.md`, `evidence/g4_data_profile.csv`
-- [ ] **G5** 30 consultas
+- [x] **G5** Consultas: 30 (10 básicas, 10 intermedias, 10 avanzadas) + 7 validaciones cruzadas → `sql/19_demo_queries.sql`, `evidence/g5_results.md`
 - [ ] **G6** Quality gate de datos
 - [ ] **G7** Rendimiento y seguridad
 - [ ] **G8** Informe y defensa
