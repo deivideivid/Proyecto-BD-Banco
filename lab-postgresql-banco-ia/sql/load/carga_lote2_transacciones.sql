@@ -4,7 +4,7 @@
 --   2.000.000 asientos contables (doble partida)
 --
 -- Requisitos:
---   1. Tablas creadas con sql/tablas_banco_andino.sql
+--   1. Modelo creado con sql/run_all.sql (tablas, funciones, triggers y roles)
 --   2. Lote 1 cargado con sql/load/carga_lote1.sql
 --   3. CSV generados con: python src/generate_transactions.py
 --
@@ -21,6 +21,13 @@ SET client_encoding = 'UTF8';
 SET statement_timeout = 0;
 
 BEGIN;
+
+-- Carga masiva: se desactivan los triggers de negocio y de auditoría de las tablas
+-- que se cargan (solo el dueño de la tabla puede hacerlo) y se reactivan antes del
+-- COMMIT. Las reglas se verifican después, en bloque, con los controles de validación.
+ALTER TABLE fin.transaccion_financiera DISABLE TRIGGER USER;
+ALTER TABLE fin.asiento_contable DISABLE TRIGGER USER;
+ALTER TABLE core.cuenta DISABLE TRIGGER USER;
 
 -- 0. Protección: este lote solo se carga una vez y sobre el lote 1
 DO $$
@@ -54,6 +61,12 @@ WHERE s.cuenta_id = c.cuenta_id
 -- 4. Sincronizar la secuencia de identidad
 SELECT setval(pg_get_serial_sequence('fin.transaccion_financiera', 'transaccion_id'),
               (SELECT max(transaccion_id) FROM fin.transaccion_financiera));
+
+
+-- Reactivar los triggers (si algo falla antes, el ROLLBACK los deja activos)
+ALTER TABLE fin.transaccion_financiera ENABLE TRIGGER USER;
+ALTER TABLE fin.asiento_contable ENABLE TRIGGER USER;
+ALTER TABLE core.cuenta ENABLE TRIGGER USER;
 
 COMMIT;
 

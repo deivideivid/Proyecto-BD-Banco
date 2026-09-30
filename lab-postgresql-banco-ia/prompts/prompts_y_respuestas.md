@@ -2,9 +2,9 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G2 |
+| Gates cubiertos | G0–G3 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
-| Última actualización | 2026-09-29 |
+| Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
 
 ## Reglas de uso aplicadas
@@ -24,6 +24,7 @@
 | [P-05](#p-05--selección-de-supuestos-y-documentación-de-g1) | 2026-09-17 | G1 | Seleccionar los 5 supuestos y documentar los puntos pendientes de G1. | IA-05 a IA-09 |
 | [Prompt 1 del laboratorio](#prompt-1-del-laboratorio--analizar-el-caso) | 2026-09-17 | G1 | Correspondencia entre el Prompt 1 oficial y los resultados obtenidos. | — |
 | [P-06](#p-06--prompt-2a-del-laboratorio--auditor-del-modelo) | 2026-09-29 | G2 | Auditar el modelo relacional implementado (Prompt 2A oficial). | IA-12 a IA-16 |
+| [P-07](#p-07--prompt-2b-del-laboratorio--generar-sql-profesional) | 2026-09-30 | G3 | Construir la implementación completa y probarla (Prompt 2B oficial). | IA-17 a IA-21 |
 
 ---
 
@@ -317,3 +318,34 @@ Después entrega el modelo lógico corregido, indicando cada cambio realizado.
 - La propuesta de cambiar el CHECK de documentos del usuario por una FK compuesta (H-05) se **rechazó**: no mejora ninguna regla.
 
 **Decisiones derivadas:** IA-12 a IA-16 (sección 13 del modelo lógico).
+
+---
+
+## P-07 · Prompt 2B del laboratorio · Generar SQL profesional
+
+**Fecha:** 2026-09-30 · **Gate:** G3
+
+**Prompt (texto oficial del laboratorio):**
+
+```
+Usa la especificación y el modelo lógico aprobados. Actúa como PostgreSQL Database Architect y Senior DBA.
+Genera una implementación PostgreSQL profesional y reproducible.
+Obligatorio: 3FN; PK/FK/UNIQUE/NOT NULL/CHECK; NUMERIC para dinero; TIMESTAMPTZ para eventos; convenciones snake_case; comentarios en objetos críticos; idempotency key; transacciones ACID; ledger de doble partida; inmutabilidad de POSTED; auditoría; RBAC; mínimo privilegio; índices justificados; manejo de concurrencia donde sea necesario.
+Implementa operaciones seguras para: crear cliente/cuenta, activar, bloquear, desbloquear, consignar, retirar, transferir, reversar y cerrar cuenta. Cada operación debe validar precondiciones, ser atómica, auditar y manejar errores.
+Evalúa SELECT ... FOR UPDATE y niveles de aislamiento para evitar doble retiro/lost update/doble procesamiento.
+Organiza la salida en: 00_extensions.sql, 01_schemas.sql, ... 19_demo_queries.sql, 20_teardown.sql.
+Antes de finalizar, audita tu propia salida y muestra: regla | PASS/FAIL | evidencia | corrección.
+```
+
+**Contexto entregado a la IA:** modelo aprobado en G2 (`docs/02_modelo_logico.md` y el DDL corregido), las 54 reglas de G1 y la base con los lotes 1 y 2 para probar compatibilidad.
+
+**Respuesta relevante (resumen):** scripts numerados 00–20 y `run_all.sql`; 17 operaciones como funciones `SECURITY DEFINER` y 1 procedimiento; 32 triggers (inmutabilidad, doble partida diferida, reglas de cuenta y titularidad, auditoría); 5 roles de base de datos; 49 pruebas en `18_tests.sql` y 5 pruebas de concurrencia con dos sesiones. La autoauditoría está en [`docs/03_construccion.md`, sección 8](../docs/03_construccion.md#8-autoauditoría-formato-del-prompt-2b-regla--passfail--evidencia--corrección).
+
+**Revisión y verificación:**
+
+- `run_all.sql` se ejecutó dos veces seguidas en una base nueva: 49/49 PASS las dos veces.
+- Se cargaron los lotes con los triggers activos en el modelo: 20/20 y 24/24 PASS. Las 49 pruebas también pasan sobre la base con el millón de transacciones.
+- Se detectaron y corrigieron dos problemas de la primera versión: la prueba de `TRUNCATE` (verificaciones diferidas pendientes) y una vista lenta sobre 1.000.000 de filas (de 3 min 25 s a 4 s).
+- Se **rechazó** crear índices en G3 (se justifican en G7) y se **modificó** la auditoría durante la carga masiva.
+
+**Decisiones derivadas:** IA-17 a IA-21 ([sección 11 de la construcción](../docs/03_construccion.md#11-matriz-ia-nuevas-entradas-de-g3)).

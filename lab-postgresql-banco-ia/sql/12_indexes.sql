@@ -1,0 +1,23 @@
+-- =====================================================================
+-- 12_indexes.sql · Banco Andino Colombia
+-- Índices secundarios.
+--
+-- Decisión (G3): aquí NO se crean índices "por si acaso". El laboratorio
+-- exige que cada índice tenga una consulta que lo justifique (G7), medida
+-- con EXPLAIN (ANALYZE, BUFFERS) antes y después. Los índices se agregan
+-- en G7 con esa evidencia (evidence/g7_explain.md).
+--
+-- Índices que ya existen porque los crean las restricciones:
+--   - Todas las claves primarias y restricciones UNIQUE (documento del
+--     cliente, número de cuenta, idempotency_key, transaccion_reversada_id…).
+--   - core.uq_titularidad_principal_vigente  (RN-13, parcial)
+--   - core.uq_titularidad_cliente_vigente    (G2, hallazgo H-06, parcial)
+--
+-- Consultas candidatas ya identificadas para G7 (se usan en 14_functions.sql):
+--   - Suma de retiros del día por cuenta (RN-37, fin.fn_retirar)
+--   - Movimientos por cuenta origen / destino (extractos, reconciliación)
+--   - Asientos por cuenta (saldo según ledger, RN-48)
+--   - Eventos por cuenta ordenados en el tiempo (estado vigente)
+-- =====================================================================
+
+-- (archivo sin sentencias en G3)

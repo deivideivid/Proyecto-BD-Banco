@@ -7,9 +7,9 @@ Todos los datos son **100 % sintéticos**: no hay información de personas reale
 
 ```
 lab-postgresql-banco-ia/
-├── docs/        Especificación (G1), modelo lógico (G2), diagramas ER y decisiones
+├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), diagramas ER y decisiones
 ├── prompts/     Registro de prompts y respuestas de la IA
-├── sql/         Tablas (tablas_banco_andino.sql) y scripts de carga (sql/load)
+├── sql/         Scripts numerados 00–20, run_all.sql, cargas (sql/load) y pruebas de concurrencia (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
 ├── data/lote1/  CSV del lote 1 (clientes, cuentas, eventos)
 ├── data/lote2/  CSV del lote 2 (NO se sube: se genera localmente)
@@ -23,7 +23,7 @@ lab-postgresql-banco-ia/
 | 1 | 10.000 clientes · 50.000 cuentas · titularidades · eventos | 20/20 PASS |
 | 2 | 1.000.000 transacciones POSTED (+ rechazadas y pendientes) · 2.000.000 asientos | 24/24 PASS |
 
-La base completa pesa cerca de **571 MB**, así que se trabaja en **PostgreSQL local** y no en el plan gratis de Supabase (límite de 500 MB).
+La base completa pesa cerca de **475 MB**, muy cerca del límite de 500 MB del plan gratis de Supabase (y lo superará con los índices de G7), así que se trabaja en **PostgreSQL local**.
 
 ## Cómo montar la base (Windows)
 
@@ -37,9 +37,10 @@ cd lab-postgresql-banco-ia
 python src/generate_transactions.py
 #    Huellas esperadas: asiento_contable 1c68ae9b3d8ca2c0 · transaccion_financiera 8fcf2ec17bc357e3
 
-# 2. Crear la base y las tablas
+# 2. Crear la base y el modelo completo (tablas, funciones, triggers, roles) + 49 pruebas
 psql -U postgres -c "CREATE DATABASE banco_andino_lab"
-psql -U postgres -d banco_andino_lab -v ON_ERROR_STOP=1 -f sql/tablas_banco_andino.sql
+psql -U postgres -d banco_andino_lab -f sql/run_all.sql
+#    Debe terminar con: G3 PRUEBAS = PASS (49 PASS, 0 FAIL)
 
 # 3. Cargar los datos (al final cada script muestra sus controles: todos deben decir PASS)
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote1.sql
@@ -49,14 +50,16 @@ psql -U postgres -d banco_andino_lab -f sql/load/carga_lote2_transacciones.sql
 El lote 1 ya viene en `data/lote1`. Si se quiere regenerar: `pip install -r requirements.txt` y `python src/generate_data.py`.
 Ambos generadores usan la semilla `20260909`, así que producen exactamente los mismos datos en cualquier computador.
 
-> pgAdmin 4 sirve para consultar, pero **no ejecuta `\copy`**: la carga se hace con `psql` (SQL Shell).
+> pgAdmin 4 sirve para consultar, pero **no ejecuta `\copy` ni `\ir`**: `run_all.sql` y las cargas se ejecutan con `psql` (SQL Shell).
+>
+> ⚠️ `run_all.sql` **borra y recrea** el modelo: después hay que volver a cargar los lotes.
 
 ## Estado por gates
 
 - [x] **G0** Entorno: PostgreSQL 18.6 + Python 3.13 → `evidence/g0_environment.txt`
 - [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (adoptados por el equipo, no consultados con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
 - [x] **G2** Modelo lógico: 3FN con 8 excepciones justificadas, ERD final de 28 tablas, 13 decisiones → `docs/02_modelo_logico.md`, `docs/02_erd.png`
-- [ ] **G3** Construcción SQL: funciones, triggers, roles y pruebas (las 28 tablas ya están)
+- [x] **G3** Construcción: scripts 00–20, 17 operaciones seguras, 32 triggers, 5 roles, 49 pruebas + 5 de concurrencia → `docs/03_construccion.md`, `evidence/g3_tests.txt`
 - [ ] **G4** Datos sintéticos: generadores y validaciones listos; falta el perfil de datos
 - [ ] **G5** 30 consultas
 - [ ] **G6** Quality gate de datos

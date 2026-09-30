@@ -4,7 +4,7 @@
 --   10.000 clientes · 50.000 cuentas · titularidades · eventos
 --
 -- Requisitos:
---   1. Tablas creadas con sql/tablas_banco_andino.sql
+--   1. Modelo creado con sql/run_all.sql (tablas, funciones, triggers y roles)
 --   2. CSV generados con: python src/generate_data.py
 --
 -- Ejecutar DESDE LA RAÍZ DEL REPOSITORIO (las rutas de \copy son relativas):
@@ -17,6 +17,19 @@
 SET client_encoding = 'UTF8';
 
 BEGIN;
+
+-- Carga masiva: se desactivan los triggers de negocio y de auditoría de las tablas
+-- que se cargan (solo el dueño de la tabla puede hacerlo) y se reactivan antes del
+-- COMMIT. Las reglas se verifican después, en bloque, con los controles de validación.
+ALTER TABLE seg.usuario DISABLE TRIGGER USER;
+ALTER TABLE seg.usuario_rol DISABLE TRIGGER USER;
+ALTER TABLE core.cliente DISABLE TRIGGER USER;
+ALTER TABLE core.persona_natural DISABLE TRIGGER USER;
+ALTER TABLE core.persona_juridica DISABLE TRIGGER USER;
+ALTER TABLE core.cuenta DISABLE TRIGGER USER;
+ALTER TABLE core.titularidad_cuenta DISABLE TRIGGER USER;
+ALTER TABLE core.evento_cuenta DISABLE TRIGGER USER;
+ALTER TABLE core.cambio_limite DISABLE TRIGGER USER;
 
 -- 1. Geografía
 \copy ref.departamento (departamento_codigo, nombre) FROM 'data/lote1/departamento.csv' WITH (FORMAT csv, HEADER true, ENCODING 'UTF8')
@@ -59,6 +72,18 @@ SELECT setval(pg_get_serial_sequence('seg.usuario',        'usuario_id'), (SELEC
 SELECT setval(pg_get_serial_sequence('core.cliente',       'cliente_id'), (SELECT max(cliente_id) FROM core.cliente));
 SELECT setval(pg_get_serial_sequence('core.cuenta',        'cuenta_id'),  (SELECT max(cuenta_id)  FROM core.cuenta));
 SELECT setval(pg_get_serial_sequence('core.evento_cuenta', 'evento_id'),  (SELECT max(evento_id)  FROM core.evento_cuenta));
+
+
+-- Reactivar los triggers (si algo falla antes, el ROLLBACK los deja activos)
+ALTER TABLE seg.usuario ENABLE TRIGGER USER;
+ALTER TABLE seg.usuario_rol ENABLE TRIGGER USER;
+ALTER TABLE core.cliente ENABLE TRIGGER USER;
+ALTER TABLE core.persona_natural ENABLE TRIGGER USER;
+ALTER TABLE core.persona_juridica ENABLE TRIGGER USER;
+ALTER TABLE core.cuenta ENABLE TRIGGER USER;
+ALTER TABLE core.titularidad_cuenta ENABLE TRIGGER USER;
+ALTER TABLE core.evento_cuenta ENABLE TRIGGER USER;
+ALTER TABLE core.cambio_limite ENABLE TRIGGER USER;
 
 COMMIT;
 

@@ -1,0 +1,242 @@
+== G3 · Evidencia de construcción y pruebas · Banco Andino Colombia
+Servidor: PostgreSQL 16.13 (Ubuntu 16.13-0ubuntu0.24.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0, 64-bit
+Fecha: 2026-09-30 · Base: banco_andino_lab (nueva)
+
+== 1. run_all.sql desde cero (ejecución 1): código de salida 0, 1 s
+== Banco Andino · run_all: 1) borrar el modelo anterior
+== 2) crear el modelo (00 a 17) en una sola transacción
+== 3) pruebas de G3 (se deshacen al final: no dejan datos)
+ pass | fail |     veredicto     
+------+------+-------------------
+   49 |    0 | G3 PRUEBAS = PASS
+
+== 2. run_all.sql otra vez sobre la misma base (ejecución 2): código de salida 0, 0 s
+   Criterio de G3: el script debe correr dos veces seguidas sin errores.
+== Resultado de las pruebas de G3
+ prueba |                                          descripcion                                          |  esperado   |                                                obtenido                                                | resultado 
+--------+-----------------------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------------------------+-----------
+ T01    | Dos clientes con el mismo documento                                                           | error 23505 | 23505: duplicate key value violates unique constraint "uq_cliente_documento"                           | PASS
+ T02    | Crear cuenta con cliente inexistente                                                          | error BA016 | BA016: El cliente -1 no existe                                                                         | PASS
+ T03    | Retiro superior al saldo sin sobregiro                                                        | error BA003 | BA003: Fondos insuficientes en la cuenta 10000000001: disponible 1000000.00 + cupo 0.00, solicita      | PASS
+ T04    | Transferir con origen = destino                                                               | error BA006 | BA006: La cuenta origen y la cuenta destino deben ser distintas                                        | PASS
+ T05a   | Modificar el monto de una transacción POSTED                                                  | error BA007 | BA007: La transacción 1 (POSTED) es inmutable: los errores se corrigen con un reverso (RN-40, RN-      | PASS
+ T05b   | Eliminar una transacción POSTED                                                               | error BA007 | BA007: Las transacciones no se eliminan (transacción 1)                                                | PASS
+ T05c   | Modificar un asiento contable                                                                 | error BA007 | BA007: fin.asiento_contable no permite UPDATE (registro inmutable)                                     | PASS
+ T05d   | Vaciar (TRUNCATE) los asientos                                                                | error BA007 | BA007: fin.asiento_contable no permite TRUNCATE (registro inmutable)                                   | PASS
+ T06    | Transferencia válida: débito y crédito juntos y cuadrados                                     | verdadero   | origen 1000000.00→750000.00, destino 0.00→250000.00, 2 líneas, cuadrada=t                              | PASS
+ T07    | Reverso: nueva transacción, original intacta, saldos restituidos                              | verdadero   | original 4 sigue POSTED; reverso 5 con cuentas invertidas; saldos 1000000.00 / 0.00; asientos espejo=t | PASS
+ T08    | Reversar dos veces la misma transacción (RN-42)                                               | error BA008 | BA008: La transacción 4 ya fue reversada                                                               | PASS
+ T09    | Reversar un reverso (RN-42)                                                                   | error BA008 | BA008: Solo se reversan transacciones POSTED que no sean reversos (tipo REVERSO, estado POSTED)        | PASS
+ T10    | Monto con 3 decimales (RN-30)                                                                 | error BA005 | BA005: Monto inválido: 10.555 (debe ser mayor que 0 y tener máximo 2 decimales)                        | PASS
+ T11    | Monto cero (RN-30)                                                                            | error BA005 | BA005: Monto inválido: 0 (debe ser mayor que 0 y tener máximo 2 decimales)                             | PASS
+ T12    | Transferir entre COP y USD (RN-33)                                                            | error BA006 | BA006: No se puede transferir entre monedas distintas (COP → USD)                                      | PASS
+ T13    | Retiros del día por encima del límite diario (RN-37)                                          | error BA004 | BA004: Excede el límite diario de retiro: retirado hoy 2500000.00, solicitado 600000, límite 3000      | PASS
+ T14    | Misma solicitud dos veces: una sola transacción (RN-38)                                       | verdadero   | primera 8, segunda 8, filas con la clave: 1                                                            | PASS
+ T15    | Misma clave con otro monto (RN-38)                                                            | error BA015 | BA015: La clave c114b0a0-1ef0-4134-ab9f-b4ba7f0a1e98 ya se usó para otra solicitud                     | PASS
+ T16    | Cuenta BLOQUEADA recibe una consignación (S1, RN-35)                                          | verdadero   | consignación 9 contabilizada                                                                           | PASS
+ T17    | Retiro desde cuenta BLOQUEADA (S1, RN-34)                                                     | error BA002 | BA002: La cuenta 10000000002 está BLOQUEADA y no puede originar débitos                                | PASS
+ T18    | Reversar una consignación hecha a cuenta ahora BLOQUEADA (RN-43)                              | error BA002 | BA002: La cuenta 10000000002 está BLOQUEADA y no puede originar débitos                                | PASS
+ T19    | Cajero intenta desbloquear (RN-28)                                                            | error BA001 | BA001: El usuario 1 no tiene el permiso CTA_DESBLOQUEAR                                                | PASS
+ T20    | Cajero intenta reversar (RN-51)                                                               | error BA001 | BA001: El usuario 1 no tiene el permiso TX_REVERSAR                                                    | PASS
+ T21    | Usuario opera una cuenta de la que es titular (RN-54)                                         | error BA009 | BA009: El usuario 4 es titular de la cuenta 6 y no puede operarla                                      | PASS
+ T22    | El creador aprueba su propio ajuste (RN-44)                                                   | error BA013 | BA013: Quien crea un ajuste no puede aprobarlo (RN-44)                                                 | PASS
+ T23    | Ajuste aprobado por otro supervisor queda POSTED con asientos                                 | verdadero   | estado POSTED, aprobado por 3                                                                          | PASS
+ T24    | Rechazo registrado con motivo, sin asientos ni efecto en saldo (RN-45)                        | verdadero   | transacción 11 REJECTED sin asientos                                                                   | PASS
+ T25    | Transacción POSTED con un solo asiento (RN-46, RN-47)                                         | error BA014 | BA014: Transacción -25 descuadrada: débitos 100.00, créditos 0 (RN-46, RN-47)                          | PASS
+ T26    | Asiento con cuenta contable que no corresponde al producto (G2, H-03)                         | error BA014 | BA014: La cuenta 1 pertenece a PAS_DEP_AHORROS, no a PAS_DEP_CORRIENTE                                 | PASS
+ T27    | Cliente sin subtipo (RN-02)                                                                   | error BA017 | BA017: El cliente 7 debe tener exactamente un subtipo (natural o jurídica)                             | PASS
+ T28    | Titular menor de 18 años (RN-08, S2)                                                          | error BA010 | BA010: El titular debe tener 18 años cumplidos a la fecha de apertura (RN-08)                          | PASS
+ T29    | Cuenta EMPRESARIAL para persona natural (RN-15, S4)                                           | error BA010 | BA010: El producto EMPRESARIAL solo admite clientes JURIDICA, no NATURAL (RN-14, RN-15)                | PASS
+ T30    | Segundo titular en cuenta NOMINA (máximo 1, RN-16, S3)                                        | error BA010 | BA010: El producto NOMINA admite máximo 1 titular(es) (RN-16)                                          | PASS
+ T31    | Cupo de sobregiro en cuenta de AHORROS (RN-17)                                                | error BA017 | BA017: El producto AHORROS no permite cupo de sobregiro (RN-17)                                        | PASS
+ T32    | Cambiar la moneda de una cuenta (RN-22)                                                       | error BA017 | BA017: La moneda de una cuenta no cambia (RN-22)                                                       | PASS
+ T33    | Cambiar el estado sin registrar evento (RN-25)                                                | error BA011 | BA011: Estado, fecha de cierre y límite solo cambian registrando un evento de cuenta (RN-25, RN-2      | PASS
+ T34    | Evento con transición no permitida (RN-24)                                                    | error BA011 | BA011: Transición no permitida para la cuenta 10000000002: ACTIVACION de ACTIVA a ACTIVA               | PASS
+ T35    | Cerrar una cuenta con saldo (RN-20)                                                           | error BA012 | BA012: La cuenta 10000000001 tiene saldo 3512345.67 (retenido 0.00) y no se puede cerrar               | PASS
+ T36    | Borrar un cliente (RN-09)                                                                     | error BA007 | BA007: No se eliminan registros de core.cliente (se inactivan o se cierran, RN-09)                     | PASS
+ T37    | Cambio de límite y cierre actualizan la cuenta a través de eventos (RN-25, RN-27)             | verdadero   | límite 1500000.00, estado CERRADA, estado = último evento: t                                           | PASS
+ T38    | Consignar en una cuenta CERRADA (RN-35)                                                       | error BA002 | BA002: La cuenta 30000000005 está CERRADA y no puede recibir créditos                                  | PASS
+ T39    | La transferencia quedó auditada con usuario, registro y valores (RN-52)                       | verdadero   | 1 registro(s) de auditoría, usuario 1                                                                  | PASS
+ T40    | Modificar un registro de auditoría (RN-53)                                                    | error BA007 | BA007: aud.log_auditoria no permite UPDATE (registro inmutable)                                        | PASS
+ T41    | Borrar registros de auditoría (RN-53)                                                         | error BA007 | BA007: aud.log_auditoria no permite DELETE (registro inmutable)                                        | PASS
+ T42    | Rol banco_cajero no puede hacer UPDATE directo a transacciones                                | error 42501 | 42501: permission denied for table transaccion_financiera                                              | PASS
+ T43    | Rol banco_cajero no puede ejecutar fn_reversar                                                | error 42501 | 42501: permission denied for function fn_reversar                                                      | PASS
+ T44    | Rol banco_consulta no puede leer la auditoría                                                 | error 42501 | 42501: permission denied for schema aud                                                                | PASS
+ T45    | Rol banco_cajero sí consigna a través de la función                                           | verdadero   | consignación 12 como banco_cajero                                                                      | PASS
+ T46    | Todas las transacciones cuadran; saldo = ledger; estado = último evento (RN-47, RN-48, RN-25) | verdadero   | descuadradas 0, cuentas con diferencia 0, estados distintos 0                                          | PASS
+(49 rows)
+
+ pass | fail |     veredicto     
+------+------+-------------------
+   49 |    0 | G3 PRUEBAS = PASS
+(1 row)
+
+== run_all terminado
+
+== 3. Compatibilidad con la carga masiva (los triggers se desactivan y reactivan en la carga)
+Lote 1 (código de salida 0):
+                        control                        | esperado | obtenido | resultado 
+-------------------------------------------------------+----------+----------+-----------
+ Clientes                                              |    10000 |    10000 | PASS
+ Personas naturales                                    |     8500 |     8500 | PASS
+ Personas jurídicas                                    |     1500 |     1500 | PASS
+ Cuentas                                               |    50000 |    50000 | PASS
+ RN-02 clientes sin subtipo o con ambos                |        0 |        0 | PASS
+ RN-08 titulares menores de 18 años al abrir           |        0 |        0 | PASS
+ RN-13 cuentas no cerradas sin exactamente 1 principal |        0 |        0 | PASS
+ RN-14/15 producto no permitido para el titular        |        0 |        0 | PASS
+ RN-16 cuentas con más titulares que el máximo         |        0 |        0 | PASS
+ RN-17 sobregiro fuera de CORRIENTE                    |        0 |        0 | PASS
+ RN-23 primer evento distinto de CREACION              |        0 |        0 | PASS
+ RN-25 estado distinto del último evento               |        0 |        0 | PASS
+ RN-27 límite distinto del último cambio               |        0 |        0 | PASS
+ RN-28 desbloqueo/cierre/cambio sin SUPERVISOR         |        0 |        0 | PASS
+ RN-48 saldo distinto de 0 sin asientos contables      |        0 |        0 | PASS
+ RN-54 usuarios que también son clientes               |        0 |        0 | PASS
+ Apertura anterior a la vinculación                    |        0 |        0 | PASS
+ Clientes sin ninguna cuenta como titular principal    |        0 |        0 | PASS
+ Clientes INACTIVO con titularidad vigente             |        0 |        0 | PASS
+ Personas naturales con más de 1 cuenta NOMINA         |        0 |        0 | PASS
+(20 rows)
+
+Lote 2 (código de salida 0); carga de lotes 1 y 2: 106 s:
+                           control                           | esperado | obtenido | resultado 
+-------------------------------------------------------------+----------+----------+-----------
+ S5 transacciones POSTED                                     |  1000000 |  1000000 | PASS
+ Asientos contables (2 por transacción POSTED)               |  2000000 |  2000000 | PASS
+ RN-45 REJECTED/PENDING con asientos                         |        0 |        0 | PASS
+ RN-46 POSTED sin débito o sin crédito                       |        0 |        0 | PASS
+ RN-47 transacciones descuadradas (Σ D ≠ Σ C)                |        0 |        0 | PASS
+ Asientos cuyo valor ≠ monto de la transacción               |        0 |        0 | PASS
+ RN-48 saldo almacenado ≠ saldo según asientos               |        0 |        0 | PASS
+ RN-31 momentos con saldo por debajo del cupo de sobregiro   |        0 |        0 | PASS
+ RN-32/33 transferencias a la misma cuenta u otra moneda     |        0 |        0 | PASS
+ RN-34 débitos POSTED sobre cuenta no ACTIVA                 |        0 |        0 | PASS
+ RN-35 créditos POSTED sobre cuenta no ACTIVA/BLOQUEADA      |        0 |        0 | PASS
+ RN-36 movimientos antes de la apertura o después del cierre |        0 |        0 | PASS
+ RN-37 cuenta-día con retiros sobre el límite vigente        |        0 |        0 | PASS
+ RN-41 reversos con monto o cuentas distintos a la original  |        0 |        0 | PASS
+ RN-41 asientos del reverso que no espejan la original       |        0 |        0 | PASS
+ RN-42 reversos de un reverso                                |        0 |        0 | PASS
+ RN-44 ajustes POSTED sin aprobación de otro SUPERVISOR      |        0 |        0 | PASS
+ RN-51 reversos registrados por usuario sin rol SUPERVISOR   |        0 |        0 | PASS
+ RN-20 cuentas CERRADA con saldo distinto de 0               |        0 |        0 | PASS
+ RN-54 operaciones sobre cuentas donde el usuario es titular |        0 |        0 | PASS
+ Solicitudes fuera de la ventana 2024-09-01 a 2026-08-31     |        0 |        0 | PASS
+ fecha_contable ≠ día de contabilización (hora Colombia)     |        0 |        0 | PASS
+ Movimientos en los 180 días previos a una inactivación      |        0 |        0 | PASS
+ Cuentas con saldo que viola el cupo de sobregiro hoy        |        0 |        0 | PASS
+(24 rows)
+
+== 4. Pruebas de G3 sobre la base con el millón de transacciones cargado (4 s)
+ pass | fail |     veredicto     
+------+------+-------------------
+   49 |    0 | G3 PRUEBAS = PASS
+(1 row)
+
+
+== 5. Pruebas de concurrencia (base aparte banco_andino_ct; sesión B inicia 1 s después de A; A espera 3 s antes del COMMIT)
+== Preparación
+psql:sql/tests/concurrencia/ct_00_preparar.sql:22: NOTICE:  table "ct_ctx" does not exist, skipping
+Preparación lista: 4 cuentas con saldo inicial (c1 = 100.000, c2 = c3 = 500.000, c4 = 300.000)
+
+== CT-01 (01_doble_retiro) · sesión A en segundo plano, sesión B 1 s después
+-- Sesión A:
+BEGIN
+ retiro_sesion_a 
+-----------------
+              17
+(1 row)
+
+Sesión A: retiro hecho, esperando antes del COMMIT (ejecute ya la sesión B)...
+(1 row)
+
+COMMIT
+Sesión A: COMMIT
+-- Sesión B (esperó 2.1 s por el bloqueo):
+psql:sql/tests/concurrencia/ct_01_doble_retiro_b.sql:7: ERROR:  Fondos insuficientes en la cuenta 10000000010: disponible 20000.00 + cupo 0.00, solicitado 80000
+CONTEXT:  PL/pgSQL function fin.fn_validar_debito(bigint,numeric) line 11 at RAISE
+SQL statement "SELECT fin.fn_validar_debito(p_cuenta_id, p_monto)"
+PL/pgSQL function fin.fn_retirar(bigint,bigint,numeric,uuid,text) line 13 at PERFORM
+
+== CT-02 (02_transferencias_cruzadas) · sesión A en segundo plano, sesión B 1 s después
+-- Sesión A:
+BEGIN
+ transferencia_a 
+-----------------
+              18
+(1 row)
+
+Sesión A: transferencia c2 → c3 hecha, esperando antes del COMMIT (ejecute ya la sesión B)...
+(1 row)
+
+COMMIT
+Sesión A: COMMIT
+-- Sesión B (esperó 2.1 s por el bloqueo):
+ transferencia_b 
+-----------------
+              19
+(1 row)
+
+
+== CT-03 (03_idempotencia) · sesión A en segundo plano, sesión B 1 s después
+-- Sesión A:
+BEGIN
+ consignacion_a 
+----------------
+             20
+(1 row)
+
+Sesión A: consignación con clave K hecha, esperando antes del COMMIT (ejecute ya la sesión B)...
+(1 row)
+
+COMMIT
+Sesión A: COMMIT
+-- Sesión B (esperó 2.1 s por el bloqueo):
+ consignacion_b 
+----------------
+             20
+(1 row)
+
+
+== CT-04 (04_doble_reverso) · sesión A en segundo plano, sesión B 1 s después
+-- Sesión A:
+BEGIN
+ reverso_a 
+-----------
+        22
+(1 row)
+
+Sesión A: reverso hecho, esperando antes del COMMIT (ejecute ya la sesión B)...
+(1 row)
+
+COMMIT
+Sesión A: COMMIT
+-- Sesión B (esperó 2.1 s por el bloqueo):
+psql:sql/tests/concurrencia/ct_04_doble_reverso_b.sql:7: ERROR:  La transacción 16 ya fue reversada
+CONTEXT:  PL/pgSQL function fin.fn_reversar(bigint,bigint,uuid,text) line 21 at RAISE
+
+== Verificación
+ prueba |                              descripcion                              |                 esperado                 |                 obtenido                 | resultado 
+--------+-----------------------------------------------------------------------+------------------------------------------+------------------------------------------+-----------
+ CT-0   | Línea base: saldo = ledger y todo cuadra en las cuentas de prueba     | 0 diferencias · 0 descuadres             | 0 diferencias · 0 descuadres             | PASS
+ CT-1   | Doble retiro simultáneo: solo pasa uno; saldo final 20.000            | 1 retiro · saldo 20000.00                | 1 retiro · saldo 20000.00                | PASS
+ CT-2   | Transferencias cruzadas sin interbloqueo; c2 = 450.000 y c3 = 550.000 | 2 transferencias · 450000.00 / 550000.00 | 2 transferencias · 450000.00 / 550000.00 | PASS
+ CT-3   | Misma solicitud simultánea (misma clave): un solo movimiento          | 1 transacción con la clave K             | 1 transacción con la clave K             | PASS
+ CT-4   | Doble reverso simultáneo: solo queda uno                              | 1 reverso de la transacción              | 1 reverso de la transacción              | PASS
+(5 rows)
+
+
+== Tamaño de la base con los lotes 1 y 2 cargados: 475 MB
+
+== 6. Verificación en el entorno del equipo
+Equipo: Windows · PostgreSQL 18.6 (el mismo de evidence/g0_environment.txt)
+Ejecución: SQL Shell (psql) → \i sql/run_all.sql sobre la base nueva banco_andino_lab · 2026-09-30
+Resultado:
+ pass | fail |     veredicto
+------+------+-------------------
+   49 |    0 | G3 PRUEBAS = PASS
+(1 fila)
+Conclusión: el modelo, las funciones, los triggers y las pruebas funcionan igual en PostgreSQL 16.13 y 18.6.
+
+QUALITY GATE G3 = PASS
