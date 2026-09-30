@@ -7,7 +7,7 @@ Todos los datos son **100 % sintéticos**: no hay información de personas reale
 
 ```
 lab-postgresql-banco-ia/
-├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), diagramas ER y decisiones
+├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), diagramas ER y decisiones
 ├── prompts/     Registro de prompts y respuestas de la IA
 ├── sql/         Scripts numerados 00–20, run_all.sql, cargas (sql/load) y pruebas de concurrencia (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
@@ -45,7 +45,12 @@ psql -U postgres -d banco_andino_lab -f sql/run_all.sql
 # 3. Cargar los datos (al final cada script muestra sus controles: todos deben decir PASS)
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote1.sql
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote2_transacciones.sql
+
+# 4. Perfil de datos de G4 (48 métricas; guarda evidence/g4_data_profile.csv)
+psql -U postgres -d banco_andino_lab -f sql/load/perfil_datos_g4.sql
 ```
+
+> Si PowerShell dice que `psql` no se reconoce, use **SQL Shell (psql)**: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`, `\i sql/load/carga_lote1.sql`, etc. O agregue `C:\Program Files\PostgreSQL\18\bin` al PATH de Windows.
 
 El lote 1 ya viene en `data/lote1`. Si se quiere regenerar: `pip install -r requirements.txt` y `python src/generate_data.py`.
 Ambos generadores usan la semilla `20260909`, así que producen exactamente los mismos datos en cualquier computador.
@@ -60,7 +65,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 - [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (adoptados por el equipo, no consultados con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
 - [x] **G2** Modelo lógico: 3FN con 8 excepciones justificadas, ERD final de 28 tablas, 13 decisiones → `docs/02_modelo_logico.md`, `docs/02_erd.png`
 - [x] **G3** Construcción: scripts 00–20, 17 operaciones seguras, 32 triggers, 5 roles, 49 pruebas + 5 de concurrencia → `docs/03_construccion.md`, `evidence/g3_tests.txt`
-- [ ] **G4** Datos sintéticos: generadores y validaciones listos; falta el perfil de datos
+- [x] **G4** Datos sintéticos: 10K clientes · 50K cuentas · 1M transacciones, reproducibles, perfil de 48 métricas → `docs/04_datos_sinteticos.md`, `evidence/g4_data_profile.csv`
 - [ ] **G5** 30 consultas
 - [ ] **G6** Quality gate de datos
 - [ ] **G7** Rendimiento y seguridad

@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G3 |
+| Gates cubiertos | G0–G4 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
 | Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
@@ -25,6 +25,7 @@
 | [Prompt 1 del laboratorio](#prompt-1-del-laboratorio--analizar-el-caso) | 2026-09-17 | G1 | Correspondencia entre el Prompt 1 oficial y los resultados obtenidos. | — |
 | [P-06](#p-06--prompt-2a-del-laboratorio--auditor-del-modelo) | 2026-09-29 | G2 | Auditar el modelo relacional implementado (Prompt 2A oficial). | IA-12 a IA-16 |
 | [P-07](#p-07--prompt-2b-del-laboratorio--generar-sql-profesional) | 2026-09-30 | G3 | Construir la implementación completa y probarla (Prompt 2B oficial). | IA-17 a IA-21 |
+| [P-08](#p-08--prompt-3-del-laboratorio--generar-10k50k1m) | 2026-09-17 a 2026-09-30 | G4 | Generar, cargar y perfilar los datos sintéticos (Prompt 3 oficial). | IA-22 a IA-27 |
 
 ---
 
@@ -349,3 +350,34 @@ Antes de finalizar, audita tu propia salida y muestra: regla | PASS/FAIL | evide
 - Se **rechazó** crear índices en G3 (se justifican en G7) y se **modificó** la auditoría durante la carga masiva.
 
 **Decisiones derivadas:** IA-17 a IA-21 ([sección 11 de la construcción](../docs/03_construccion.md#11-matriz-ia-nuevas-entradas-de-g3)).
+
+---
+
+## P-08 · Prompt 3 del laboratorio · Generar 10K/50K/1M
+
+**Fecha:** 2026-09-17 (generadores y cargas) y 2026-09-30 (perfil de G4) · **Gate:** G4
+
+**Prompt (texto oficial del laboratorio):**
+
+```
+Actúa como Senior Data Engineer especializado en datos sintéticos financieros y PostgreSQL.
+Crea un generador reproducible con SEED=20260909 para poblar el esquema aprobado con:
+- 10.000 clientes (aprox. 85% naturales, 15% jurídicas);
+- 50.000 cuentas;
+- 1.000.000 transacciones financieras + ledger asociado;
+- usuarios internos en cantidad razonable.
+Reglas: 1) 0 PII real; 2) documentos/NIT/cuentas únicos; 3) distribución geográfica ponderada, no uniforme; 4) cuentas por cliente no uniformes; 5) actividad temporal ≥24 meses con estacionalidad por mes/día/hora; 6) montos con distribución sesgada; 7) transacción posterior a apertura y anterior al cierre; 8) bloqueos respetados; 9) origen ≠ destino; 10) sin saldo negativo cuando no hay sobregiro; 11) ledger balanceado; 12) pequeña cantidad de casos extremos válidos.
+Implementa preferiblemente Python + Faker + psycopg o CSV + PostgreSQL COPY. Evita 1M INSERT individuales.
+Entrega: generate_data.py, requirements.txt, README, configuración, estrategia de carga y validación posterior con tabla métrica | esperado | obtenido | PASS/FAIL.
+```
+
+**Respuesta relevante (resumen):** dos generadores (`generate_data.py` para clientes y cuentas; `generate_transactions.py` para el millón con simulación cronológica), carga con `\copy` en una transacción por lote, 20 + 24 controles de carga y un perfil de 48 métricas que produce `evidence/g4_data_profile.csv`.
+
+**Errores de la IA detectados por el equipo o por las validaciones:**
+
+- Interpretó "las primeras 10.000 cuentas" como un lote de 10.000; eran 50.000 (IA-22).
+- Una búsqueda web devolvió nombres de municipios que no correspondían a su código DIVIPOLA (IA-23).
+- La primera versión del generador del millón dejó 482 movimientos en el periodo previo a una inactivación y ningún rechazo por límite diario; lo detectaron las validaciones (IA-24).
+- Reportó el tamaño de la base como 571 MB; incluía tablas temporales. El real es 475 MB (IA-25).
+
+**Decisiones derivadas:** IA-22 a IA-27 ([sección 8 del documento de datos](../docs/04_datos_sinteticos.md#8-matriz-ia-nuevas-entradas-de-g4)).

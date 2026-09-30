@@ -1,0 +1,46 @@
+== G4 · Reproducibilidad de los datos sintéticos · Banco Andino Colombia
+Fecha: 2026-09-30 · Python 3.11.15 · Faker 40.39.0 · SEED = 20260909
+
+Criterio de G4: el hash (SHA-256) de cada CSV debe ser idéntico entre dos ejecuciones.
+Procedimiento: se ejecutaron los dos generadores, se calcularon los hashes, se borró la carpeta data/ y se repitió todo.
+
+== Ejecución 1
+4c0e354370fb0d6b985e572480ce22dc6a9849223e09af371dcb33f7125f71a7  data/lote1/cambio_limite.csv
+56970a9721001657c341142c55ba6f7981f281e1e537f2296e4776aa8cbd5144  data/lote1/cliente.csv
+fe0d41993897ae52b6cab23124d1a99beb1ed1c7a1003104b7dec8fa561007d2  data/lote1/cuenta.csv
+20b8806d8cfcb1a4e05a81b0528f6e032165e1480881eb3356527777d06c22df  data/lote1/departamento.csv
+1208974d42ac3094ada88cd9bfad8ba1a19375c436ad7ff85b6321e0131b633f  data/lote1/evento_cuenta.csv
+e776dffffd044fcfd1260cdd843e92d852b4baeaf5c91fb9a0bae18e7ebf9886  data/lote1/municipio.csv
+a1a2c59659d52aeb58ddb028408966893180e8263b5bfb6a76c775d48414a0bd  data/lote1/oficina.csv
+c7adf03b45d6392ae14f03c49acc2e84470082d79f45bfc78de2612ec8aedcce  data/lote1/persona_juridica.csv
+28a6eeefa652883643733698edd99efaecc69a12026a405578a5fb9d530d718a  data/lote1/persona_natural.csv
+e433ee8b48b78fac39c94ec887463eb3e6afd98c31ab687e3b2650e76e30ecb4  data/lote1/titularidad_cuenta.csv
+dfed2d03cf6749e7e641a9c42c0c11f9a1a910fc72e9788a1fc9a5ba5378e290  data/lote1/usuario.csv
+b7e6c7ede043e3e5d57d5a76570677a5d2f0af28714f0c0509e6d5344dbdda5e  data/lote1/usuario_rol.csv
+1c68ae9b3d8ca2c06799c0e13a128c0876d7069058fd198e047424858cc3f59a  data/lote2/asiento_contable.csv
+8fcf2ec17bc357e3b85e9527786cea49275030ec5205365797eb68da101b194b  data/lote2/transaccion_financiera.csv
+
+== Ejecución 2
+4c0e354370fb0d6b985e572480ce22dc6a9849223e09af371dcb33f7125f71a7  data/lote1/cambio_limite.csv
+56970a9721001657c341142c55ba6f7981f281e1e537f2296e4776aa8cbd5144  data/lote1/cliente.csv
+fe0d41993897ae52b6cab23124d1a99beb1ed1c7a1003104b7dec8fa561007d2  data/lote1/cuenta.csv
+20b8806d8cfcb1a4e05a81b0528f6e032165e1480881eb3356527777d06c22df  data/lote1/departamento.csv
+1208974d42ac3094ada88cd9bfad8ba1a19375c436ad7ff85b6321e0131b633f  data/lote1/evento_cuenta.csv
+e776dffffd044fcfd1260cdd843e92d852b4baeaf5c91fb9a0bae18e7ebf9886  data/lote1/municipio.csv
+a1a2c59659d52aeb58ddb028408966893180e8263b5bfb6a76c775d48414a0bd  data/lote1/oficina.csv
+c7adf03b45d6392ae14f03c49acc2e84470082d79f45bfc78de2612ec8aedcce  data/lote1/persona_juridica.csv
+28a6eeefa652883643733698edd99efaecc69a12026a405578a5fb9d530d718a  data/lote1/persona_natural.csv
+e433ee8b48b78fac39c94ec887463eb3e6afd98c31ab687e3b2650e76e30ecb4  data/lote1/titularidad_cuenta.csv
+dfed2d03cf6749e7e641a9c42c0c11f9a1a910fc72e9788a1fc9a5ba5378e290  data/lote1/usuario.csv
+b7e6c7ede043e3e5d57d5a76570677a5d2f0af28714f0c0509e6d5344dbdda5e  data/lote1/usuario_rol.csv
+1c68ae9b3d8ca2c06799c0e13a128c0876d7069058fd198e047424858cc3f59a  data/lote2/asiento_contable.csv
+8fcf2ec17bc357e3b85e9527786cea49275030ec5205365797eb68da101b194b  data/lote2/transaccion_financiera.csv
+
+Resultado: los 14 archivos tienen exactamente el mismo hash en las dos ejecuciones → PASS
+
+== Otras comprobaciones
+- El lote 2 se generó también con Python 3.10, 3.12 y 3.13: mismos hashes (asiento_contable 1c68ae9b3d8ca2c0…, transaccion_financiera 8fcf2ec17bc357e3…).
+- Los CSV del lote 1 guardados en el repositorio tienen el mismo hash que los generados (cliente.csv 56970a9721001657…).
+- Los hashes se calculan sobre archivos con fin de línea LF (así los escribe el generador y así los guarda Git gracias a .gitattributes).
+
+RESULTADO: PASS

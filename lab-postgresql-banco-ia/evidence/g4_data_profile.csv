@@ -1,0 +1,50 @@
+categoria,metrica,esperado,obtenido,resultado
+Conteos,Clientes,10000,10000,PASS
+Conteos,Personas naturales (≈85 %),8500,8500,PASS
+Conteos,Personas jurídicas (≈15 %),1500,1500,PASS
+Conteos,Cuentas,50000,50000,PASS
+Conteos,Transacciones POSTED (supuesto S5),1000000,1000000,PASS
+Conteos,Asientos contables (ledger),2000000,2000000,PASS
+Conteos,Usuarios internos (cantidad razonable),entre 100 y 1000,269,PASS
+Conteos,"Transacciones REJECTED y PENDING (adicionales, sin asientos)",> 0,24178,PASS
+Duplicados,Documentos de cliente repetidos (incluye NIT),0,0,PASS
+Duplicados,Números de cuenta repetidos,0,0,PASS
+Duplicados,Claves de idempotencia repetidas,0,0,PASS
+Duplicados,Documentos de usuario interno repetidos,0,0,PASS
+Huérfanos,Clientes sin subtipo o con ambos,0,0,PASS
+Huérfanos,Cuentas no cerradas sin titular principal vigente,0,0,PASS
+Huérfanos,Cuentas sin evento de creación,0,0,PASS
+Huérfanos,Transacciones POSTED sin asientos,0,0,PASS
+Huérfanos,Transacciones REJECTED o PENDING con asientos,0,0,PASS
+Huérfanos,Municipios de clientes y oficinas fuera del catálogo,0,0,PASS
+Temporal,Movimientos antes de la apertura o después del cierre,0,0,PASS
+Temporal,Débitos desde una cuenta que no estaba ACTIVA (bloqueos respetados),0,0,PASS
+Temporal,Créditos a una cuenta que no estaba ACTIVA ni BLOQUEADA,0,0,PASS
+Temporal,Apertura de cuenta anterior a la vinculación del titular,0,0,PASS
+Temporal,Meses con actividad (mínimo 24),≥ 24,24,PASS
+Temporal,Reversos con fecha anterior a la transacción original,0,0,PASS
+Financiera,Transacciones POSTED descuadradas (Σ D ≠ Σ C),0,0,PASS
+Financiera,Cuentas con saldo distinto del ledger (RN-48),0,0,PASS
+Financiera,Momentos con saldo negativo sin sobregiro (o por debajo del cupo),0,0,PASS
+Financiera,Transferencias con origen = destino o entre monedas distintas,0,0,PASS
+Financiera,Cuentas CERRADAS con saldo distinto de 0,0,0,PASS
+Financiera,Cuenta-día con retiros por encima del límite diario vigente,0,0,PASS
+Financiera,Montos con más de 2 decimales o ≤ 0,0,0,PASS
+Privacidad,Correos fuera del dominio reservado example.com,0,0,PASS
+Privacidad,Cédulas de clientes fuera del rango sintético 1.000.000.000–1.299.999.999,0,0,PASS
+Privacidad,NIT fuera del rango sintético 960.000.000–989.999.999,0,0,PASS
+Distribución,Clientes por departamento: mayor / promedio,> 3 (no uniforme),"9.6 (33 departamentos, máx 2902, mín 2)",PASS
+Distribución,Cuentas por cliente: máximo / mediana,≥ 10 (cola larga),"100.0 (mediana 3, p95 12, máx 300)",PASS
+Distribución,Transacciones por cuenta: p99 / mediana,≥ 5,"41.3 (mediana 7, p99 289, máx 2339, cuentas con ≤ 2 movimientos: 16749)",PASS
+Distribución,Transacciones por hora: hora pico / hora más baja,≥ 5 (patrón horario),"22.7 (pico a las 11 h, mínimo a las 1 h)",PASS
+Distribución,Promedio diario domingo / lunes a viernes,"< 0,7",0.37,PASS
+Distribución,Promedio diario en quincena y fin de mes / resto de días,"> 1,2",1.75,PASS
+Distribución,Diciembre / promedio de noviembre y enero (cada año),"> 1,2 en ambos diciembres",2024-12: 1.42 · 2025-12: 1.49,PASS
+Distribución,Montos COP: mediana < promedio y P99 ≥ 10 × mediana,verdadero,mediana 842898.00 · promedio 1775276 · P95 6486000.00 · P99 14470000.00 · máx 258380571.00,PASS
+Distribución,Estados de cuenta: ACTIVA > 50 % y las demás presentes,verdadero,ACTIVA 87.1 % · CERRADA 4.7 % · INACTIVA 4.2 % · BLOQUEADA 4.0 %,PASS
+Distribución,Tipos de transacción POSTED presentes (7 tipos),7,7 (TRANSFERENCIA 28.0 % · CONSIGNACION 24.4 % · DEBITO 19.5 % · CREDITO 18.9 % · RETIRO 7.9 % · REVERSO 1.0 % · AJUSTE 0.4 %),PASS
+Casos extremos,Cuentas usando sobregiro hoy (saldo negativo dentro del cupo),> 0 y < 5 % de las cuentas,1000,PASS
+Casos extremos,Días en que una cuenta retiró su límite diario completo,> 0,4,PASS
+Casos extremos,Cuentas cerradas que trasladaron su saldo antes del cierre,> 0,1192,PASS
+Casos extremos,Reversos rechazados por cuenta bloqueada (RN-43),> 0,197,PASS
+Veredicto,QUALITY GATE G4,0 FAIL,0 FAIL de 48 métricas,PASS
