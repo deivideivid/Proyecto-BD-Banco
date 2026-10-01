@@ -1,0 +1,244 @@
+erDiagram
+  aud_log_auditoria["aud.log_auditoria"] {
+    bigint auditoria_id PK
+    timestamptz ocurrido_en
+    bigint usuario_id FK
+    text usuario_bd
+    varchar esquema
+    varchar tabla
+    jsonb registro
+    varchar operacion
+    jsonb valores_antes
+    jsonb valores_despues
+  }
+  core_cambio_limite["core.cambio_limite"] {
+    bigint evento_id PK, FK
+    varchar tipo_evento FK
+    numeric valor_anterior
+    numeric valor_nuevo
+  }
+  core_cliente["core.cliente"] {
+    bigint cliente_id PK
+    varchar tipo_cliente FK
+    varchar tipo_documento FK
+    varchar numero_documento
+    smallint digito_verificacion
+    char municipio_codigo FK
+    varchar estado_cliente FK
+    date fecha_vinculacion
+    varchar email
+    varchar telefono
+    timestamptz creado_en
+  }
+  core_cuenta["core.cuenta"] {
+    bigint cuenta_id PK
+    char numero_cuenta UK
+    varchar producto_codigo FK
+    char moneda_codigo FK
+    integer oficina_id FK
+    varchar estado_cuenta FK
+    timestamptz fecha_apertura
+    timestamptz fecha_cierre
+    numeric saldo_contable
+    numeric saldo_retenido
+    numeric saldo_disponible
+    numeric cupo_sobregiro
+    numeric limite_retiro_diario
+  }
+  core_evento_cuenta["core.evento_cuenta"] {
+    bigint evento_id PK
+    bigint cuenta_id FK
+    varchar tipo_evento FK
+    varchar estado_anterior FK
+    varchar estado_nuevo FK
+    varchar motivo
+    timestamptz ocurrido_en
+    bigint registrado_por FK
+  }
+  core_persona_juridica["core.persona_juridica"] {
+    bigint cliente_id PK, FK
+    varchar tipo_cliente FK
+    varchar razon_social
+    date fecha_constitucion
+    char actividad_economica
+  }
+  core_persona_natural["core.persona_natural"] {
+    bigint cliente_id PK, FK
+    varchar tipo_cliente FK
+    varchar nombres
+    varchar apellidos
+    date fecha_nacimiento
+  }
+  core_producto["core.producto"] {
+    varchar producto_codigo PK
+    varchar nombre UK
+    varchar tipo_cliente_permitido
+    boolean permite_sobregiro
+    smallint max_titulares
+    varchar cuenta_contable_codigo FK
+  }
+  core_titularidad_cuenta["core.titularidad_cuenta"] {
+    bigint cuenta_id PK, FK
+    bigint cliente_id PK, FK
+    timestamptz vigente_desde PK
+    varchar rol_titular
+    timestamptz vigente_hasta
+  }
+  fin_asiento_contable["fin.asiento_contable"] {
+    bigint transaccion_id PK, FK
+    smallint linea PK
+    varchar cuenta_contable_codigo FK
+    bigint cuenta_id FK
+    char naturaleza
+    numeric valor
+    timestamptz registrado_en
+  }
+  fin_transaccion_financiera["fin.transaccion_financiera"] {
+    bigint transaccion_id PK
+    varchar tipo_codigo FK
+    varchar estado_codigo FK
+    bigint cuenta_origen_id FK
+    bigint cuenta_destino_id FK
+    numeric monto
+    uuid idempotency_key UK
+    bytea hash_solicitud
+    bigint transaccion_reversada_id FK, UK
+    varchar descripcion
+    timestamptz fecha_solicitud
+    timestamptz fecha_contabilizacion
+    date fecha_contable
+    bigint creado_por FK
+    bigint aprobado_por FK
+    varchar motivo_rechazo
+  }
+  ref_cuenta_contable["ref.cuenta_contable"] {
+    varchar cuenta_contable_codigo PK
+    varchar nombre UK
+    char naturaleza
+    boolean es_deposito_cliente
+  }
+  ref_departamento["ref.departamento"] {
+    char departamento_codigo PK
+    varchar nombre UK
+  }
+  ref_estado_cliente["ref.estado_cliente"] {
+    varchar codigo PK
+    varchar nombre UK
+  }
+  ref_estado_cuenta["ref.estado_cuenta"] {
+    varchar codigo PK
+    varchar nombre UK
+  }
+  ref_estado_transaccion["ref.estado_transaccion"] {
+    varchar codigo PK
+    varchar nombre UK
+  }
+  ref_moneda["ref.moneda"] {
+    char codigo PK
+    varchar nombre UK
+    smallint decimales
+  }
+  ref_municipio["ref.municipio"] {
+    char municipio_codigo PK
+    char departamento_codigo FK
+    varchar nombre
+  }
+  ref_oficina["ref.oficina"] {
+    integer oficina_id PK
+    varchar codigo UK
+    varchar nombre
+    char municipio_codigo FK
+    boolean activa
+  }
+  ref_tipo_documento["ref.tipo_documento"] {
+    varchar codigo PK
+    varchar nombre UK
+    varchar tipo_cliente
+  }
+  ref_tipo_evento_cuenta["ref.tipo_evento_cuenta"] {
+    varchar codigo PK
+    varchar nombre UK
+  }
+  ref_tipo_transaccion["ref.tipo_transaccion"] {
+    varchar codigo PK
+    varchar nombre UK
+  }
+  ref_transicion_estado_cuenta["ref.transicion_estado_cuenta"] {
+    varchar tipo_evento PK, FK
+    varchar estado_anterior PK, FK
+    varchar estado_nuevo PK, FK
+  }
+  seg_permiso["seg.permiso"] {
+    smallint permiso_id PK
+    varchar codigo UK
+    varchar descripcion
+  }
+  seg_rol["seg.rol"] {
+    smallint rol_id PK
+    varchar codigo UK
+    varchar nombre
+  }
+  seg_rol_permiso["seg.rol_permiso"] {
+    smallint rol_id PK, FK
+    smallint permiso_id PK, FK
+  }
+  seg_usuario["seg.usuario"] {
+    bigint usuario_id PK
+    varchar login UK
+    varchar tipo_documento FK
+    varchar numero_documento
+    varchar nombres
+    varchar apellidos
+    integer oficina_id FK
+    varchar estado
+    timestamptz creado_en
+  }
+  seg_usuario_rol["seg.usuario_rol"] {
+    bigint usuario_id PK, FK
+    smallint rol_id PK, FK
+    timestamptz vigente_desde PK
+    timestamptz vigente_hasta
+    bigint asignado_por FK
+  }
+  seg_usuario |o--o{ aud_log_auditoria : "usuario_id"
+  core_evento_cuenta ||--o| core_cambio_limite : "evento_id,tipo_evento"
+  ref_estado_cliente ||--o{ core_cliente : "estado_cliente"
+  ref_municipio ||--o{ core_cliente : "municipio_codigo"
+  ref_tipo_documento ||--o{ core_cliente : "tipo_cliente,tipo_documento"
+  ref_estado_cuenta ||--o{ core_cuenta : "estado_cuenta"
+  ref_moneda ||--o{ core_cuenta : "moneda_codigo"
+  ref_oficina ||--o{ core_cuenta : "oficina_id"
+  core_producto ||--o{ core_cuenta : "producto_codigo"
+  core_cuenta ||--o{ core_evento_cuenta : "cuenta_id"
+  ref_estado_cuenta |o--o{ core_evento_cuenta : "estado_anterior"
+  ref_estado_cuenta ||--o{ core_evento_cuenta : "estado_nuevo"
+  seg_usuario ||--o{ core_evento_cuenta : "registrado_por"
+  ref_tipo_evento_cuenta ||--o{ core_evento_cuenta : "tipo_evento"
+  ref_transicion_estado_cuenta |o--o{ core_evento_cuenta : "tipo_evento,estado_anterior,estado_nuevo"
+  core_cliente ||--o| core_persona_juridica : "cliente_id,tipo_cliente"
+  core_cliente ||--o| core_persona_natural : "cliente_id,tipo_cliente"
+  ref_cuenta_contable ||--o{ core_producto : "cuenta_contable_codigo"
+  core_cliente ||--o{ core_titularidad_cuenta : "cliente_id"
+  core_cuenta ||--o{ core_titularidad_cuenta : "cuenta_id"
+  ref_cuenta_contable ||--o{ fin_asiento_contable : "cuenta_contable_codigo"
+  core_cuenta |o--o{ fin_asiento_contable : "cuenta_id"
+  fin_transaccion_financiera ||--o{ fin_asiento_contable : "transaccion_id"
+  seg_usuario |o--o{ fin_transaccion_financiera : "aprobado_por"
+  seg_usuario ||--o{ fin_transaccion_financiera : "creado_por"
+  core_cuenta |o--o{ fin_transaccion_financiera : "cuenta_destino_id"
+  core_cuenta |o--o{ fin_transaccion_financiera : "cuenta_origen_id"
+  ref_estado_transaccion ||--o{ fin_transaccion_financiera : "estado_codigo"
+  ref_tipo_transaccion ||--o{ fin_transaccion_financiera : "tipo_codigo"
+  fin_transaccion_financiera |o--o| fin_transaccion_financiera : "transaccion_reversada_id"
+  ref_departamento ||--o{ ref_municipio : "departamento_codigo"
+  ref_municipio ||--o{ ref_oficina : "municipio_codigo"
+  ref_estado_cuenta ||--o{ ref_transicion_estado_cuenta : "estado_anterior"
+  ref_estado_cuenta ||--o{ ref_transicion_estado_cuenta : "estado_nuevo"
+  ref_tipo_evento_cuenta ||--o{ ref_transicion_estado_cuenta : "tipo_evento"
+  seg_permiso ||--o{ seg_rol_permiso : "permiso_id"
+  seg_rol ||--o{ seg_rol_permiso : "rol_id"
+  ref_oficina |o--o{ seg_usuario : "oficina_id"
+  ref_tipo_documento ||--o{ seg_usuario : "tipo_documento"
+  seg_usuario |o--o{ seg_usuario_rol : "asignado_por"
+  seg_rol ||--o{ seg_usuario_rol : "rol_id"
+  seg_usuario ||--o{ seg_usuario_rol : "usuario_id"

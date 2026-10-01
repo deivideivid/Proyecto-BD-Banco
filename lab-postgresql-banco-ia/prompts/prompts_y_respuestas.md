@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G7 |
+| Gates cubiertos | G0–G8 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
 | Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
@@ -28,7 +28,8 @@
 | [P-08](#p-08--prompt-3-del-laboratorio--generar-10k50k1m) | 2026-09-17 a 2026-09-30 | G4 | Generar, cargar y perfilar los datos sintéticos (Prompt 3 oficial). | IA-22 a IA-27 |
 | [P-09](#p-09--prompt-4-del-laboratorio--30-consultas) | 2026-09-30 | G5 | Proponer, escribir, validar y explicar las 30 consultas (basado en el Prompt 4). | IA-28 a IA-31 |
 | [P-10](#p-10--prompt-5-del-laboratorio--auditor-de-calidad) | 2026-09-30 | G6 | Auditar la base sin corregirla, corregir los FAIL y probar que el gate detecta defectos (Prompt 5). | IA-32 a IA-36 |
-| [P-11](#p-11--prompt-6-del-laboratorio--revisor-de-performance) | 2026-10-01 | G7 | Analizar 10 consultas con EXPLAIN antes y después, justificar índices y demostrar el RBAC (Prompt 6). | IA-37 a IA-44 |
+| [P-11](#p-11--prompt-6-del-laboratorio--revisor-de-performance) | 2026-10-01 | G7 | Analizar 10 consultas con EXPLAIN antes y después, justificar índices y demostrar el RBAC (Prompt 6). | IA-37 a IA-46 |
+| [P-12](#p-12--cierre-informe-final-matriz-ia-y-defensa) | 2026-10-01 | G8 | Reconstrucción en un paso, ERD final desde el catálogo, informe final, matriz IA consolidada y guía de defensa. | — |
 
 ---
 
@@ -470,5 +471,37 @@ Devuelve comparación before/after y clasifica la mejora como: no concluyente, m
 
 - En G5 propuso como candidatas a índice las 5 consultas más lentas. Son reportes que leen casi toda la tabla; los cuellos de botella reales estaban en las operaciones: un retiro tardaba 95 ms por recorrer el millón de transacciones (IA-37).
 - El índice del extracto hizo que el reporte A06/W10 pasara de 1,3 s a 2,8 s, aunque el costo estimado bajó. Sus tres primeras propuestas para corregirlo (índice cubriente, más `work_mem`, reescritura) no mejoraron nada (IA-39, IA-40).
+- Al ejecutarlo en el PC del equipo (Windows, PostgreSQL 18.6) aparecieron dos fallas que no se vieron en PostgreSQL 16: tildes dañadas por la codificación de SQL Shell y filas con decimales en EXPLAIN (IA-45, IA-46).
 
-**Decisiones derivadas:** IA-37 a IA-42 ([`evidence/g7_explain.md`](../evidence/g7_explain.md#9-matriz-ia-nuevas-entradas-de-g7-rendimiento)) e IA-43 a IA-44 ([`evidence/g7_security.md`](../evidence/g7_security.md#6-matriz-ia-nuevas-entradas-de-g7-seguridad)).
+**Decisiones derivadas:** IA-37 a IA-42 e IA-45 a IA-46 ([`evidence/g7_explain.md`](../evidence/g7_explain.md#9-matriz-ia-nuevas-entradas-de-g7-rendimiento)) e IA-43 a IA-44 ([`evidence/g7_security.md`](../evidence/g7_security.md#6-matriz-ia-nuevas-entradas-de-g7-seguridad)).
+
+---
+
+## P-12 · Cierre: informe final, matriz IA y defensa
+
+**Fecha:** 2026-10-01 · **Gate:** G8
+
+**Lo que se pidió a la IA:**
+
+- Armar la entrega final según la sección 13 de la guía:
+  - repositorio reproducible;
+  - ERD final del modelo implementado;
+  - informe técnico de máximo 8 páginas;
+  - matriz IA con las decisiones de aceptar, modificar y rechazar;
+  - preparación de la defensa: 3 decisiones de diseño, 2 errores descubiertos y las 8 preguntas de la guía.
+- Verificar el checklist final del estudiante punto por punto.
+
+**Respuesta relevante (resumen):**
+
+- `sql/g8_reconstruir_todo.sql`: reconstruye y verifica todo en un paso (G8 RECONSTRUCCIÓN = PASS en 3 min 17 s).
+- `sql/tests/g8_erd_desde_catalogo.sql`: genera el ERD desde el catálogo; resultado idéntico al ERD de G2.
+- `docs/informe_final.docx` y `.pdf`: 5 páginas.
+- `docs/matriz_ia.md`: 46 decisiones consolidadas.
+- `docs/defensa.md` y `sql/tests/g8_demo_defensa.sql`: guía de defensa y 8 demostraciones en vivo sin dejar cambios.
+
+**Errores detectados:**
+
+- La primera versión del generador del ERD ordenaba las columnas de una FK compuesta (`tipo_documento,tipo_cliente`) distinto al ERD de G2. Se corrigió para ordenar por posición de la columna; ahora los dos archivos son idénticos byte a byte.
+- Los integrantes y el docente no se conocen en esta conversación, así que el informe deja ese dato para que el equipo lo complete.
+
+**Decisiones derivadas:** ninguna entrada nueva en la matriz. La matriz consolidada está en [`docs/matriz_ia.md`](../docs/matriz_ia.md).

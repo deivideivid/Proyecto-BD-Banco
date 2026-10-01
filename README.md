@@ -7,7 +7,7 @@ Todos los datos son **100 % sintéticos**: no hay información de personas reale
 
 ```
 lab-postgresql-banco-ia/
-├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), diagramas ER y decisiones
+├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), ERD final, informe final, matriz IA y guía de defensa
 ├── prompts/     Registro de prompts y respuestas de la IA
 ├── sql/         Scripts 00–20, run_all.sql, quality_gate.sql, cargas (sql/load), rendimiento (sql/perf) y pruebas (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
@@ -25,7 +25,19 @@ lab-postgresql-banco-ia/
 
 La base completa pesa cerca de **475 MB** sin índices secundarios y cerca de **560 MB** con los índices de G7 (86 MB). Supera el límite de 500 MB del plan gratis de Supabase, así que se trabaja en **PostgreSQL local**.
 
-## Cómo montar la base (Windows)
+## Reconstrucción completa en un paso (G8)
+
+Desde la carpeta `lab-postgresql-banco-ia`, con la base `banco_andino_lab` creada y el lote 2 generado (`python src/generate_transactions.py`):
+
+```
+psql -U postgres -d banco_andino_lab -f sql/g8_reconstruir_todo.sql
+```
+
+Hace todo lo de la sección siguiente (modelo + 49 pruebas, lotes 1 y 2, perfil de G4, quality gate de G6 y permisos de G7) y termina con **G8 RECONSTRUCCIÓN = PASS** en 3 a 10 minutos. En SQL Shell: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab`, `\i sql/g8_reconstruir_todo.sql`.
+
+Para la defensa: `\i sql/tests/g8_demo_defensa.sql` (8 demostraciones en vivo; no deja cambios).
+
+## Cómo montar la base paso a paso (Windows)
 
 Requisitos: PostgreSQL 16 o superior (incluye `psql`) y Python 3.10 a 3.13.
 Todos los comandos se ejecutan **desde la carpeta `lab-postgresql-banco-ia`**, porque las rutas de carga son relativas.
@@ -85,7 +97,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 - [x] **G5** Consultas: 30 (10 básicas, 10 intermedias, 10 avanzadas) + 7 validaciones cruzadas → `sql/19_demo_queries.sql`, `evidence/g5_results.md`
 - [x] **G6** Quality gate: 76 pruebas en 12 categorías, antes 98,3 (1 FAIL ALTA) → después 99,6 (0 FAIL), 7/7 defectos inyectados detectados → `sql/quality_gate.sql`, `evidence/g6_quality_before_after.md`
 - [x] **G7** Rendimiento y seguridad: 10 consultas con EXPLAIN antes y después, 6 índices justificados (retiro 95 → 1,2 ms), 3 casos sin índice, RBAC 23/23 → `evidence/g7_explain.md`, `evidence/g7_security.md`
-- [ ] **G8** Informe y defensa
+- [x] **G8** Cierre: reconstrucción completa en un paso (`sql/g8_reconstruir_todo.sql`), ERD final generado desde el catálogo, informe final (5 páginas), matriz IA de 46 decisiones y guía de defensa → `docs/informe_final.pdf`, `docs/matriz_ia.md`, `docs/defensa.md`
 
 ## Reglas del repositorio
 

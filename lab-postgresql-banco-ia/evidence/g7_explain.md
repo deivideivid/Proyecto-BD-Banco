@@ -195,6 +195,8 @@ La parte de seguridad (RBAC) se verifica en [`g7_security.md`](g7_security.md).
 | IA-40 | P-11 (6) | Subir `work_mem` o reescribir W10 con `GROUP BY`. | **Rechazar** | 1,55 s y 1,9 s | Ninguna mejora; el cuello es el cálculo numérico. |
 | IA-41 | P-11 (6) | Desactivar el index scan solo en la transacción del reporte W10. | **Aceptar** | W10S: 1,43 s | Mitigación con alcance limitado; IX-3 se mantiene para la operación diaria. |
 | IA-42 | P-11 (6) | Reescribir W09 y el procedimiento de inactivación con `registrado_en`. | **Aceptar** | 428,7 → 74,3 ms; OP3 22,7 → 1,1 s; mismas 12.365 cuentas | Equivalencia verificada en los 2.000.000 de asientos. |
+| IA-45 | P-11 (6) | Scripts de G7 sin `SET client_encoding = 'UTF8'`. En SQL Shell de Windows las tildes del CSV quedaron dañadas ("OperaciÃ³n"). | **Corregir** | `g7_explain_antes.csv` generado en el PC del equipo | Se forzó UTF-8 en 7 scripts y se reparó el CSV. La misma causa había dañado las tildes de los catálogos creados con `run_all.sql` en G3; se corrige reconstruyendo la base en G8. |
+| IA-46 | P-11 (6) | El script de medición suponía que EXPLAIN devuelve filas enteras; PostgreSQL 18 devuelve "1.00". | **Corregir** | Error en el PC del equipo (PostgreSQL 18.6) | Se redondea el valor; probado en PostgreSQL 16 y 18. |
 
 ## 10. Repetición en PostgreSQL 18.6 (PC del equipo)
 

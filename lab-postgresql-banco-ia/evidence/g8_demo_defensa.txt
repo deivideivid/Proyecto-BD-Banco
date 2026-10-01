@@ -1,0 +1,75 @@
+SET
+SET
+
+== DEMO 1 · Inmutabilidad: una transacción POSTED no se modifica ni se borra (RN-40, RN-53)
+   (se intenta como postgres, el dueño de la base: aun así lo impide un trigger)
+psql:sql/tests/g8_demo_defensa.sql:21: ERROR:  La transacción 1 (POSTED) es inmutable: los errores se corrigen con un reverso (RN-40, RN-41)
+psql:sql/tests/g8_demo_defensa.sql:22: ERROR:  fin.asiento_contable no permite DELETE (registro inmutable)
+
+== DEMO 2 · Doble partida: Σ débitos = Σ créditos en el millón de transacciones (RN-47)
+ transacciones_posted | descuadradas 
+----------------------+--------------
+              1000000 |            0
+
+
+== DEMO 3 · Reconciliación: saldo guardado = saldo según el ledger en las 50.000 cuentas (RN-48)
+ cuentas | con_diferencia | diferencia_total 
+---------+----------------+------------------
+   50000 |              0 |             0.00
+
+
+== DEMO 4 · Idempotencia: la misma solicitud enviada dos veces genera UNA sola transacción (RN-38)
+BEGIN
+ primer_envio 
+--------------
+      1024184
+
+ segundo_envio 
+---------------
+       1024184
+
+ transacciones_creadas 
+-----------------------
+                     1
+
+ROLLBACK
+
+== DEMO 5 · Atomicidad: una transferencia que falla no deja nada a medias (RN-39)
+psql:sql/tests/g8_demo_defensa.sql:54: ERROR:  Fondos insuficientes en la cuenta 30000000030: disponible 91739544.00 + cupo 0.00, solicitado 999999999999
+ transacciones_nuevas | cambio_saldo_origen 
+----------------------+---------------------
+                    0 |                0.00
+
+
+== DEMO 6 · Reglas en la base: retiro que excede el límite diario (RN-37, error BA004)
+BEGIN
+psql:sql/tests/g8_demo_defensa.sql:61: ERROR:  Excede el límite diario de retiro: retirado hoy 0, solicitado 2000000.01, límite 2000000.00
+ROLLBACK
+
+== DEMO 7 · Índice útil: el límite diario de cada retiro usa ix_transaccion_origen_fecha (G7)
+                                                       QUERY PLAN                                                       
+------------------------------------------------------------------------------------------------------------------------
+ Aggregate (actual time=0.013..0.013 rows=1 loops=1)
+   Buffers: shared hit=4
+   ->  Index Scan using ix_transaccion_origen_fecha on transaccion_financiera (actual time=0.009..0.010 rows=1 loops=1)
+         Index Cond: ((cuenta_origen_id = 30) AND (fecha_contable = '2026-07-17'::date))
+         Filter: (((tipo_codigo)::text = 'RETIRO'::text) AND ((estado_codigo)::text = 'POSTED'::text))
+         Buffers: shared hit=4
+ Planning Time: 0.070 ms
+ Execution Time: 0.024 ms
+
+
+== DEMO 8 · Mínimo privilegio: un usuario de consulta no puede tocar el dinero (G7)
+DROP ROLE
+CREATE ROLE
+BEGIN
+SET
+ cuentas_que_puede_leer 
+------------------------
+                  50000
+
+psql:sql/tests/g8_demo_defensa.sql:77: ERROR:  permission denied for table cuenta
+ROLLBACK
+DROP ROLE
+
+== Fin de la demostración: la base no cambió.
