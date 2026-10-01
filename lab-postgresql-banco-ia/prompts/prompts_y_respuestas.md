@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G6 |
+| Gates cubiertos | G0–G7 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
 | Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
@@ -28,6 +28,7 @@
 | [P-08](#p-08--prompt-3-del-laboratorio--generar-10k50k1m) | 2026-09-17 a 2026-09-30 | G4 | Generar, cargar y perfilar los datos sintéticos (Prompt 3 oficial). | IA-22 a IA-27 |
 | [P-09](#p-09--prompt-4-del-laboratorio--30-consultas) | 2026-09-30 | G5 | Proponer, escribir, validar y explicar las 30 consultas (basado en el Prompt 4). | IA-28 a IA-31 |
 | [P-10](#p-10--prompt-5-del-laboratorio--auditor-de-calidad) | 2026-09-30 | G6 | Auditar la base sin corregirla, corregir los FAIL y probar que el gate detecta defectos (Prompt 5). | IA-32 a IA-36 |
+| [P-11](#p-11--prompt-6-del-laboratorio--revisor-de-performance) | 2026-10-01 | G7 | Analizar 10 consultas con EXPLAIN antes y después, justificar índices y demostrar el RBAC (Prompt 6). | IA-37 a IA-44 |
 
 ---
 
@@ -437,3 +438,37 @@ No corrijas silenciosamente: primero evidencia el fallo, luego recomienda.
 - La primera versión de la prueba de defectos habría sobrescrito la evidencia real con los resultados de la copia dañada (IA-36).
 
 **Decisiones derivadas:** IA-32 a IA-36 ([`evidence/g6_quality_before_after.md`](../evidence/g6_quality_before_after.md#9-matriz-ia-nuevas-entradas-de-g6)).
+
+---
+
+## P-11 · Prompt 6 del laboratorio · Revisor de performance
+
+**Fecha:** 2026-10-01 · **Gate:** G7
+
+**Prompt oficial del laboratorio:**
+
+```
+Analiza estos planes EXPLAIN (ANALYZE, BUFFERS). No recomiendes índices de forma automática.
+Para cada consulta identifica cuello de botella, causa probable, selectividad, columnas de join/filtro/orden, índice candidato si aplica, costo de escritura/almacenamiento del índice y riesgo de sobreindexación.
+Devuelve comparación before/after y clasifica la mejora como: no concluyente, menor, relevante o crítica. Señala cuando la mejor decisión sea NO crear índice.
+```
+
+**Cómo se usó:**
+
+- Antes de usar el prompt, se pidió a la IA elegir 10 consultas representativas. Se incluyeron las que ejecutan por dentro las funciones del banco (límite diario de `fn_retirar`, trigger de eventos, procedimiento de inactivación) y no solo las más lentas de G5.
+- Se pidió medir también el costo de escritura con operaciones reales y con la carga masiva.
+- Para la seguridad (paso 6 y 7 de la fase), se pidió un script que probara permisos con un usuario de cada rol sin dejar cambios.
+
+**Respuesta relevante (resumen):**
+
+- `sql/perf/g7_workload.sql` (workload medible antes y después) y 6 índices en `sql/12_indexes.sql`, cada uno con su consulta.
+- `sql/15_procedures.sql` con el procedimiento de inactivación reescrito.
+- `sql/tests/g7_rbac_demo.sql` con 23 pruebas de acceso.
+- `evidence/g7_explain.md` y `evidence/g7_security.md`.
+
+**Errores o vacíos de la IA detectados por las mediciones:**
+
+- En G5 propuso como candidatas a índice las 5 consultas más lentas. Son reportes que leen casi toda la tabla; los cuellos de botella reales estaban en las operaciones: un retiro tardaba 95 ms por recorrer el millón de transacciones (IA-37).
+- El índice del extracto hizo que el reporte A06/W10 pasara de 1,3 s a 2,8 s, aunque el costo estimado bajó. Sus tres primeras propuestas para corregirlo (índice cubriente, más `work_mem`, reescritura) no mejoraron nada (IA-39, IA-40).
+
+**Decisiones derivadas:** IA-37 a IA-42 ([`evidence/g7_explain.md`](../evidence/g7_explain.md#9-matriz-ia-nuevas-entradas-de-g7-rendimiento)) e IA-43 a IA-44 ([`evidence/g7_security.md`](../evidence/g7_security.md#6-matriz-ia-nuevas-entradas-de-g7-seguridad)).

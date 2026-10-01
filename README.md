@@ -9,7 +9,7 @@ Todos los datos son **100 % sintéticos**: no hay información de personas reale
 lab-postgresql-banco-ia/
 ├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), diagramas ER y decisiones
 ├── prompts/     Registro de prompts y respuestas de la IA
-├── sql/         Scripts numerados 00–20, run_all.sql, quality_gate.sql, cargas (sql/load) y pruebas (sql/tests)
+├── sql/         Scripts 00–20, run_all.sql, quality_gate.sql, cargas (sql/load), rendimiento (sql/perf) y pruebas (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
 ├── data/lote1/  CSV del lote 1 (clientes, cuentas, eventos)
 ├── data/lote2/  CSV del lote 2 (NO se sube: se genera localmente)
@@ -23,7 +23,7 @@ lab-postgresql-banco-ia/
 | 1 | 10.000 clientes · 50.000 cuentas · titularidades · eventos | 20/20 PASS |
 | 2 | 1.000.000 transacciones POSTED (+ rechazadas y pendientes) · 2.000.000 asientos | 24/24 PASS |
 
-La base completa pesa cerca de **475 MB**, muy cerca del límite de 500 MB del plan gratis de Supabase (y lo superará con los índices de G7), así que se trabaja en **PostgreSQL local**.
+La base completa pesa cerca de **475 MB** sin índices secundarios y cerca de **560 MB** con los índices de G7 (86 MB). Supera el límite de 500 MB del plan gratis de Supabase, así que se trabaja en **PostgreSQL local**.
 
 ## Cómo montar la base (Windows)
 
@@ -57,6 +57,13 @@ psql -U postgres -d banco_andino_lab -f sql/quality_gate.sql
 #    Debe terminar con: QUALITY_GATE = PASS
 #    Opcional, prueba de las pruebas sobre una copia (cierre pgAdmin antes):
 psql -U postgres -d postgres -f sql/tests/quality_gate_defectos.sql
+
+# 7. Rendimiento y seguridad de G7
+#    (en una base nueva, run_all.sql ya crea los índices: basta con los pasos b y c)
+psql -U postgres -d banco_andino_lab -f sql/perf/g7_workload.sql      # a) antes  → evidence/g7_explain_antes.csv
+psql -U postgres -d banco_andino_lab -f sql/perf/g7_aplicar.sql       #    aplica los 6 índices y el procedimiento
+psql -U postgres -d banco_andino_lab -f sql/perf/g7_workload.sql      # b) después → evidence/g7_explain_despues.csv
+psql -U postgres -d banco_andino_lab -f sql/tests/g7_rbac_demo.sql    # c) permisos por rol: G7 RBAC = PASS
 ```
 
 > Si PowerShell dice que `psql` no se reconoce, use **SQL Shell (psql)**: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`, `\i sql/load/carga_lote1.sql`, etc. O agregue `C:\Program Files\PostgreSQL\18\bin` al PATH de Windows.
@@ -77,7 +84,7 @@ Ambos generadores usan la semilla `20260909`, así que producen exactamente los 
 - [x] **G4** Datos sintéticos: 10K clientes · 50K cuentas · 1M transacciones, reproducibles, perfil de 48 métricas → `docs/04_datos_sinteticos.md`, `evidence/g4_data_profile.csv`
 - [x] **G5** Consultas: 30 (10 básicas, 10 intermedias, 10 avanzadas) + 7 validaciones cruzadas → `sql/19_demo_queries.sql`, `evidence/g5_results.md`
 - [x] **G6** Quality gate: 76 pruebas en 12 categorías, antes 98,3 (1 FAIL ALTA) → después 99,6 (0 FAIL), 7/7 defectos inyectados detectados → `sql/quality_gate.sql`, `evidence/g6_quality_before_after.md`
-- [ ] **G7** Rendimiento y seguridad
+- [x] **G7** Rendimiento y seguridad: 10 consultas con EXPLAIN antes y después, 6 índices justificados (retiro 95 → 1,2 ms), 3 casos sin índice, RBAC 23/23 → `evidence/g7_explain.md`, `evidence/g7_security.md`
 - [ ] **G8** Informe y defensa
 
 ## Reglas del repositorio

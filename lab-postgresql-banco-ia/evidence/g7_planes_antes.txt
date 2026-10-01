@@ -1,0 +1,341 @@
+== Fase: ANTES (sin índices de G7)
+== W01 · Límite diario de retiro (dentro de fin.fn_retirar, RN-37)
+                                                                                    QUERY PLAN                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=26449.96..26449.97 rows=1 width=32) (actual time=62.933..64.036 rows=1 loops=1)
+   Buffers: shared hit=9089 read=7822
+   ->  Gather  (cost=1000.00..26449.96 rows=1 width=6) (actual time=62.915..64.020 rows=1 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=9089 read=7822
+         ->  Parallel Seq Scan on transaccion_financiera  (cost=0.00..25449.86 rows=1 width=6) (actual time=55.630..57.253 rows=0 loops=3)
+               Filter: ((cuenta_origen_id = 30) AND ((tipo_codigo)::text = 'RETIRO'::text) AND ((estado_codigo)::text = 'POSTED'::text) AND (fecha_contable = '2026-07-17'::date))
+               Rows Removed by Filter: 341392
+               Buffers: shared hit=9089 read=7822
+ Planning:
+   Buffers: shared hit=102
+ Planning Time: 0.256 ms
+ Execution Time: 64.059 ms
+
+== W02 · Extracto mensual de una cuenta (julio 2026)
+                                                                                            QUERY PLAN                                                                                             
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Gather Merge  (cost=36427.16..36427.63 rows=4 width=45) (actual time=86.191..89.927 rows=5 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=93 read=20766
+   ->  Sort  (cost=35427.14..35427.14 rows=2 width=45) (actual time=81.207..81.210 rows=2 loops=3)
+         Sort Key: a.registrado_en
+         Sort Method: quicksort  Memory: 25kB
+         Buffers: shared hit=93 read=20766
+         Worker 0:  Sort Method: quicksort  Memory: 25kB
+         Worker 1:  Sort Method: quicksort  Memory: 25kB
+         ->  Nested Loop  (cost=0.42..35427.13 rows=2 width=45) (actual time=58.751..81.176 rows=2 loops=3)
+               Buffers: shared hit=77 read=20766
+               ->  Parallel Seq Scan on asiento_contable a  (cost=0.00..35410.24 rows=2 width=24) (actual time=58.723..81.135 rows=2 loops=3)
+                     Filter: ((registrado_en >= '2026-07-01 00:00:00-05'::timestamp with time zone) AND (registrado_en < '2026-08-01 00:00:00-05'::timestamp with time zone) AND (cuenta_id = 30))
+                     Rows Removed by Filter: 666665
+                     Buffers: shared hit=56 read=20766
+               ->  Index Scan using transaccion_financiera_pkey on transaccion_financiera t  (cost=0.42..8.44 rows=1 width=37) (actual time=0.018..0.018 rows=1 loops=5)
+                     Index Cond: (transaccion_id = a.transaccion_id)
+                     Buffers: shared hit=21
+ Planning:
+   Buffers: shared hit=216
+ Planning Time: 0.411 ms
+ Execution Time: 89.969 ms
+
+== W03 · Saldo según el ledger de una cuenta (RN-48)
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize Aggregate  (cost=32242.64..32242.65 rows=1 width=32) (actual time=78.488..78.584 rows=1 loops=1)
+   Buffers: shared hit=632 read=20190
+   ->  Gather  (cost=32242.41..32242.62 rows=2 width=32) (actual time=75.850..78.550 rows=3 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=632 read=20190
+         ->  Partial Aggregate  (cost=31242.41..31242.42 rows=1 width=32) (actual time=71.286..71.287 rows=1 loops=3)
+               Buffers: shared hit=632 read=20190
+               ->  Parallel Seq Scan on asiento_contable  (cost=0.00..31242.17 rows=32 width=8) (actual time=0.848..71.176 rows=34 loops=3)
+                     Filter: (cuenta_id = 30)
+                     Rows Removed by Filter: 666632
+                     Buffers: shared hit=632 read=20190
+ Planning Time: 0.069 ms
+ Execution Time: 78.610 ms
+
+== W04 · Últimas 20 transacciones de una cuenta (como origen o destino)
+                                                                    QUERY PLAN                                                                     
+---------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=24316.03..24318.37 rows=20 width=39) (actual time=54.879..58.065 rows=20 loops=1)
+   Buffers: shared hit=9739 read=7246
+   ->  Gather Merge  (cost=24316.03..24323.97 rows=68 width=39) (actual time=54.877..58.058 rows=20 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         Buffers: shared hit=9739 read=7246
+         ->  Sort  (cost=23316.01..23316.09 rows=34 width=39) (actual time=47.348..47.351 rows=17 loops=3)
+               Sort Key: fecha_contabilizacion DESC NULLS LAST
+               Sort Method: top-N heapsort  Memory: 27kB
+               Buffers: shared hit=9739 read=7246
+               Worker 0:  Sort Method: quicksort  Memory: 26kB
+               Worker 1:  Sort Method: quicksort  Memory: 26kB
+               ->  Parallel Seq Scan on transaccion_financiera  (cost=0.00..23315.14 rows=34 width=39) (actual time=0.827..47.243 rows=35 loops=3)
+                     Filter: ((cuenta_origen_id = 30) OR (cuenta_destino_id = 30))
+                     Rows Removed by Filter: 341358
+                     Buffers: shared hit=9665 read=7246
+ Planning:
+   Buffers: shared hit=11
+ Planning Time: 0.103 ms
+ Execution Time: 58.088 ms
+
+== W05 · Cuentas vigentes de un cliente
+                                                         QUERY PLAN                                                          
+-----------------------------------------------------------------------------------------------------------------------------
+ Nested Loop  (cost=0.29..1134.93 rows=5 width=44) (actual time=0.010..2.919 rows=9 loops=1)
+   Buffers: shared hit=476
+   ->  Seq Scan on titularidad_cuenta t  (cost=0.00..1093.39 rows=5 width=18) (actual time=0.005..2.848 rows=9 loops=1)
+         Filter: ((vigente_hasta IS NULL) AND (cliente_id = 7))
+         Rows Removed by Filter: 51542
+         Buffers: shared hit=449
+   ->  Index Scan using cuenta_pkey on cuenta c  (cost=0.29..8.31 rows=1 width=42) (actual time=0.007..0.007 rows=1 loops=9)
+         Index Cond: (cuenta_id = t.cuenta_id)
+         Buffers: shared hit=27
+ Planning:
+   Buffers: shared hit=137 read=15
+ Planning Time: 0.499 ms
+ Execution Time: 2.936 ms
+
+== W06 · Último evento de una cuenta (trigger trg_evento_validar)
+                                                   QUERY PLAN                                                   
+----------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=2735.31..2735.32 rows=1 width=9) (actual time=5.609..5.611 rows=1 loops=1)
+   Buffers: shared hit=1261
+   ->  Seq Scan on evento_cuenta  (cost=0.00..2735.30 rows=2 width=8) (actual time=0.012..5.601 rows=4 loops=1)
+         Filter: (cuenta_id = 30)
+         Rows Removed by Filter: 112141
+         Buffers: shared hit=1261
+ Planning:
+   Buffers: shared hit=40 read=3
+ Planning Time: 0.168 ms
+ Execution Time: 5.630 ms
+
+== W07 · Cola de ajustes pendientes de aprobación
+                                                                  QUERY PLAN                                                                  
+----------------------------------------------------------------------------------------------------------------------------------------------
+ Gather Merge  (cost=23248.08..23251.34 rows=28 width=46) (actual time=46.707..49.751 rows=74 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=10315 read=6670 written=15
+   ->  Sort  (cost=22248.05..22248.09 rows=14 width=46) (actual time=39.692..39.695 rows=25 loops=3)
+         Sort Key: fecha_solicitud
+         Sort Method: quicksort  Memory: 27kB
+         Buffers: shared hit=10315 read=6670 written=15
+         Worker 0:  Sort Method: quicksort  Memory: 26kB
+         Worker 1:  Sort Method: quicksort  Memory: 25kB
+         ->  Parallel Seq Scan on transaccion_financiera  (cost=0.00..22247.79 rows=14 width=46) (actual time=39.388..39.634 rows=25 loops=3)
+               Filter: ((estado_codigo)::text = 'PENDING_APPROVAL'::text)
+               Rows Removed by Filter: 341368
+               Buffers: shared hit=10241 read=6670 written=15
+ Planning:
+   Buffers: shared hit=4 read=2
+ Planning Time: 0.132 ms
+ Execution Time: 49.773 ms
+
+== W08 · Buscar un cliente por documento
+                                                                   QUERY PLAN                                                                   
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Nested Loop Left Join  (cost=0.57..16.61 rows=1 width=47) (actual time=0.069..0.071 rows=1 loops=1)
+   Buffers: shared hit=6
+   ->  Index Scan using uq_cliente_documento on cliente c  (cost=0.29..8.30 rows=1 width=23) (actual time=0.060..0.061 rows=1 loops=1)
+         Index Cond: (((tipo_documento)::text = 'CC'::text) AND ((numero_documento)::text = '1082099316'::text))
+         Buffers: shared hit=3
+   ->  Index Scan using persona_natural_pkey on persona_natural pn  (cost=0.29..8.30 rows=1 width=32) (actual time=0.005..0.005 rows=1 loops=1)
+         Index Cond: (cliente_id = c.cliente_id)
+         Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=125 read=14
+ Planning Time: 0.661 ms
+ Execution Time: 0.095 ms
+
+== W09 · Cuentas ACTIVAS sin movimiento en 90 días (G5 I02 / pr_inactivar)
+                                                                                       QUERY PLAN                                                                                        
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=58569.83..58569.84 rows=4 width=17) (actual time=442.455..444.529 rows=4 loops=1)
+   Sort Key: (count(*)) DESC
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=12678 read=26487
+   ->  Finalize GroupAggregate  (cost=58568.77..58569.79 rows=4 width=17) (actual time=442.437..444.513 rows=4 loops=1)
+         Group Key: c.producto_codigo
+         Buffers: shared hit=12675 read=26487
+         ->  Gather Merge  (cost=58568.77..58569.71 rows=8 width=17) (actual time=442.428..444.501 rows=4 loops=1)
+               Workers Planned: 2
+               Workers Launched: 2
+               Buffers: shared hit=12675 read=26487
+               ->  Sort  (cost=57568.75..57568.76 rows=4 width=17) (actual time=431.880..431.887 rows=1 loops=3)
+                     Sort Key: c.producto_codigo
+                     Sort Method: quicksort  Memory: 25kB
+                     Buffers: shared hit=12675 read=26487
+                     Worker 0:  Sort Method: quicksort  Memory: 25kB
+                     Worker 1:  Sort Method: quicksort  Memory: 25kB
+                     ->  Partial HashAggregate  (cost=57568.67..57568.71 rows=4 width=17) (actual time=431.847..431.853 rows=1 loops=3)
+                           Group Key: c.producto_codigo
+                           Batches: 1  Memory Usage: 24kB
+                           Buffers: shared hit=12659 read=26487
+                           Worker 0:  Batches: 1  Memory Usage: 24kB
+                           Worker 1:  Batches: 1  Memory Usage: 24kB
+                           ->  Parallel Hash Right Anti Join  (cost=25265.41..57505.70 rows=12594 width=9) (actual time=430.110..431.268 rows=4122 loops=3)
+                                 Hash Cond: (a.cuenta_id = c.cuenta_id)
+                                 Buffers: shared hit=12659 read=26487
+                                 ->  Parallel Hash Join  (cost=23193.64..54540.02 rows=147744 width=8) (actual time=235.908..386.960 rows=123659 loops=3)
+                                       Hash Cond: (a.transaccion_id = t.transaccion_id)
+                                       Buffers: shared hit=11246 read=26487
+                                       ->  Parallel Seq Scan on asiento_contable a  (cost=0.00..29158.14 rows=833614 width=16) (actual time=0.030..86.768 rows=666667 loops=3)
+                                             Buffers: shared hit=429 read=20393
+                                       ->  Parallel Hash  (cost=22247.79..22247.79 rows=75668 width=8) (actual time=99.916..99.917 rows=61829 loops=3)
+                                             Buckets: 262144  Batches: 1  Memory Usage: 9344kB
+                                             Buffers: shared hit=10817 read=6094
+                                             ->  Parallel Seq Scan on transaccion_financiera t  (cost=0.00..22247.79 rows=75668 width=8) (actual time=37.110..69.855 rows=61829 loops=3)
+                                                   Filter: (fecha_contable > '2026-06-02'::date)
+                                                   Rows Removed by Filter: 279563
+                                                   Buffers: shared hit=10817 read=6094
+                                 ->  Parallel Hash  (cost=1750.65..1750.65 rows=25690 width=17) (actual time=11.399..11.400 rows=14519 loops=3)
+                                       Buckets: 65536  Batches: 1  Memory Usage: 2784kB
+                                       Buffers: shared hit=1383
+                                       ->  Parallel Seq Scan on cuenta c  (cost=0.00..1750.65 rows=25690 width=17) (actual time=0.010..5.418 rows=14519 loops=3)
+                                             Filter: ((estado_cuenta)::text = 'ACTIVA'::text)
+                                             Rows Removed by Filter: 2148
+                                             Buffers: shared hit=1383
+ Planning:
+   Buffers: shared hit=58
+ Planning Time: 0.423 ms
+ Execution Time: 444.595 ms
+
+== W10 · Movimientos atípicos por cuenta (G5 A06)
+                                                                         QUERY PLAN                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=264571.24..264571.26 rows=10 width=86) (actual time=1417.310..1417.314 rows=10 loops=1)
+   Buffers: shared hit=982 read=19843, temp read=10282 written=10304
+   ->  Sort  (cost=264571.24..265646.65 rows=430167 width=86) (actual time=1409.323..1409.325 rows=10 loops=1)
+         Sort Key: (round(((movs.valor - movs.media) / NULLIF(movs.desviacion, '0'::numeric)), 1)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=982 read=19843, temp read=10282 written=10304
+         ->  Subquery Scan on movs  (cost=198278.35..255275.48 rows=430167 width=86) (actual time=562.348..1406.023 rows=12845 loops=1)
+               Filter: (movs.valor > (movs.media + ('4'::numeric * movs.desviacion)))
+               Rows Removed by Filter: 1093343
+               Buffers: shared hit=979 read=19843, temp read=10282 written=10304
+               ->  WindowAgg  (cost=198278.35..227314.63 rows=1290501 width=94) (actual time=562.313..1180.727 rows=1106188 loops=1)
+                     Run Condition: (count(*) OVER (?) >= 20)
+                     Buffers: shared hit=979 read=19843, temp read=10282 written=10304
+                     ->  Sort  (cost=198278.35..201504.61 rows=1290501 width=22) (actual time=562.160..676.595 rows=1279544 loops=1)
+                           Sort Key: a.cuenta_id
+                           Sort Method: external merge  Disk: 41160kB
+                           Buffers: shared hit=979 read=19843, temp read=10282 written=10304
+                           ->  Seq Scan on asiento_contable a  (cost=0.00..40828.73 rows=1290501 width=22) (actual time=0.024..188.335 rows=1279544 loops=1)
+                                 Filter: (cuenta_id IS NOT NULL)
+                                 Rows Removed by Filter: 720456
+                                 Buffers: shared hit=979 read=19843
+ Planning:
+   Buffers: shared hit=13 read=1
+ Planning Time: 0.168 ms
+ JIT:
+   Functions: 15
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.583 ms, Inlining 0.000 ms, Optimization 0.421 ms, Emission 7.623 ms, Total 8.627 ms
+ Execution Time: 1436.950 ms
+
+== W09R · W09 reescrita: usa asiento_contable.registrado_en (= fecha de contabilización) y evita el join
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=35325.80..35325.81 rows=4 width=17) (actual time=143.088..147.375 rows=4 loops=1)
+   Sort Key: (count(*)) DESC
+   Sort Method: quicksort  Memory: 25kB
+   Buffers: shared hit=2600 read=19651
+   ->  Finalize GroupAggregate  (cost=35324.75..35325.76 rows=4 width=17) (actual time=143.080..147.367 rows=4 loops=1)
+         Group Key: c.producto_codigo
+         Buffers: shared hit=2600 read=19651
+         ->  Gather Merge  (cost=35324.75..35325.68 rows=8 width=17) (actual time=143.071..147.355 rows=4 loops=1)
+               Workers Planned: 2
+               Workers Launched: 2
+               Buffers: shared hit=2600 read=19651
+               ->  Sort  (cost=34324.72..34324.73 rows=4 width=17) (actual time=117.971..117.975 rows=1 loops=3)
+                     Sort Key: c.producto_codigo
+                     Sort Method: quicksort  Memory: 25kB
+                     Buffers: shared hit=2600 read=19651
+                     Worker 0:  Sort Method: quicksort  Memory: 25kB
+                     Worker 1:  Sort Method: quicksort  Memory: 25kB
+                     ->  Partial HashAggregate  (cost=34324.64..34324.68 rows=4 width=17) (actual time=117.946..117.949 rows=1 loops=3)
+                           Group Key: c.producto_codigo
+                           Batches: 1  Memory Usage: 24kB
+                           Buffers: shared hit=2584 read=19651
+                           Worker 0:  Batches: 1  Memory Usage: 24kB
+                           Worker 1:  Batches: 1  Memory Usage: 24kB
+                           ->  Parallel Hash Right Anti Join  (cost=2071.77..34261.67 rows=12594 width=9) (actual time=116.612..117.446 rows=4122 loops=3)
+                                 Hash Cond: (a.cuenta_id = c.cuenta_id)
+                                 Buffers: shared hit=2584 read=19651
+                                 ->  Parallel Seq Scan on asiento_contable a  (cost=0.00..31242.17 rows=156640 width=8) (actual time=38.741..80.198 rows=123659 loops=3)
+                                       Filter: (registrado_en >= '2026-06-03 00:00:00-05'::timestamp with time zone)
+                                       Rows Removed by Filter: 543008
+                                       Buffers: shared hit=1171 read=19651
+                                 ->  Parallel Hash  (cost=1750.65..1750.65 rows=25690 width=17) (actual time=5.692..5.693 rows=14519 loops=3)
+                                       Buckets: 65536  Batches: 1  Memory Usage: 2752kB
+                                       Buffers: shared hit=1383
+                                       ->  Parallel Seq Scan on cuenta c  (cost=0.00..1750.65 rows=25690 width=17) (actual time=0.008..7.679 rows=43557 loops=1)
+                                             Filter: ((estado_cuenta)::text = 'ACTIVA'::text)
+                                             Rows Removed by Filter: 6443
+                                             Buffers: shared hit=1383
+ Planning:
+   Buffers: shared hit=7
+ Planning Time: 0.262 ms
+ Execution Time: 147.428 ms
+
+== W10S · W10 con enable_indexscan = off solo en la sesión del reporte
+                                                                         QUERY PLAN                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=264571.24..264571.26 rows=10 width=86) (actual time=1388.696..1388.700 rows=10 loops=1)
+   Buffers: shared hit=1747 read=19075, temp read=10281 written=10303
+   ->  Sort  (cost=264571.24..265646.65 rows=430167 width=86) (actual time=1381.472..1381.475 rows=10 loops=1)
+         Sort Key: (round(((movs.valor - movs.media) / NULLIF(movs.desviacion, '0'::numeric)), 1)) DESC
+         Sort Method: top-N heapsort  Memory: 26kB
+         Buffers: shared hit=1747 read=19075, temp read=10281 written=10303
+         ->  Subquery Scan on movs  (cost=198278.35..255275.48 rows=430167 width=86) (actual time=547.632..1378.540 rows=12845 loops=1)
+               Filter: (movs.valor > (movs.media + ('4'::numeric * movs.desviacion)))
+               Rows Removed by Filter: 1093343
+               Buffers: shared hit=1747 read=19075, temp read=10281 written=10303
+               ->  WindowAgg  (cost=198278.35..227314.63 rows=1290501 width=94) (actual time=547.605..1159.083 rows=1106188 loops=1)
+                     Run Condition: (count(*) OVER (?) >= 20)
+                     Buffers: shared hit=1747 read=19075, temp read=10281 written=10303
+                     ->  Sort  (cost=198278.35..201504.61 rows=1290501 width=22) (actual time=547.407..659.439 rows=1279544 loops=1)
+                           Sort Key: a.cuenta_id
+                           Sort Method: external merge  Disk: 41152kB
+                           Buffers: shared hit=1747 read=19075, temp read=10281 written=10303
+                           ->  Seq Scan on asiento_contable a  (cost=0.00..40828.73 rows=1290501 width=22) (actual time=0.020..188.803 rows=1279544 loops=1)
+                                 Filter: (cuenta_id IS NOT NULL)
+                                 Rows Removed by Filter: 720456
+                                 Buffers: shared hit=1747 read=19075
+ Planning Time: 0.141 ms
+ JIT:
+   Functions: 15
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 0.722 ms, Inlining 0.000 ms, Optimization 0.464 ms, Emission 6.808 ms, Total 7.994 ms
+ Execution Time: 1393.966 ms
+
+== OP1–OP3 · operaciones reales (con ROLLBACK)
+psql:sql/perf/g7_workload.sql:317: NOTICE:  table "g7_ops" does not exist, skipping
+== Resumen de la fase: ANTES (sin índices de G7)
+  id  |                                            consulta                                            | mediana_ms |   costo   | buffers |                                             acceso                                              
+------+------------------------------------------------------------------------------------------------+------------+-----------+---------+-------------------------------------------------------------------------------------------------
+ OP1  | Retiro en caja (fin.fn_retirar), promedio por operación                                        |     94.865 |           |         | 
+ OP2  | Consignación en caja (fin.fn_consignar), promedio por operación                                |      1.317 |           |         | 
+ OP3  | Inactivación de cuentas sin movimiento en 180 días (procedimiento completo)                    |  22730.513 |           |         | 
+ W01  | Límite diario de retiro (dentro de fin.fn_retirar, RN-37)                                      |     59.908 |  26449.97 |   16911 | Seq Scan en transaccion_financiera
+ W02  | Extracto mensual de una cuenta (julio 2026)                                                    |     92.397 |  36427.63 |   20859 | Index Scan transaccion_financiera_pkey en transaccion_financiera + Seq Scan en asiento_contable
+ W03  | Saldo según el ledger de una cuenta (RN-48)                                                    |     79.717 |  32242.65 |   20822 | Seq Scan en asiento_contable
+ W04  | Últimas 20 transacciones de una cuenta (como origen o destino)                                 |     55.382 |  24318.37 |   16985 | Seq Scan en transaccion_financiera
+ W05  | Cuentas vigentes de un cliente                                                                 |      2.327 |   1134.93 |     476 | Index Scan cuenta_pkey en cuenta + Seq Scan en titularidad_cuenta
+ W06  | Último evento de una cuenta (trigger trg_evento_validar)                                       |      5.038 |   2735.32 |    1261 | Seq Scan en evento_cuenta
+ W07  | Cola de ajustes pendientes de aprobación                                                       |     54.329 |  23251.34 |   16985 | Seq Scan en transaccion_financiera
+ W08  | Buscar un cliente por documento                                                                |      0.028 |     16.61 |       6 | Index Scan persona_natural_pkey en persona_natural + Index Scan uq_cliente_documento en cliente
+ W09  | Cuentas ACTIVAS sin movimiento en 90 días (G5 I02 / pr_inactivar)                              |    428.674 |  58569.84 |   39162 | Seq Scan en asiento_contable + Seq Scan en cuenta + Seq Scan en transaccion_financiera
+ W09R | W09 reescrita: usa asiento_contable.registrado_en (= fecha de contabilización) y evita el join |    152.478 |  35325.81 |   22251 | Seq Scan en asiento_contable + Seq Scan en cuenta
+ W10  | Movimientos atípicos por cuenta (G5 A06)                                                       |   1346.697 | 264571.26 |   20822 | Seq Scan en asiento_contable
+ W10S | W10 con enable_indexscan = off solo en la sesión del reporte                                   |   1431.893 | 264571.26 |   20822 | Seq Scan en asiento_contable
+
+Guardado en evidence/g7_explain_antes.csv

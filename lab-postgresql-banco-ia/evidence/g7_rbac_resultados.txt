@@ -1,0 +1,61 @@
+== G7 · Pruebas de acceso por rol
+ prueba |     usuario     |                accion                 |    esperado    |    obtenido    | resultado 
+--------+-----------------+---------------------------------------+----------------+----------------+-----------
+ S01    | demo_consulta   | Leer saldos de cuentas                | PERMITIDO      | PERMITIDO      | PASS
+ S02    | demo_consulta   | Leer la auditoría                     | DENEGADO       | DENEGADO       | PASS
+ S03    | demo_consulta   | Leer usuarios internos (seguridad)    | DENEGADO       | DENEGADO       | PASS
+ S04    | demo_consulta   | Cambiar un saldo directamente         | DENEGADO       | DENEGADO       | PASS
+ S05    | demo_consulta   | Hacer un retiro                       | DENEGADO       | DENEGADO       | PASS
+ S06    | demo_cajero     | Consignar con la función segura       | PERMITIDO      | PERMITIDO      | PASS
+ S07    | demo_cajero     | Retirar con la función segura         | PERMITIDO      | PERMITIDO      | PASS
+ S08    | demo_cajero     | Insertar una transacción a mano       | DENEGADO       | DENEGADO       | PASS
+ S09    | demo_cajero     | Cambiar un saldo directamente         | DENEGADO       | DENEGADO       | PASS
+ S10    | demo_cajero     | Reversar una transacción              | DENEGADO       | DENEGADO       | PASS
+ S11    | demo_cajero     | Leer la auditoría                     | DENEGADO       | DENEGADO       | PASS
+ S12    | demo_supervisor | Reversar (usuario interno SUPERVISOR) | PERMITIDO      | PERMITIDO      | PASS
+ S13    | demo_supervisor | Reversar (usuario interno CAJERO)     | DENEGADO (app) | DENEGADO (app) | PASS
+ S14    | demo_auditor    | Leer la auditoría                     | PERMITIDO      | PERMITIDO      | PASS
+ S15    | demo_auditor    | Leer usuarios y roles internos        | PERMITIDO      | PERMITIDO      | PASS
+ S16    | demo_auditor    | Leer el ledger                        | PERMITIDO      | PERMITIDO      | PASS
+ S17    | demo_auditor    | Modificar la auditoría                | DENEGADO       | DENEGADO       | PASS
+ S18    | demo_auditor    | Borrar asientos contables             | DENEGADO       | DENEGADO       | PASS
+ S19    | demo_auditor    | Consignar                             | DENEGADO       | DENEGADO       | PASS
+ S20    | demo_admin_seg  | Administrar usuarios internos         | PERMITIDO      | PERMITIDO      | PASS
+ S21    | demo_admin_seg  | Ver saldos de cuentas                 | DENEGADO       | DENEGADO       | PASS
+ S22    | demo_sin_rol    | Leer cuentas                          | DENEGADO       | DENEGADO       | PASS
+ S23    | demo_sin_rol    | Ejecutar una función del banco        | DENEGADO       | DENEGADO       | PASS
+
+== Detalle de los accesos denegados (mensaje de PostgreSQL)
+ prueba |                      detalle                       
+--------+----------------------------------------------------
+ S02    | permission denied for schema aud
+ S03    | permission denied for schema seg
+ S04    | permission denied for table cuenta
+ S05    | permission denied for function fn_retirar
+ S08    | permission denied for table transaccion_financiera
+ S09    | permission denied for table cuenta
+ S10    | permission denied for function fn_reversar
+ S11    | permission denied for schema aud
+ S13    | El usuario 10 no tiene el permiso TX_REVERSAR
+ S17    | permission denied for table log_auditoria
+ S18    | permission denied for table asiento_contable
+ S19    | permission denied for function fn_consignar
+ S21    | permission denied for schema core
+ S22    | permission denied for schema core
+ S23    | permission denied for schema ref
+
+== Matriz de privilegios de los roles de base de datos
+       rol        | cuenta_select | cuenta_update | tx_insert | asiento_delete | auditoria_select | usuario_update | retirar | reversar 
+------------------+---------------+---------------+-----------+----------------+------------------+----------------+---------+----------
+ banco_consulta   | t             | f             | f         | f              | f                | f              | f       | f
+ banco_cajero     | t             | f             | f         | f              | f                | f              | t       | f
+ banco_supervisor | t             | f             | f         | f              | f                | f              | t       | t
+ banco_auditor    | t             | f             | f         | f              | t                | f              | f       | f
+ banco_admin_seg  | f             | f             | f         | f              | f                | t              | f       | f
+
+== Veredicto
+ pruebas | permitidos | denegados | fallas |   resultado    
+---------+------------+-----------+--------+----------------
+      23 |          8 |        15 |      0 | G7 RBAC = PASS
+
+Usuarios de prueba borrados; la base no cambió.

@@ -14,6 +14,7 @@
 -- entre monedas: cada consulta filtra COP o agrupa por moneda.
 -- =====================================================================
 
+SET client_encoding = 'UTF8';   -- SQL Shell de Windows no usa UTF-8 por defecto: sin esto las tildes se dañan
 \set QUIET on
 \pset footer off
 SET timezone = 'America/Bogota';   -- fechas y horas en hora de Colombia

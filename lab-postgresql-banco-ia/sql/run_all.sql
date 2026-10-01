@@ -13,6 +13,7 @@
 -- =====================================================================
 
 \set ON_ERROR_STOP on
+SET client_encoding = 'UTF8';   -- SQL Shell de Windows no usa UTF-8 por defecto: sin esto las tildes se dañan
 \set QUIET on
 SET client_min_messages = warning;
 \echo '== Banco Andino · run_all: 1) borrar el modelo anterior'

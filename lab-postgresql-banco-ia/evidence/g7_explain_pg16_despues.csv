@@ -1,0 +1,16 @@
+id,consulta,tipo,mediana_ms,costo,buffers,filas,acceso
+OP1,"Retiro en caja (fin.fn_retirar), promedio por operación",Operación · 200 ejecuciones,1.168,,,200,
+OP2,"Consignación en caja (fin.fn_consignar), promedio por operación",Operación · 200 ejecuciones,1.179,,,200,
+OP3,Inactivación de cuentas sin movimiento en 180 días (procedimiento completo),Lote · 1 ejecución,1096.503,,,4018,
+W01,"Límite diario de retiro (dentro de fin.fn_retirar, RN-37)","OLTP crítica · cada retiro, con la cuenta bloqueada (FOR UPDATE)",0.011,8.46,4,1,Index Scan ix_transaccion_origen_fecha en transaccion_financiera
+W02,Extracto mensual de una cuenta (julio 2026),"OLTP · caja, portal y extractos",0.017,65.84,28,5,Index Scan ix_asiento_cuenta_fecha en asiento_contable + Index Scan transaccion_financiera_pkey en transaccion_financiera
+W03,Saldo según el ledger de una cuenta (RN-48),OLTP · conciliación puntual de una cuenta,0.054,293.17,106,1,Index Scan ix_asiento_cuenta_fecha en asiento_contable
+W04,Últimas 20 transacciones de una cuenta (como origen o destino),OLTP · pantalla de la cuenta,0.110,320.11,112,20,Bitmap Heap Scan en transaccion_financiera
+W05,Cuentas vigentes de un cliente,OLTP · caja y fn_cerrar_cuenta (cliente sin cuentas vigentes),0.024,55.95,38,9,Index Scan cuenta_pkey en cuenta + Index Scan ix_titularidad_cliente en titularidad_cuenta
+W06,Último evento de una cuenta (trigger trg_evento_validar),"OLTP · cada evento: bloqueo, desbloqueo, cierre…",0.006,4.48,4,1,Index Only Scan ix_evento_cuenta_fecha en evento_cuenta
+W07,Cola de ajustes pendientes de aprobación,OLTP · pantalla del supervisor (RN-44),0.019,8.14,47,74,Index Scan ix_transaccion_pendientes en transaccion_financiera
+W08,Buscar un cliente por documento,OLTP · el primer paso de toda atención en caja,0.011,16.61,6,1,Index Scan persona_natural_pkey en persona_natural + Index Scan uq_cliente_documento en cliente
+W09,Cuentas ACTIVAS sin movimiento en 90 días (G5 I02 / pr_inactivar),Lote · proceso nocturno de inactivación,418.238,58631.97,39178,4,Seq Scan en asiento_contable + Seq Scan en cuenta + Seq Scan en transaccion_financiera
+W09R,W09 reescrita: usa asiento_contable.registrado_en (= fecha de contabilización) y evita el join,Lote · variante,74.293,15619.96,132248,4,Index Only Scan ix_asiento_cuenta_fecha en asiento_contable + Seq Scan en cuenta
+W10,Movimientos atípicos por cuenta (G5 A06),Analítica · reporte de riesgo,2760.768,179985.62,1277467,10,Index Scan ix_asiento_cuenta_fecha en asiento_contable
+W10S,W10 con enable_indexscan = off solo en la sesión del reporte,Analítica · variante,1426.123,260448.72,20829,10,Seq Scan en asiento_contable

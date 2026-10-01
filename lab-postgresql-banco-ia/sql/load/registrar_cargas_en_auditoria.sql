@@ -16,6 +16,7 @@
 --   psql -d banco_andino_lab -f sql/load/registrar_cargas_en_auditoria.sql
 -- =====================================================================
 \set ON_ERROR_STOP on
+SET client_encoding = 'UTF8';   -- SQL Shell de Windows no usa UTF-8 por defecto: sin esto las tildes se dañan
 \if :{?carga_en_curso}
 \else
 \set carga_en_curso false
