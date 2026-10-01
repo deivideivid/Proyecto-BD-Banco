@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |---|---|
-| Gates cubiertos | G0–G5 |
+| Gates cubiertos | G0–G6 |
 | Herramienta | Claude (Anthropic), en la aplicación de escritorio |
 | Última actualización | 2026-09-30 |
 | Matriz de decisiones | [Anexo C de la especificación](../docs/01_especificacion.md#anexo-c--matriz-de-decisiones-sobre-ia) (IA-01 a IA-11) y [sección 13 del modelo lógico](../docs/02_modelo_logico.md#13-matriz-ia-nuevas-entradas-de-g2) (IA-12 en adelante) |
@@ -27,6 +27,7 @@
 | [P-07](#p-07--prompt-2b-del-laboratorio--generar-sql-profesional) | 2026-09-30 | G3 | Construir la implementación completa y probarla (Prompt 2B oficial). | IA-17 a IA-21 |
 | [P-08](#p-08--prompt-3-del-laboratorio--generar-10k50k1m) | 2026-09-17 a 2026-09-30 | G4 | Generar, cargar y perfilar los datos sintéticos (Prompt 3 oficial). | IA-22 a IA-27 |
 | [P-09](#p-09--prompt-4-del-laboratorio--30-consultas) | 2026-09-30 | G5 | Proponer, escribir, validar y explicar las 30 consultas (basado en el Prompt 4). | IA-28 a IA-31 |
+| [P-10](#p-10--prompt-5-del-laboratorio--auditor-de-calidad) | 2026-09-30 | G6 | Auditar la base sin corregirla, corregir los FAIL y probar que el gate detecta defectos (Prompt 5). | IA-32 a IA-36 |
 
 ---
 
@@ -408,3 +409,31 @@ Cuando reciba la consulta del estudiante, evalúala por: corrección, legibilida
 - VC1 sumaba pesos y dólares en la misma validación (IA-30).
 
 **Decisiones derivadas:** IA-28 a IA-31 ([`evidence/g5_results.md`](../evidence/g5_results.md#matriz-ia-nuevas-entradas-de-g5)).
+
+---
+
+## P-10 · Prompt 5 del laboratorio · Auditor de calidad
+
+**Fecha:** 2026-09-30 · **Gate:** G6
+
+**Prompt oficial del laboratorio:**
+
+```
+Actúa como Senior Data Quality Engineer, PostgreSQL DBA y Data Auditor. Audita la base sin corregirla primero.
+Genera SQL ejecutable para evaluar: completitud, unicidad, integridad referencial, validez, consistencia geográfica, consistencia temporal, consistencia financiera, reconciliación de saldos, reglas de negocio, distribuciones, diseño y auditoría.
+Para cada test devuelve: test_id | categoría | regla | tabla | esperado | obtenido | severidad | PASS/WARNING/FAIL | detalle.
+Quality gates críticos: 0 duplicados de documento/NIT/cuenta/idempotencia; 0 huérfanos; 0 transacciones imposibles por estado/fecha; Σ débito = Σ crédito para 100% de POSTED; diferencias de saldo = 0 salvo regla documentada.
+Calcula scores solo desde pruebas ejecutadas: Data Quality, Database Design, Integrity, Auditability y Overall. Si falla cualquier regla crítica financiera o referencial, QUALITY_GATE=FAIL.
+No corrijas silenciosamente: primero evidencia el fallo, luego recomienda.
+```
+
+**Cómo se usó:** se pidió además (1) corregir los FAIL encontrados y repetir el gate, conservando el antes y el después, y (2) demostrar que el gate sí detecta errores metiendo defectos en una copia de la base.
+
+**Respuesta relevante (resumen):** `sql/quality_gate.sql` con 76 pruebas en las 12 categorías y puntajes por dimensión; `sql/load/registrar_cargas_en_auditoria.sql` para corregir A04; `sql/tests/quality_gate_defectos.sql` con 7 defectos inyectados (7/7 detectados); `evidence/g6_quality_before_after.md` con el antes (98,3, 1 FAIL ALTA) y el después (99,6, 0 FAIL).
+
+**Errores o vacíos de la IA detectados:**
+
+- La carga con triggers desactivados que la misma IA propuso en G3 (DC-07) dejó 3,2 millones de filas sin rastro en la auditoría; lo destapó la prueba A04 (IA-32).
+- La primera versión de la prueba de defectos habría sobrescrito la evidencia real con los resultados de la copia dañada (IA-36).
+
+**Decisiones derivadas:** IA-32 a IA-36 ([`evidence/g6_quality_before_after.md`](../evidence/g6_quality_before_after.md#9-matriz-ia-nuevas-entradas-de-g6)).

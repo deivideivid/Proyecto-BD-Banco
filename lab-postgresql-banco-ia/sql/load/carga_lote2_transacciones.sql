@@ -70,6 +70,11 @@ ALTER TABLE core.cuenta ENABLE TRIGGER USER;
 
 COMMIT;
 
+-- Rastro de la carga en la auditoría (G6, hallazgo A04): como los triggers
+-- estaban desactivados, se deja una fila por tabla en aud.log_auditoria.
+\set carga_en_curso true
+\ir registrar_cargas_en_auditoria.sql
+
 -- 5. Limpieza y estadísticas (fuera de la transacción)
 VACUUM (ANALYZE) core.cuenta;
 ANALYZE fin.transaccion_financiera, fin.asiento_contable;

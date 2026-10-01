@@ -87,6 +87,11 @@ ALTER TABLE core.cambio_limite ENABLE TRIGGER USER;
 
 COMMIT;
 
+-- Rastro de la carga en la auditoría (G6, hallazgo A04): como los triggers
+-- estaban desactivados, se deja una fila por tabla en aud.log_auditoria.
+\set carga_en_curso true
+\ir registrar_cargas_en_auditoria.sql
+
 -- 6. Estadísticas para el planificador
 ANALYZE ref.departamento, ref.municipio, ref.oficina, seg.usuario, seg.usuario_rol,
         core.cliente, core.persona_natural, core.persona_juridica, core.cuenta,
