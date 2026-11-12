@@ -15,7 +15,7 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 |---|---|---|
 | B0 | Corrección previa de la documentación | Listo |
 | B1 | Requisitos, perfiles y bocetos | Listo |
-| B2 | Modelo estrella en la base | Pendiente |
+| B2 | Modelo estrella en la base | En curso |
 | B3 | Tableros en Power BI | Pendiente |
 | B4 | Tableros dentro del aplicativo | Pendiente |
 | B5 | Servidor del aplicativo y permisos | Pendiente |
@@ -28,6 +28,8 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 ## Carpetas
 
 - `B1_diseno/` - requisitos del profesor, perfiles, pantallas, tecnologías y bocetos.
+- `B2_modelo_estrella/` - el modelo estrella (esquema `bi`), su validación y los indicadores.
+- `herramientas/` - el script que usan los `.bat` para correr SQL con la contraseña de PostgreSQL.
 - `despliegue/` - dónde y cómo vamos a publicar el aplicativo (lo lleva Jerónimo).
 - `equipo/hojas_de_vida/` - las hojas de vida de los 5 en PDF.
 - `IA/` - el registro de cómo usamos la IA en esta fase.

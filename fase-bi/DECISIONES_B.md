@@ -25,3 +25,8 @@ Lo que fuimos decidiendo en grupo y por qué.
 11. **Aprobamos los bocetos de B1** con un cambio: menú lateral plegable con botón ☰, como el de
     Opera, para que el contenido se agrande. La interfaz final va minimalista, estilo glass, con
     botones e íconos animados y simples. La paleta de colores la definimos antes de B6.
+12. **El modelo estrella tiene dos hechos que comparten dimensiones**: transacciones (una fila
+    por transacción) y saldos (una foto por cuenta al corte). Cada transacción se asigna a una
+    sola cuenta para que los montos cuadren con el banco.
+13. **Fijamos 13 indicadores con sus valores oficiales en SQL** y dos escenarios de prueba (A:
+    todo; B: agosto de 2026 y AHORROS). Power BI y el aplicativo tienen que dar lo mismo.

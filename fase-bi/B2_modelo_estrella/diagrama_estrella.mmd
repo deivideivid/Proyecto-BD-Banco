@@ -1,0 +1,73 @@
+erDiagram
+    dim_fecha ||--o{ fact_transaccion : "fecha_key"
+    dim_tipo_transaccion ||--o{ fact_transaccion : "tipo_key"
+    dim_cuenta ||--o{ fact_transaccion : "cuenta_key"
+    dim_cliente ||--o{ fact_transaccion : "cliente_key"
+    dim_oficina ||--o{ fact_transaccion : "oficina_key"
+    dim_producto ||--o{ fact_transaccion : "producto_key"
+    dim_cuenta ||--|| fact_saldo_cuenta : "cuenta_key"
+    dim_fecha ||--o{ fact_saldo_cuenta : "fecha_corte_key"
+    dim_cliente ||--o{ fact_saldo_cuenta : "cliente_key"
+    dim_oficina ||--o{ fact_saldo_cuenta : "oficina_key"
+    dim_producto ||--o{ fact_saldo_cuenta : "producto_key"
+    fact_transaccion {
+        bigint transaccion_id PK
+        int fecha_key FK
+        smallint hora
+        varchar tipo_key FK
+        varchar estado
+        bigint cuenta_key FK
+        bigint cuenta_destino_key FK
+        bigint cliente_key FK
+        int oficina_key FK
+        varchar producto_key FK
+        char moneda
+        numeric monto
+        varchar motivo_rechazo
+    }
+    fact_saldo_cuenta {
+        bigint cuenta_key PK
+        int fecha_corte_key FK
+        varchar estado_cuenta
+        char moneda
+        numeric saldo_contable
+        numeric saldo_disponible
+        boolean en_sobregiro
+    }
+    dim_fecha {
+        int fecha_key PK
+        date fecha
+        char anio_mes
+        varchar nombre_dia
+        boolean es_quincena
+    }
+    dim_cuenta {
+        bigint cuenta_key PK
+        char numero_cuenta
+        varchar producto_key FK
+        int oficina_key FK
+        bigint cliente_key FK
+        varchar estado_cuenta
+    }
+    dim_cliente {
+        bigint cliente_key PK
+        varchar tipo_cliente
+        varchar cliente
+        varchar departamento
+        smallint anio_vinculacion
+    }
+    dim_oficina {
+        int oficina_key PK
+        varchar oficina
+        varchar municipio
+        varchar departamento
+    }
+    dim_producto {
+        varchar producto_key PK
+        varchar producto
+    }
+    dim_tipo_transaccion {
+        varchar tipo_key PK
+        varchar tipo
+        varchar sentido
+    }
