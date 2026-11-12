@@ -30,3 +30,9 @@ Lo que fuimos decidiendo en grupo y por qué.
     sola cuenta para que los montos cuadren con el banco.
 13. **Fijamos 13 indicadores con sus valores oficiales en SQL** y dos escenarios de prueba (A:
     todo; B: agosto de 2026 y AHORROS). Power BI y el aplicativo tienen que dar lo mismo.
+14. **Power BI entra con `powerbi_lector`**, que solo ve el esquema `bi`. Quitamos las relaciones
+    de `dim_cuenta` hacia cliente, oficina y producto para que no hubiera caminos dobles, y
+    dejamos inactiva la relación uno a uno entre saldos y cuentas.
+15. **Las páginas de Power BI las generamos como archivos (formato PBIR)** en vez de arrastrar
+    cada gráfica a mano. Así quedan iguales en computador y en celular y se pueden volver a
+    generar. El tema de colores lo aplicamos cuando definamos la paleta.

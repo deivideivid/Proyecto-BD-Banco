@@ -1,0 +1,78 @@
+createOrReplace
+
+	ref table 'bi fact_transaccion'
+
+		measure 'K01 Transacciones contabilizadas' = CALCULATE(COUNTROWS('bi fact_transaccion'), 'bi fact_transaccion'[estado] = "POSTED")
+			formatString: #,0
+			displayFolder: Transacciones
+
+		measure 'K02 Monto movido COP' = CALCULATE(SUM('bi fact_transaccion'[monto]), 'bi fact_transaccion'[estado] = "POSTED", 'bi fact_transaccion'[moneda] = "COP")
+			formatString: #,0.00
+			displayFolder: Transacciones
+
+		measure 'K03 Monto movido USD' = CALCULATE(SUM('bi fact_transaccion'[monto]), 'bi fact_transaccion'[estado] = "POSTED", 'bi fact_transaccion'[moneda] = "USD") + 0
+			formatString: #,0.00
+			displayFolder: Transacciones
+
+		measure 'K04 Ticket promedio COP' = CALCULATE(AVERAGE('bi fact_transaccion'[monto]), 'bi fact_transaccion'[estado] = "POSTED", 'bi fact_transaccion'[moneda] = "COP")
+			formatString: #,0.00
+			displayFolder: Transacciones
+
+		measure 'K05 Tasa de rechazo %' = ```
+				VAR rechazadas = CALCULATE(COUNTROWS('bi fact_transaccion'), 'bi fact_transaccion'[estado] = "REJECTED")
+				VAR contabilizadas = CALCULATE(COUNTROWS('bi fact_transaccion'), 'bi fact_transaccion'[estado] = "POSTED")
+				RETURN DIVIDE(rechazadas, rechazadas + contabilizadas)
+				```
+			formatString: 0.00%
+			displayFolder: Transacciones
+
+		measure 'K06 Reversos' = CALCULATE(COUNTROWS('bi fact_transaccion'), 'bi fact_transaccion'[estado] = "POSTED", 'bi fact_transaccion'[tipo_key] = "REVERSO") + 0
+			formatString: #,0
+			displayFolder: Transacciones
+
+		measure 'K07 Clientes con movimientos' = CALCULATE(DISTINCTCOUNT('bi fact_transaccion'[cliente_key]), 'bi fact_transaccion'[estado] = "POSTED")
+			formatString: #,0
+			displayFolder: Clientes y cuentas
+
+		measure 'Transacciones rechazadas' = CALCULATE(COUNTROWS('bi fact_transaccion'), 'bi fact_transaccion'[estado] = "REJECTED") + 0
+			formatString: #,0
+			displayFolder: Transacciones
+
+	ref table 'bi fact_saldo_cuenta'
+
+		measure 'K08 Cuentas activas' = CALCULATE(COUNTROWS('bi fact_saldo_cuenta'), 'bi fact_saldo_cuenta'[estado_cuenta] = "ACTIVA", REMOVEFILTERS('bi dim_fecha')) + 0
+			formatString: #,0
+			displayFolder: Clientes y cuentas
+
+		measure 'K09 Saldo total COP' = CALCULATE(SUM('bi fact_saldo_cuenta'[saldo_contable]), 'bi fact_saldo_cuenta'[moneda] = "COP", REMOVEFILTERS('bi dim_fecha'))
+			formatString: #,0.00
+			displayFolder: Clientes y cuentas
+
+		measure 'K10 Saldo total USD' = CALCULATE(SUM('bi fact_saldo_cuenta'[saldo_contable]), 'bi fact_saldo_cuenta'[moneda] = "USD", REMOVEFILTERS('bi dim_fecha')) + 0
+			formatString: #,0.00
+			displayFolder: Clientes y cuentas
+
+		measure 'K11 Cuentas en sobregiro' = CALCULATE(COUNTROWS('bi fact_saldo_cuenta'), 'bi fact_saldo_cuenta'[en_sobregiro] = TRUE(), REMOVEFILTERS('bi dim_fecha')) + 0
+			formatString: #,0
+			displayFolder: Clientes y cuentas
+
+		measure 'Cuentas al corte' = CALCULATE(COUNTROWS('bi fact_saldo_cuenta'), REMOVEFILTERS('bi dim_fecha'))
+			formatString: #,0
+			displayFolder: Clientes y cuentas
+
+	ref table 'bi calidad_prueba'
+
+		measure 'K12 Puntaje del quality gate' = ```
+				VAR t = ADDCOLUMNS('bi calidad_prueba',
+				    "w", SWITCH('bi calidad_prueba'[severidad], "CRITICA", 4, "ALTA", 3, "MEDIA", 2, 1),
+				    "v", SWITCH('bi calidad_prueba'[resultado], "PASS", 1, "WARNING", 0.5, 0))
+				RETURN ROUND(100 * DIVIDE(SUMX(t, [w] * [v]), SUMX(t, [w])), 1)
+				```
+			formatString: 0.0
+			displayFolder: Control y calidad
+
+	ref table 'bi fact_control'
+
+		measure 'K13 Controles en PASS' = CALCULATE(COUNTROWS('bi fact_control'), 'bi fact_control'[resultado] = "PASS") + 0
+			formatString: #,0
+			displayFolder: Control y calidad
