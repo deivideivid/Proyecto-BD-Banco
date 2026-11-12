@@ -15,8 +15,8 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 |---|---|---|
 | B0 | Corrección previa de la documentación | Listo |
 | B1 | Requisitos, perfiles y bocetos | Listo |
-| B2 | Modelo estrella en la base | En curso |
-| B3 | Tableros en Power BI | Pendiente |
+| B2 | Modelo estrella en la base | Listo |
+| B3 | Tableros en Power BI | En curso |
 | B4 | Tableros dentro del aplicativo | Pendiente |
 | B5 | Servidor del aplicativo y permisos | Pendiente |
 | B6 | Interfaces por perfil | Pendiente |

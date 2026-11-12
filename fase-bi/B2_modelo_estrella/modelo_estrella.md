@@ -29,7 +29,7 @@ Además cargamos `bi.calidad_prueba` con las 76 pruebas del quality gate de G6, 
 
 | Tabla | Una fila es… | Filas | Atributos para filtrar |
 |---|---|---|---|
-| `bi.dim_fecha` | Un día | 4.261 | año, trimestre, mes, año-mes, día de la semana, fin de semana, quincena |
+| `bi.dim_fecha` | Un día | unos 4.260 | año, trimestre, mes, año-mes, día de la semana, fin de semana, quincena |
 | `bi.dim_cuenta` | Una cuenta | 50.000 | número, producto, moneda, oficina, titular principal, estado, año de apertura |
 | `bi.dim_cliente` | Un cliente | 10.000 | tipo (natural o jurídica), nombre, estado, municipio, departamento, año de vinculación |
 | `bi.dim_oficina` | Una oficina | 87 | oficina, municipio, departamento |
