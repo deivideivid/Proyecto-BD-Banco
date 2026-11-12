@@ -36,13 +36,15 @@ estrella, para que cada uno se pueda calcular igual en SQL, en Power BI y en el 
 
 ## Cómo se ve en celular
 
-- El menú lateral del computador se vuelve una barra abajo con los íconos principales.
+- El menú lateral se abre con el botón ☰ encima del contenido, y abajo queda una barra con
+  los accesos más usados.
 - Las tablas largas se vuelven tarjetas, una por fila.
 - Los formularios van en una sola columna con botones grandes.
 - Las gráficas se apilan una debajo de la otra.
 
 ## Reglas de diseño que nos pusimos
 
+- El menú lateral se pliega con el botón ☰ y el contenido se agranda (ver `lineamientos_interfaz.md`).
 - Mismo color principal y el mismo logo del Banco Andino en todas las pantallas.
 - Cada operación pide confirmar antes de enviarse y muestra el número de transacción al terminar.
 - Cuando la base rechaza algo, mostramos el motivo en lenguaje sencillo según el código de error

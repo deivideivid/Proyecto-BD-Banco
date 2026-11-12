@@ -22,3 +22,6 @@ Lo que fuimos decidiendo en grupo y por qué.
 9. **El despliegue lo lleva Jerónimo.** Las opciones están en `despliegue/DESPLIEGUE.md`.
 10. **Trabajamos con la base en el computador de Juan Diego**, con PostgreSQL local. En B0
     revisamos que siga cargada y con los mismos conteos.
+11. **Aprobamos los bocetos de B1** con un cambio: menú lateral plegable con botón ☰, como el de
+    Opera, para que el contenido se agrande. La interfaz final va minimalista, estilo glass, con
+    botones e íconos animados y simples. La paleta de colores la definimos antes de B6.

@@ -14,7 +14,7 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 | Gate | Qué es | Estado |
 |---|---|---|
 | B0 | Corrección previa de la documentación | Listo |
-| B1 | Requisitos, perfiles y bocetos | En revisión del grupo |
+| B1 | Requisitos, perfiles y bocetos | Listo |
 | B2 | Modelo estrella en la base | Pendiente |
 | B3 | Tableros en Power BI | Pendiente |
 | B4 | Tableros dentro del aplicativo | Pendiente |
