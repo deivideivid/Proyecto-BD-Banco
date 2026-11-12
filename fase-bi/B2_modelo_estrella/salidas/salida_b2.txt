@@ -1,0 +1,132 @@
+﻿Banco Andino - B2 modelo estrella - 2026-11-12 10:43:03 - equipo DESKTOP-F1GG12C
+
+===== fase-bi\B2_modelo_estrella\sql\b2_01_esquema_bi.sql =====
+SET
+DROP SCHEMA
+psql:fase-bi/B2_modelo_estrella/sql/b2_01_esquema_bi.sql:11: NOTICE:  el esquema «bi» no existe, omitiendo
+CREATE SCHEMA
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE VIEW
+CREATE PROCEDURE
+COMMENT
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+Esquema bi creado.
+
+===== fase-bi\B2_modelo_estrella\sql\b2_02_cargar_bi.sql =====
+SET
+El despliegue de duraci�n est� activado.
+TRUNCATE TABLE
+Duraci�n: 7,319 ms
+COPY 76
+Duraci�n: 2,271 ms
+CALL
+Duraci�n: 120814,065 ms (02:00,814)
+ANALYZE
+Duraci�n: 2871,917 ms (00:02,872)
+== Última carga
+ carga_id | fecha_corte | filas_fact_transaccion | filas_fact_saldo | segundos 
+----------+-------------+------------------------+------------------+----------
+        1 | 2026-08-31  |                1024178 |            50000 |    120.7
+(1 fila)
+
+Duraci�n: 2,073 ms
+
+===== fase-bi\B2_modelo_estrella\sql\b2_03_rol_powerbi.sql =====
+DO
+COMMENT
+GRANT
+GRANT
+GRANT
+REVOKE
+GRANT ROLE
+== Prueba de permisos de banco_bi
+SET
+         prueba          | resultado 
+-------------------------+-----------
+ Lee bi.fact_transaccion | PERMITIDO
+(1 fila)
+
+psql:fase-bi/B2_modelo_estrella/sql/b2_03_rol_powerbi.sql:43: NOTICE:  Lee core.cuenta: DENEGADO (correcto)
+psql:fase-bi/B2_modelo_estrella/sql/b2_03_rol_powerbi.sql:43: NOTICE:  Escribe en bi: DENEGADO (correcto)
+DO
+RESET
+Rol banco_bi y usuario powerbi_lector listos. Falta ponerle contraseña a powerbi_lector en cada PC.
+
+===== fase-bi\B2_modelo_estrella\sql\b2_04_validar_bi.sql =====
+SET
+CREATE TABLE
+INSERT 0 13
+CALL
+INSERT 0 1
+UPDATE 14
+== Validación del modelo estrella
+ id  |                             control                             |             esperado             |             obtenido             | resultado 
+-----+-----------------------------------------------------------------+----------------------------------+----------------------------------+-----------
+ V01 | Filas de fact_transaccion = transacciones del banco             | 1024178                          | 1024178                          | PASS
+ V02 | Transacciones contabilizadas (POSTED)                           | 1000000                          | 1000000                          | PASS
+ V03 | Monto POSTED en COP igual al del banco                          | 1767796946066.07                 | 1767796946066.07                 | PASS
+ V04 | Monto POSTED en USD igual al del banco                          | 1768114.58                       | 1768114.58                       | PASS
+ V05 | Monto POSTED por tipo igual al del banco (tipos distintos)      | 0                                | 0                                | PASS
+ V06 | Rechazadas y pendientes                                         | 24178                            | 24178                            | PASS
+ V07 | Cuentas en dim_cuenta y en fact_saldo_cuenta                    | 50000 / 50000                    | 50000 / 50000                    | PASS
+ V08 | Saldo contable total COP igual al del banco                     | 1004471074520.73                 | 1004471074520.73                 | PASS
+ V09 | Saldo contable total USD igual al del banco                     | 1051931.27                       | 1051931.27                       | PASS
+ V10 | Clientes y oficinas                                             | 10000 / 87                       | 10000 / 87                       | PASS
+ V11 | Cuentas sin titular principal en dim_cuenta                     | 0                                | 0                                | PASS
+ V12 | Días del calendario sin hueco (de la primera a la última fecha) | 4260                             | 4260                             | PASS
+ V13 | Controles de cuadre y calidad en PASS                           | 6                                | 6                                | PASS
+ V14 | Repetir la carga da exactamente lo mismo (huella md5)           | 4149f55080d618b5aed9a6ea3414eef5 | 4149f55080d618b5aed9a6ea3414eef5 | PASS
+
+== Veredicto
+ pass | fail |         veredicto         
+------+------+---------------------------
+   14 |    0 | B2 MODELO ESTRELLA = PASS
+
+
+===== fase-bi\B2_modelo_estrella\sql\b2_05_kpi_referencia.sql =====
+SET
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE TABLE
+INSERT 0 13
+== Valores oficiales de los indicadores (A: todo · B: 2026-08 y AHORROS)
+ id  |               indicador               |   escenario_a    |   escenario_b   
+-----+---------------------------------------+------------------+-----------------
+ K01 | Transacciones contabilizadas          |          1000000 |           11834
+ K02 | Monto movido COP                      | 1767796946066.07 |  12643399220.02
+ K03 | Monto movido USD                      |       1768114.58 |        18151.07
+ K04 | Ticket promedio COP                   |       1775276.18 |      1077317.59
+ K05 | Tasa de rechazo %                     |             2.35 |            6.94
+ K06 | Reversos                              |             9530 |             135
+ K07 | Clientes con movimientos              |             9070 |            3947
+ K08 | Cuentas activas (al corte)            |            43557 |           17851
+ K09 | Saldo total COP (al corte)            | 1004471074520.73 | 126700742889.73
+ K10 | Saldo total USD (al corte)            |       1051931.27 |       253402.31
+ K11 | Cuentas en sobregiro (al corte)       |             1000 |               0
+ K12 | Puntaje del quality gate              |             99.6 |            99.6
+ K13 | Controles de cuadre y calidad en PASS |                6 |               6
+
+
+RESULTADO: OK - todos los scripts corrieron sin errores.
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\B2_modelo_estrella\salidas\salida_b2.txt
