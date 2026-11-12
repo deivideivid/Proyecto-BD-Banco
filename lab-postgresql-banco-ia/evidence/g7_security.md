@@ -7,7 +7,7 @@
 | Fecha | 2026-10-01 |
 | Roles y permisos | [`sql/17_roles_permissions.sql`](../sql/17_roles_permissions.sql) (G3) |
 | Demostración | [`sql/tests/g7_rbac_demo.sql`](../sql/tests/g7_rbac_demo.sql) → [`g7_rbac_resultados.txt`](g7_rbac_resultados.txt) |
-| Resultado | **G7 RBAC = PASS**: 23 pruebas con 6 usuarios (8 accesos permitidos, 15 denegados, 0 fallas), en PostgreSQL 16 y en el PostgreSQL 18.6 del equipo |
+| Resultado | **G7 RBAC = PASS**: 23 pruebas con 6 usuarios (8 accesos permitidos, 15 denegados, 0 fallas), en PostgreSQL 16 y en nuestro PostgreSQL 18.6 |
 
 ## 1. Modelo de seguridad en dos niveles
 
@@ -20,7 +20,7 @@ Principios aplicados:
 
 - **Nadie de la aplicación escribe directo en las tablas de dinero.** Ningún rol tiene `INSERT`, `UPDATE` ni `DELETE` sobre `cuenta`, `transaccion_financiera` ni `asiento_contable`. El dinero solo se mueve con funciones `SECURITY DEFINER`, que validan las reglas, bloquean filas y registran la doble partida.
 - **Funciones blindadas:** todas tienen `search_path = pg_catalog, pg_temp` fijo. Esto evita que alguien suplante tablas u operadores (prueba DS06 de G6 = 0).
-- **Nada para PUBLIC:** se quitan explícitamente los permisos por defecto sobre esquemas, tablas, secuencias y funciones (prueba DS07 de G6 = 0).
+- **Nada para PUBLIC:** quitamos explícitamente los permisos por defecto sobre esquemas, tablas, secuencias y funciones (prueba DS07 de G6 = 0).
 - **Separación de funciones:**
   - El cajero no reversa: solo el supervisor (RN-51).
   - El auditor solo lee.
@@ -50,7 +50,7 @@ Matriz verificada en la base con `has_table_privilege` y `has_function_privilege
 
 ## 3. Demostración con usuarios de cada rol
 
-El script crea 6 usuarios de prueba: uno por rol y uno sin rol. Se crean **sin contraseña** (`NOLOGIN`), así que no hay credenciales en el repositorio, y se usan con `SET ROLE`, que equivale a conectarse con ese usuario. Cada acción se ejecuta de verdad:
+Nuestro script crea 6 usuarios de prueba: uno por rol y uno sin rol. Los creamos **sin contraseña** (`NOLOGIN`), así que no hay credenciales en el repositorio, y los usamos con `SET ROLE`, que equivale a conectarse con ese usuario. Cada acción se ejecuta de verdad:
 
 - Si PostgreSQL la permite, se deshace al final, así que la base no cambia.
 - Si la niega, se guarda el mensaje de error.
@@ -101,7 +101,7 @@ Los mensajes de abajo son los de una instalación en inglés; en un PostgreSQL e
 | Red | `pg_hba.conf` solo con las IP de los servidores de la aplicación; SSL obligatorio. |
 | Reportes | El rol de consulta corre los reportes pesados (como W10) en una réplica de lectura, con `statement_timeout` para que no afecten la operación. |
 | Superusuario | `postgres` solo para mantenimiento; la aplicación nunca se conecta como dueña de la base. |
-| Revisión | Ejecutar `sql/tests/g7_rbac_demo.sql` y `sql/quality_gate.sql` (pruebas DS06, DS07, DS08 y A01–A06) después de cada cambio de permisos. |
+| Revisión | Corremos `sql/tests/g7_rbac_demo.sql` y `sql/quality_gate.sql` (pruebas DS06, DS07, DS08 y A01–A06) después de cada cambio de permisos. |
 
 ## 5. Verificación del gate G7 (seguridad)
 
@@ -112,7 +112,7 @@ Los mensajes de abajo son los de una instalación en inglés; en un PostgreSQL e
 | RBAC demuestra mínimo privilegio | **Cumple** | 23/23 pruebas como se esperaba; matriz de la sección 2 |
 | Evidencia mínima: `evidence/g7_explain.md` + `evidence/g7_security.md` | **Cumple** | Ambos documentos |
 
-**Repetición en el PC del equipo (PostgreSQL 18.6, Windows):** el mismo script dio **23 pruebas, 8 permitidos, 15 denegados, 0 fallas → G7 RBAC = PASS**, con la misma matriz de privilegios. Los mensajes salen en español (por ejemplo, "permiso denegado al esquema aud", "permiso denegado a la función fn_retirar"; S13: "El usuario 10 no tiene el permiso TX_REVERSAR").
+**Repetición en nuestro PC (PostgreSQL 18.6, Windows):** el mismo script dio **23 pruebas, 8 permitidos, 15 denegados, 0 fallas → G7 RBAC = PASS**, con la misma matriz de privilegios. Los mensajes salen en español (por ejemplo, "permiso denegado al esquema aud", "permiso denegado a la función fn_retirar"; S13: "El usuario 10 no tiene el permiso TX_REVERSAR").
 
 **QUALITY GATE G7 = PASS** (rendimiento en `g7_explain.md` + seguridad en este documento).
 

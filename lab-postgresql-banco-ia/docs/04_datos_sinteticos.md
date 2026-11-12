@@ -11,16 +11,16 @@
 | Evidencia | `evidence/g4_data_profile.csv` · `evidence/g4_reproducibilidad.txt` · `evidence/g4_lote1_validacion.txt` · `evidence/g4_lote2_validacion.txt` |
 | Resultado | **G4 = PASS** (48/48 métricas del perfil; ver [sección 7](#7-verificación-del-gate-g4)) |
 
-## 1. Qué se generó
+## 1. Qué generamos
 
 | Lote | Contenido | Archivos |
 |---|---|---|
 | 1 | 33 departamentos · 51 municipios (DIVIPOLA) · 87 oficinas · 269 usuarios internos · **10.000 clientes** (8.500 naturales, 1.500 jurídicas) · **50.000 cuentas** · 51.551 titularidades · 112.145 eventos · 3.018 cambios de límite | `data/lote1/*.csv` (12 archivos, en el repositorio) |
-| 2 | **1.000.000 de transacciones POSTED** (incluye 9.530 reversos y 4.255 ajustes aprobados) + 24.104 rechazadas + 74 pendientes · **2.000.000 de asientos** | `data/lote2/*.csv` (291 MB, **no se suben**: se generan en 30 s) |
+| 2 | **1.000.000 de transacciones POSTED** (incluye 9.530 reversos y 4.255 ajustes aprobados) + 24.104 rechazadas + 74 pendientes · **2.000.000 de asientos** | `data/lote2/*.csv` (291 MB, **no los subimos**: se generan en 30 s) |
 
 Todos los datos son **100 % sintéticos**: nombres de Faker (`es_CO`), documentos en rangos inventados, correos del dominio reservado `example.com`.
 
-## 2. Cómo se cumplen las reglas del Prompt 3
+## 2. Cómo cumplimos las reglas del Prompt 3
 
 | # | Regla del laboratorio | Cómo la cumple el generador | Métrica del perfil |
 |---|---|---|---|
@@ -95,13 +95,13 @@ Todos los datos son **100 % sintéticos**: nombres de Faker (`es_CO`), documento
 
 ## 8. Matriz IA: nuevas entradas de G4
 
-Estas entradas también sirven para la defensa de G8 ("dónde la IA se equivocó").
+Estas entradas también las usamos en la defensa de G8 ("dónde la IA se equivocó").
 
 | ID | Prompt | Recomendación o resultado de la IA | Decisión | Evidencia | Justificación |
 |---|---|---|---|---|---|
-| IA-22 | P-08 (3) | Generar "las primeras 10.000 cuentas" como un lote de 10.000 cuentas. | **Rechazar / corregir** | El equipo aclaró que eran 50.000 cuentas | La IA interpretó mal la instrucción; se regeneró con 50.000 (conteo 104). |
-| IA-23 | P-08 (3) | Tomar de una búsqueda web los nombres de los municipios DIVIPOLA. | **Modificar** | Algunos nombres devueltos no correspondían al código | Se usaron solo códigos verificados (capitales y municipios confirmados en listados reales). |
-| IA-24 | P-08 (3) | Primera versión del generador del millón. | **Modificar** | La validación encontró 482 movimientos en los 180 días previos a una inactivación y 0 rechazos por límite diario | Se corrigió el tramo de inactividad y se agregaron intentos que exceden el límite: 24/24 PASS. |
-| IA-25 | P-08 (3) | Medir el tamaño de la base como 571 MB. | **Corregir** | La medición incluía tablas temporales de la validación | Tamaño real: 475 MB. Aun así se descarta el plan gratis de Supabase (IA-26). |
-| IA-26 | P-08 (3) | Montar la base completa en Supabase gratis para compartirla. | **Rechazar** | Límite de 500 MB del plan gratis; con los índices de G7 se supera | Cada integrante carga la base local; los datos son idénticos por la semilla. |
+| IA-22 | P-08 (3) | Generar "las primeras 10.000 cuentas" como un lote de 10.000 cuentas. | **Rechazar / corregir** | Le aclaramos que eran 50.000 cuentas | La IA interpretó mal la instrucción; lo regeneramos con 50.000 (conteo 104). |
+| IA-23 | P-08 (3) | Tomar de una búsqueda web los nombres de los municipios DIVIPOLA. | **Modificar** | Algunos nombres devueltos no correspondían al código | Usamos solo códigos que verificamos (capitales y municipios confirmados en listados reales). |
+| IA-24 | P-08 (3) | Primera versión del generador del millón. | **Modificar** | La validación encontró 482 movimientos en los 180 días previos a una inactivación y 0 rechazos por límite diario | Corregimos el tramo de inactividad y agregamos intentos que exceden el límite: 24/24 PASS. |
+| IA-25 | P-08 (3) | Medir el tamaño de la base como 571 MB. | **Corregir** | La medición incluía tablas temporales de la validación | Lo medimos de nuevo: 475 MB. Aun así descartamos el plan gratis de Supabase (IA-26). |
+| IA-26 | P-08 (3) | Montar la base completa en Supabase gratis para compartirla. | **Rechazar** | Límite de 500 MB del plan gratis; con los índices de G7 se supera | Cada uno de nosotros carga la base en local; los datos quedan idénticos por la semilla. |
 | IA-27 | P-08 (3) | Saldos en 0 al inicio de la ventana de 24 meses. | **Aceptar** | Perfil 503: 0 saldos inválidos | Simplificación documentada (sección 6). |

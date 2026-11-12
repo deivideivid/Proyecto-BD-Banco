@@ -6,7 +6,7 @@
 | Gate | **G1 — Ingeniería del dominio con IA** |
 | Fecha de entrega | 2026-09-18 |
 | Estado | Listo para revisión |
-| Integrantes | _(completar con los nombres del equipo)_ |
+| Integrantes | Juan Diego Ortiz, Adrian Daniel Argotte, Miguel Andrés Pava, Jerónimo Soto y David González |
 
 > **Criterio de aprobación de G1 (documento del laboratorio):** ≥30 reglas verificables; ERD consistente; cliente y usuario separados; eventos y transacciones separados.
 > **Evidencia mínima:** `docs/01_especificacion.md` + ERD + matriz de decisiones inicial.
@@ -33,7 +33,7 @@ Este archivo reúne toda la entrega de G1: la parte principal presenta los supue
 
 ## 1. Supuestos seleccionados
 
-El documento del laboratorio no define cinco aspectos que afectan directamente las reglas de negocio, el modelo y la generación de datos. Para cada uno se evaluaron alternativas y se eligió la que ofrece **mayor calidad del diseño** (reglas claras y verificables, coherencia con la práctica bancaria) y **mayor viabilidad** dentro del alcance y el tiempo del laboratorio.
+El documento del laboratorio no define cinco aspectos que afectan directamente las reglas de negocio, el modelo y la generación de datos. Para cada uno evaluamos alternativas y elegimos la que ofrece **mayor calidad del diseño** (reglas claras y verificables, coherencia con la práctica bancaria) y **mayor viabilidad** dentro del alcance y el tiempo del laboratorio.
 
 ### Resumen
 
@@ -55,7 +55,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | **Bloqueo de débitos (recibe, no envía)** | **Seleccionada.** |
 | Sin restricción sobre créditos ni débitos | Anula el propósito del bloqueo. |
 
-**Por qué se selecciona:** el objetivo de un bloqueo es impedir que el dinero **salga** de la cuenta (sospecha de fraude, orden de embargo, solicitud del cliente). Recibir fondos no pone en riesgo al titular ni al banco, y rechazarlos genera devoluciones y reclamos innecesarios.
+**Por qué lo elegimos:** el objetivo de un bloqueo es impedir que el dinero **salga** de la cuenta (sospecha de fraude, orden de embargo, solicitud del cliente). Recibir fondos no pone en riesgo al titular ni al banco, y rechazarlos genera devoluciones y reclamos innecesarios.
 
 **Cómo fortalece el proyecto:**
 - Produce reglas simples y verificables por separado: quién puede enviar (RN-34) y quién puede recibir (RN-35).
@@ -72,7 +72,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | Permitir menores con representante legal | Exige modelar representantes, su vigencia y sus permisos; aumenta el alcance sin aportar a los criterios del laboratorio. |
 | Sin restricción de edad | Regla imposible de justificar ante un escenario bancario. |
 
-**Por qué se selecciona:** en Colombia la mayoría de edad se alcanza a los 18 años. La titularidad de menores requiere un representante legal, entidad que no hace parte del alcance obligatorio del caso.
+**Por qué lo elegimos:** en Colombia la mayoría de edad se alcanza a los 18 años. La titularidad de menores requiere un representante legal, entidad que no hace parte del alcance obligatorio del caso.
 
 **Cómo fortalece el proyecto:**
 - Regla verificable directamente contra la fecha de nacimiento y la fecha de apertura (RN-08).
@@ -90,7 +90,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | **Máximo definido por producto** | **Seleccionada:** AHORROS 4, CORRIENTE 4, NOMINA 1, EMPRESARIAL 1. |
 | Sin límite | No es verificable ni realista. |
 
-**Por qué se selecciona:** cada producto tiene un propósito distinto y el número de titulares debe reflejarlo. Tratar el máximo como un atributo del producto evita un valor fijo escrito en el código.
+**Por qué lo elegimos:** cada producto tiene un propósito distinto y el número de titulares debe reflejarlo. Tratar el máximo como un atributo del producto evita un valor fijo escrito en el código.
 
 **Cómo fortalece el proyecto:**
 - Mejora la normalización: el máximo depende del producto y se guarda en el producto, no en cada cuenta.
@@ -108,7 +108,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | Ahorro programado | Añade cuotas periódicas y penalizaciones que no aportan a los criterios del laboratorio. |
 | **Cuenta empresarial** | **Seleccionada.** |
 
-**Por qué se selecciona:** comparte el mismo ciclo de vida, eventos y tipos de transacción de las demás cuentas, por lo que no exige nuevas entidades. Además, da un papel concreto a las personas jurídicas (15 % de los clientes).
+**Por qué lo elegimos:** comparte el mismo ciclo de vida, eventos y tipos de transacción de las demás cuentas, por lo que no exige nuevas entidades. Además, da un papel concreto a las personas jurídicas (15 % de los clientes).
 
 **Cómo fortalece el proyecto:**
 - Reutiliza completamente el modelo de cuenta, eventos y transacciones.
@@ -126,14 +126,14 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | Solo transferencias, consignaciones y retiros | Excluye reversos y ajustes, que el laboratorio define como transacciones financieras. |
 | **Solo `POSTED`, incluidos reversos y ajustes aprobados** | **Seleccionada.** |
 
-**Por qué se selecciona:** el laboratorio pide "1.000.000 transacciones financieras + ledger asociado". Solo las transacciones contabilizadas tienen asientos contables; las rechazadas no mueven dinero ni generan ledger. El reverso aparece en el documento como un tipo más de transacción financiera.
+**Por qué lo elegimos:** el laboratorio pide "1.000.000 transacciones financieras + ledger asociado". Solo las transacciones contabilizadas tienen asientos contables; las rechazadas no mueven dinero ni generan ledger. El reverso aparece en el documento como un tipo más de transacción financiera.
 
 **Cómo fortalece el proyecto:**
 - Criterio de conteo inequívoco y verificable con una sola consulta en G4 (transacciones `POSTED` = 1.000.000).
 - Coherencia total con la doble partida: cada transacción contada tiene ledger balanceado (RN-46, RN-47).
 - Las transacciones rechazadas se generan como volumen adicional, lo que aporta realismo y evidencia de las pruebas negativas sin distorsionar el objetivo (RN-45).
 
-> **Validación:** los cinco supuestos son decisiones adoptadas por el equipo y **no fueron consultados con el docente**; la base de datos y los datos sintéticos ya se construyeron con ellos. Si el docente define otra política, se actualizarán las reglas afectadas indicadas en la tabla resumen y se registrará el cambio en la matriz de decisiones.
+> **Validación:** los cinco supuestos son decisiones que adoptamos nosotros y **no los consultamos con el docente**; con ellos construimos la base de datos y los datos sintéticos. Si el docente define otra política, actualizaremos las reglas afectadas que indicamos en la tabla resumen y registraremos el cambio en la matriz de decisiones.
 
 ---
 
@@ -142,7 +142,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 | # | Punto | Resolución | Evidencia | Estado |
 |---|---|---|---|---|
 | 1 | Reglas de negocio verificables | 54 reglas atómicas con prueba y resultado esperado | [Anexo A, §A.8](#a8-reglas-de-negocio-verificables) | Completo |
-| 2 | Supuestos y decisiones abiertas | S1–S5 seleccionados y justificados | [Sección 1](#1-supuestos-seleccionados) · [Anexo A, §A.7](#a7-supuestos-adoptados) | Completo; supuestos adoptados por el equipo (no consultados con el docente) |
+| 2 | Supuestos y decisiones abiertas | S1–S5 seleccionados y justificados | [Sección 1](#1-supuestos-seleccionados) · [Anexo A, §A.7](#a7-supuestos-adoptados) | Completo; supuestos que adoptamos nosotros (no consultados con el docente) |
 | 3 | Prompt 1 y contraste | Salidas del Prompt 1 obtenidas, revisadas y consolidadas | [Registro de prompts](#d8-prompt-1-del-laboratorio--analizar-el-caso) | Completo |
 | 4 | Registro de prompts y respuestas | 5 interacciones registradas con errores detectados | [Anexo D](#anexo-d--registro-de-prompts-y-respuestas) | Completo |
 | 5 | Matriz de decisiones IA inicial | 11 decisiones: 7 aceptar, 3 modificar, 1 rechazar | [Anexo C](#anexo-c--matriz-de-decisiones-sobre-ia) | Completo |
@@ -154,11 +154,11 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 **Qué exige el laboratorio:** mínimo 30 reglas verificables; reescribir las ambiguas hasta que lo sean.
 
 **Resolución:**
-1. Se partió de una propuesta inicial de 40 reglas.
-2. Se aplicó un criterio de verificabilidad: **cada regla evalúa una sola condición y tiene una prueba con resultado binario**.
-3. Las reglas compuestas se dividieron en reglas atómicas. Por ejemplo, "una cuenta solo se cierra con saldo en 0 y la fecha de cierre es posterior a la apertura" pasó a ser RN-20 (saldo) y RN-21 (fechas).
-4. Se incorporaron las reglas derivadas de los supuestos S1–S5.
-5. Cada regla se clasificó por dominio y se le asignó una prueba de uno de dos tipos:
+1. Partimos de una propuesta inicial de 40 reglas.
+2. Aplicamos un criterio de verificabilidad: **cada regla evalúa una sola condición y tiene una prueba con resultado binario**.
+3. Las reglas compuestas las dividimos en reglas atómicas. Por ejemplo, "una cuenta solo se cierra con saldo en 0 y la fecha de cierre es posterior a la apertura" pasó a ser RN-20 (saldo) y RN-21 (fechas).
+4. Incorporamos las reglas derivadas de los supuestos S1–S5.
+5. Cada regla la clasificamos por dominio y le asignamos una prueba de uno de dos tipos:
    - **Operación rechazada:** prueba negativa que se ejecutará en G3.
    - **Conteo = 0:** consulta de auditoría que se ejecutará en G6.
 
@@ -168,18 +168,18 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 
 **Qué exige el laboratorio:** identificar las decisiones que requieren validación humana.
 
-**Resolución:** se seleccionaron y justificaron los supuestos S1–S5 (sección 1). Además, el Anexo A registra otras decisiones de alcance en su [sección A.10](#a10-decisiones-que-requieren-validación-humana): plan de cuentas contable mínimo, monedas sin conversión, exclusión de créditos, tarjetas, CDT y 4×1000, y distribución de cuentas por tipo de cliente.
+**Resolución:** seleccionamos y justificamos los supuestos S1–S5 (sección 1). Además, el Anexo A registra otras decisiones de alcance en su [sección A.10](#a10-decisiones-que-requieren-validación-humana): plan de cuentas contable mínimo, monedas sin conversión, exclusión de créditos, tarjetas, CDT y 4×1000, y distribución de cuentas por tipo de cliente.
 
-**Estado:** los cinco supuestos no se consultaron con el docente; quedan adoptados por el equipo y aplicados en la base de datos. Si el docente los revisa, su respuesta se registrará en la matriz de decisiones.
+**Estado:** los cinco supuestos no los consultamos con el docente; los dejamos adoptados nosotros y aplicados en la base de datos. Si el docente los revisa, registraremos su respuesta en la matriz de decisiones.
 
 ### Punto 3 · Prompt 1 y contraste con el resultado
 
 **Qué exige el laboratorio:** usar la IA para analizar el caso (Prompt 1) y depurar su respuesta: marcar errores, supuestos y entidades innecesarias.
 
 **Resolución:**
-1. Las nueve salidas del Prompt 1 y la autocrítica final se obtuvieron en las sesiones P-01, P-04 y P-05.
-2. El equipo revisó cada salida y documentó los problemas encontrados: exceso de alcance con código SQL anticipado, reglas compuestas y máximo fijo de titulares.
-3. El resultado depurado quedó consolidado en la especificación. La correspondencia entre cada salida exigida y su ubicación está en el [registro de prompts](#d8-prompt-1-del-laboratorio--analizar-el-caso).
+1. Las nueve salidas del Prompt 1 y la autocrítica final las obtuvimos en las sesiones P-01, P-04 y P-05.
+2. Revisamos cada salida y documentamos los problemas encontrados: exceso de alcance con código SQL anticipado, reglas compuestas y máximo fijo de titulares.
+3. El resultado depurado lo consolidamos en la especificación. La correspondencia entre cada salida exigida y su ubicación está en el [registro de prompts](#d8-prompt-1-del-laboratorio--analizar-el-caso).
 
 **Entidades evaluadas y descartadas:** firmantes autorizados, representantes legales, canales como entidad y productos de crédito. Quedaron fuera del alcance, como consta en la autocrítica (Anexo A, sección A.11).
 
@@ -196,7 +196,7 @@ El documento del laboratorio no define cinco aspectos que afectan directamente l
 - errores o problemas detectados;
 - decisiones derivadas, enlazadas a la matriz.
 
-Se registraron cinco interacciones (P-01 a P-05) y la correspondencia con el Prompt 1 oficial.
+Registramos cinco interacciones (P-01 a P-05) y la correspondencia con el Prompt 1 oficial.
 
 ### Punto 5 · Matriz de decisiones IA inicial
 
@@ -256,17 +256,19 @@ La matriz supera el mínimo de tres decisiones exigido para la defensa final y s
 | ERD | Anexo B (diagrama Mermaid) | Cumple |
 | Matriz de decisiones inicial | Anexo C | Cumple |
 
-**Resultado del gate:** criterios cumplidos. Los supuestos S1–S5 fueron adoptados por el equipo sin consulta al docente.
+**Resultado del gate:** criterios cumplidos. Los supuestos S1–S5 los adoptamos nosotros, sin consultarlos con el docente.
 
 ---
 
-## 4. Siguientes pasos (G2 — Modelo lógico y físico)
+## 4. Lo que planeamos para G2 (modelo lógico y físico)
 
-1. Si el docente revisa S1–S5, registrar su respuesta y ajustar las reglas afectadas si es necesario.
-2. Transformar las entidades del ERD en relaciones normalizadas y verificar 1FN, 2FN y 3FN.
-3. Decidir qué atributos se implementan como catálogos con clave foránea (estado, tipo, moneda).
+1. Si el docente revisaba S1–S5, íbamos a registrar su respuesta y ajustar las reglas afectadas.
+2. Pasar las entidades del ERD a relaciones normalizadas y verificar 1FN, 2FN y 3FN.
+3. Decidir qué atributos implementábamos como catálogos con clave foránea (estado, tipo, moneda).
 4. Justificar las desnormalizaciones: saldo almacenado frente al ledger y saldo disponible derivado.
-5. Ejecutar el Prompt 2A del laboratorio (auditor del modelo) y registrar sus hallazgos en la matriz de decisiones.
+5. Correr el Prompt 2A del laboratorio (auditor del modelo) y registrar sus hallazgos en la matriz de decisiones.
+
+Todo esto lo hicimos en G2 (`docs/02_modelo_logico.md`).
 
 ---
 
@@ -440,7 +442,7 @@ El cambio de límite (`CAMBIO_LIMITE`) solo se permite en cuentas `ACTIVA` y no 
 
 ### A.7 Supuestos adoptados
 
-El documento del laboratorio no define estos cinco puntos. El equipo adoptó las siguientes decisiones; la justificación completa está en la [sección 1](#1-supuestos-seleccionados).
+El documento del laboratorio no define estos cinco puntos. Adoptamos las siguientes decisiones; la justificación completa está en la [sección 1](#1-supuestos-seleccionados).
 
 | ID | Pregunta | Decisión adoptada | Reglas afectadas |
 |---|---|---|---|
@@ -454,7 +456,7 @@ El documento del laboratorio no define estos cinco puntos. El equipo adoptó las
 
 ### A.8 Reglas de negocio verificables
 
-**Criterio de verificabilidad:** cada regla evalúa una sola condición y tiene una prueba cuyo resultado es binario (se cumple / no se cumple). Las pruebas de tipo *"Operación rechazada"* se ejecutarán en G3 como pruebas negativas; las de tipo *"= 0"* se ejecutarán como consultas de auditoría en G6.
+**Criterio de verificabilidad:** cada regla evalúa una sola condición y tiene una prueba cuyo resultado es binario (se cumple / no se cumple). Las pruebas de tipo *"Operación rechazada"* las corrimos en G3 como pruebas negativas, y las de tipo *"= 0"*, como consultas de auditoría en G6.
 
 **Total: 54 reglas** (mínimo exigido: 30).
 
@@ -576,7 +578,7 @@ El documento del laboratorio no define estos cinco puntos. El equipo adoptó las
 
 | Decisión | Estado |
 |---|---|
-| Supuestos S1 a S5 (sección A.7). | Adoptados por el equipo; no consultados con el docente. |
+| Supuestos S1 a S5 (sección A.7). | Los adoptamos nosotros; no consultados con el docente. |
 | Estrategia supertipo/subtipos para personas naturales y jurídicas. | Adoptada. |
 | Plan de cuentas contable mínimo con códigos mnemónicos, no con el catálogo oficial de la Superintendencia Financiera. | Adoptada para el laboratorio. |
 | Monedas COP y USD sin conversión entre ellas. | Adoptada. |
@@ -589,10 +591,10 @@ El documento del laboratorio no define estos cinco puntos. El equipo adoptó las
 
 | Aspecto | Observación |
 |---|---|
-| **Posible sobrediseño** | El detalle de cambio de límite como entidad separada podría resolverse con columnas en el evento; se mantiene para evitar nulos en los demás tipos de evento. El plan de cuentas contable es mínimo, pero agrega complejidad frente a un ledger simple por cuenta. |
-| **Posible subdiseño** | No se modelan firmantes autorizados de cuentas empresariales ni representantes legales. Tampoco se modelan canales de atención como entidad (solo como catálogo) ni límites diarios distintos por tipo de operación. |
+| **Posible sobrediseño** | El detalle de cambio de límite como entidad separada podría resolverse con columnas en el evento; lo mantuvimos para evitar nulos en los demás tipos de evento. El plan de cuentas contable es mínimo, pero agrega complejidad frente a un ledger simple por cuenta. |
+| **Posible subdiseño** | No modelamos firmantes autorizados de cuentas empresariales ni representantes legales. Tampoco modelamos canales de atención como entidad (solo como catálogo) ni límites diarios distintos por tipo de operación. |
 | **Ambigüedades pendientes** | La regla RN-54 depende de cruzar documento de identidad entre cliente y usuario, lo que exige almacenar el documento del usuario. El tratamiento de transacciones entre cuentas de un mismo titular (¿cuentan para límites?) se definirá en G2. |
-| **Riesgo del uso de IA** | La primera propuesta de la IA incluía código SQL completo antes de validar el dominio; se descartó para esta fase (ver IA-01 en el Anexo C). |
+| **Riesgo del uso de IA** | La primera propuesta de la IA incluía código SQL completo antes de validar el dominio; la descartamos para esta fase (ver IA-01 en el Anexo C). |
 
 ---
 
@@ -826,7 +828,7 @@ erDiagram
 
 ### B.4 Notas para G2
 
-- `moneda`, `estado`, `tipo` y `tipo_evento` aparecen como atributos; en G2 se decidirá si cada uno se implementa como catálogo con clave foránea.
+- `moneda`, `estado`, `tipo` y `tipo_evento` aparecen como atributos; en G2 decidimos si cada uno se implementaba como catálogo con clave foránea.
 - `saldo_disponible` es un valor derivado (saldo contable − saldo retenido); su implementación se justificará en el modelo lógico.
 - El saldo almacenado en `CUENTA` y los asientos contables se reconciliarán según la regla RN-48.
 
@@ -836,7 +838,7 @@ erDiagram
 
 ### C.1 Propósito
 
-El laboratorio establece que **ninguna recomendación se acepta porque la IA la haya propuesto**. Esta matriz registra cada recomendación relevante, la decisión del equipo (**Aceptar**, **Modificar** o **Rechazar**), la evidencia que la sustenta y la justificación.
+El laboratorio establece que **ninguna recomendación se acepta porque la IA la haya propuesto**. Esta matriz registra cada recomendación relevante, nuestra decisión (**Aceptar**, **Modificar** o **Rechazar**), la evidencia que la sustenta y la justificación.
 
 ### C.2 Resumen
 
@@ -851,13 +853,13 @@ El laboratorio establece que **ninguna recomendación se acepta porque la IA la 
 
 | ID | Prompt | Recomendación de la IA | Decisión | Evidencia | Justificación |
 |---|---|---|---|---|---|
-| IA-01 | P-01 | Entregar, en la fase de planeación, código SQL casi completo: función de transferencia, triggers de inmutabilidad y partida doble, auditoría y script de quality gate. | **Rechazar** (para G1) | Regla central del laboratorio (sección 1: "No se acepta código porque la IA lo dijo") y criterio pedagógico (sección 17). | El código se construirá y validará por el equipo en G3. Del plan solo se conservan como referencia los riesgos identificados. |
-| IA-02 | P-01 | Redactar 42 reglas de negocio con notación técnica de mecanismos de implementación (constraint, trigger, función, prueba de calidad). | **Modificar** | Criterio de G1: "≥30 reglas verificables"; en G1 aún no existe modelo lógico ni DDL. | En P-04 las reglas se reescribieron en lenguaje de negocio, con una prueba de verificación y un resultado esperado binario. El mecanismo de implementación se decide en G2–G3. |
-| IA-03 | P-04 | Lista de 40 reglas, varias de ellas compuestas (evaluaban más de una condición). | **Modificar** | Revisión del equipo: las reglas propuestas sobre municipio/oficina, cierre de cuenta, doble partida, roles y auditoría combinaban 2 o 3 condiciones en una sola. | Se dividieron en reglas atómicas para que cada prueba falle por una sola razón. Resultado: 54 reglas (RN-01 a RN-54). |
+| IA-01 | P-01 | Entregar, en la fase de planeación, código SQL casi completo: función de transferencia, triggers de inmutabilidad y partida doble, auditoría y script de quality gate. | **Rechazar** (para G1) | Regla central del laboratorio (sección 1: "No se acepta código porque la IA lo dijo") y criterio pedagógico (sección 17). | El código lo construimos y validamos nosotros en G3. Del plan solo se conservan como referencia los riesgos identificados. |
+| IA-02 | P-01 | Redactar 42 reglas de negocio con notación técnica de mecanismos de implementación (constraint, trigger, función, prueba de calidad). | **Modificar** | Criterio de G1: "≥30 reglas verificables"; en G1 aún no existe modelo lógico ni DDL. | En P-04 las reglas las reescribimos en lenguaje de negocio, con una prueba de verificación y un resultado esperado binario. El mecanismo de implementación se decide en G2–G3. |
+| IA-03 | P-04 | Lista de 40 reglas, varias de ellas compuestas (evaluaban más de una condición). | **Modificar** | Nuestra revisión: las reglas propuestas sobre municipio/oficina, cierre de cuenta, doble partida, roles y auditoría combinaban 2 o 3 condiciones en una sola. | Las dividimos en reglas atómicas para que cada prueba falle por una sola razón. Resultado: 54 reglas (RN-01 a RN-54). |
 | IA-04 | P-01 | Modelar clientes con supertipo `cliente` y subtipos 1:1 `persona_natural` y `persona_juridica`, en lugar de tabla única o `INHERITS`. | **Aceptar** | Documentación de PostgreSQL: en tablas con `INHERITS` las restricciones `UNIQUE` y las claves foráneas no se propagan a las tablas hijas. Análisis de alternativas en el Anexo A, sección A.4. | Garantiza documento único (RN-01), evita nulos y permite reglas por tipo de cliente. |
 | IA-05 | P-04, P-05 | S1: una cuenta bloqueada recibe créditos pero no origina débitos. | **Aceptar** | Análisis de negocio en la [sección 1, S1](#s1--cuenta-bloqueada). | Protege los fondos sin rechazar pagos entrantes de terceros; produce reglas verificables (RN-34, RN-35, RN-43). |
 | IA-06 | P-04, P-05 | S2: edad mínima de 18 años para ser titular. | **Aceptar** | Mayoría de edad en Colombia a los 18 años; la titularidad de menores exige representante legal, entidad no incluida en el alcance. | Regla simple y verificable contra la fecha de nacimiento (RN-08) sin agregar entidades. |
-| IA-07 | P-04, P-05 | S3: máximo fijo de 4 titulares por cuenta. | **Modificar** | Revisión del equipo: un máximo único no aplica a nómina (cuenta de un empleado) ni a la cuenta empresarial (titular: la empresa). | El máximo se definió como parámetro del producto: AHORROS 4, CORRIENTE 4, NOMINA 1, EMPRESARIAL 1 (RN-16). |
+| IA-07 | P-04, P-05 | S3: máximo fijo de 4 titulares por cuenta. | **Modificar** | Nuestra revisión: un máximo único no aplica a nómina (cuenta de un empleado) ni a la cuenta empresarial (titular: la empresa). | Definimos el máximo como parámetro del producto: AHORROS 4, CORRIENTE 4, NOMINA 1, EMPRESARIAL 1 (RN-16). |
 | IA-08 | P-04, P-05 | S4: cuenta empresarial como producto adicional. | **Aceptar** | Comparación con alternativas (CDT, ahorro programado) en la [sección 1, S4](#s4--producto-adicional). | Reutiliza el modelo de cuenta, incorpora a las personas jurídicas y soporta la distribución de 50.000 cuentas. |
 | IA-09 | P-04, P-05 | S5: el volumen de 1.000.000 corresponde a transacciones `POSTED`, incluidos reversos y ajustes aprobados; las rechazadas son adicionales. | **Aceptar** | Documento del laboratorio: el reverso es un tipo de transacción financiera y el volumen se exige "con ledger asociado"; las rechazadas no generan ledger. | Conteo inequívoco y verificable con una sola consulta en G4. |
 | IA-10 | P-01 | Evitar el tipo `money` y `FLOAT` para importes; usar `NUMERIC`. | **Aceptar** | Contrato de calidad del laboratorio ("0 FLOAT/REAL para dinero"). Prueba en PostgreSQL 16: `SELECT '1234.56'::money;` devuelve un texto con formato dependiente de la configuración regional (`lc_monetary`). | Precisión exacta en cálculos monetarios y resultados independientes de la configuración del servidor. |
@@ -865,7 +867,7 @@ El laboratorio establece que **ninguna recomendación se acepta porque la IA la 
 
 ### C.4 Criterio para nuevas entradas
 
-Cada nueva recomendación de IA que afecte el modelo, el código, los datos o las pruebas debe registrarse con: prompt de origen, decisión, evidencia verificable (documento, DDL, prueba, `EXPLAIN` o medición) y justificación. Las entradas no se eliminan; si una decisión cambia, se agrega una nueva fila que referencia la anterior.
+Cada nueva recomendación de IA que afecte el modelo, el código, los datos o las pruebas la registramos con: prompt de origen, decisión, evidencia verificable (documento, DDL, prueba, `EXPLAIN` o medición) y justificación. No borramos entradas; si una decisión cambia, agregamos una fila nueva que referencia la anterior.
 
 ---
 
@@ -873,9 +875,9 @@ Cada nueva recomendación de IA que afecte el modelo, el código, los datos o la
 
 ### D.1 Reglas de uso aplicadas
 
-- No se ingresaron datos personales reales, credenciales ni información confidencial.
-- Se conservan los prompts completos y un resumen de las respuestas relevantes.
-- Ninguna respuesta se incorporó sin revisión: los errores detectados y las decisiones tomadas se documentan en cada entrada.
+- No ingresamos datos personales reales, credenciales ni información confidencial.
+- Conservamos los prompts completos y un resumen de las respuestas relevantes.
+- No incorporamos ninguna respuesta sin revisarla: los errores que encontramos y las decisiones que tomamos los documentamos en cada entrada.
 
 ### D.2 Índice
 
@@ -883,7 +885,7 @@ Cada nueva recomendación de IA que afecte el modelo, el código, los datos o la
 |---|---|---|---|---|
 | [P-01](#d3-p-01--plan-de-implementación-por-fases) | 2026-09-16 | G1 (preparación) | Analizar el documento del laboratorio y obtener un plan por fases con los 14 requisitos críticos. | IA-01, IA-02, IA-04, IA-10, IA-11 |
 | [P-02](#d4-p-02--revisión-del-alcance-de-la-respuesta) | 2026-09-16 | G1 (preparación) | Revisar si la respuesta anterior excedía lo solicitado. | IA-01 |
-| [P-03](#d5-p-03--resumen-para-el-equipo) | 2026-09-17 | G1 (preparación) | Obtener un resumen sencillo para socializar con el equipo. | — |
+| [P-03](#d5-p-03--resumen-para-el-grupo) | 2026-09-17 | G1 (preparación) | Obtener un resumen sencillo para socializar entre nosotros. | — |
 | [P-04](#d6-p-04--entendimiento-del-negocio-y-reglas) | 2026-09-17 | G1 | Entender el negocio y proponer al menos 30 reglas verificables. | IA-03, IA-05 a IA-09 |
 | [P-05](#d7-p-05--selección-de-supuestos-y-documentación-de-g1) | 2026-09-17 | G1 | Seleccionar los 5 supuestos y documentar los puntos pendientes de G1. | IA-05 a IA-09 |
 | [Prompt 1 del laboratorio](#d8-prompt-1-del-laboratorio--analizar-el-caso) | 2026-09-17 | G1 | Correspondencia entre el Prompt 1 oficial y los resultados obtenidos. | — |
@@ -1022,7 +1024,7 @@ Presenta el desglose en esta secuencia:
 
 **Respuesta relevante (resumen):** plan de nueve fases publicado como página web y archivo Markdown. Incluía el análisis del documento, 16 conflictos entre requisitos, la estrategia supertipo/subtipos para clientes, un ERD preliminar, reglas de negocio, estrategias de concurrencia, rendimiento, respaldo, gobernanza y generación de datos, además de fragmentos de SQL de referencia.
 
-**Errores o problemas detectados por el equipo:**
+**Errores o problemas que detectamos:**
 
 - Excedió el alcance solicitado: entregó código SQL casi funcional en una fase declarada de planeación y diseño.
 - Adelantó entregables propios de gates posteriores (catálogo de consultas de G5, diseño del quality gate de G6).
@@ -1049,7 +1051,7 @@ oye, me puedes explicar SIN HACER OTRO DOCUMENTO que hiciste aca, por que creo q
 
 ---
 
-### D.5 P-03 · Resumen para el equipo
+### D.5 P-03 · Resumen para el grupo
 
 **Fecha:** 2026-09-17 · **Gate:** preparación de G1
 
@@ -1059,7 +1061,7 @@ oye, me puedes explicar SIN HACER OTRO DOCUMENTO que hiciste aca, por que creo q
 Ok pero ahorita le voy a decir a mis compañeros de grupo sobre qué trata esto y que hace, me podrías hacer un resumen entendible y súper sencillo de todo lo que me mandaste porfa
 ```
 
-**Respuesta relevante (resumen):** explicación en lenguaje sencillo del laboratorio, de los gates G0–G8, de las condiciones de reprobación técnica y de los primeros pasos. Se utilizó para socializar el proyecto con el equipo.
+**Respuesta relevante (resumen):** explicación en lenguaje sencillo del laboratorio, de los gates G0–G8, de las condiciones de reprobación técnica y de los primeros pasos. La usamos para socializar el proyecto entre nosotros.
 
 **Decisiones derivadas:** ninguna.
 
@@ -1077,7 +1079,7 @@ Listo ya hicimos el G0 ahora, vamos a empezar a hacer el G1 y necesito que me ay
 
 **Respuesta relevante (resumen):** descripción del método (lectura del caso, actores, entidades, separaciones obligatorias, formulación de reglas verificables), entendimiento del negocio, 40 reglas agrupadas por dominio con su forma de verificación y cinco supuestos para validar.
 
-**Errores o problemas detectados por el equipo:**
+**Errores o problemas que detectamos:**
 
 - Varias reglas eran compuestas y evaluaban más de una condición a la vez.
 - El máximo de 4 titulares no aplicaba de igual forma a todos los productos.
@@ -1139,7 +1141,7 @@ Entrega en este orden:
 Finaliza con una autocrítica: qué está sobrediseñado, subdiseñado o ambiguo.
 ```
 
-Las salidas exigidas por este prompt se obtuvieron en las sesiones P-01, P-04 y P-05 y, tras la revisión del equipo, quedaron consolidadas así:
+Las salidas exigidas por este prompt se obtuvieron en las sesiones P-01, P-04 y P-05 y, tras la nuestra revisión, quedaron consolidadas así:
 
 | Salida exigida | Ubicación en la entrega |
 |---|---|

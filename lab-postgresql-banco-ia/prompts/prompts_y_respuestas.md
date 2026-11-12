@@ -9,9 +9,9 @@
 
 ## Reglas de uso aplicadas
 
-- No se ingresaron datos personales reales, credenciales ni información confidencial.
-- Se conservan los prompts completos y un resumen de las respuestas relevantes.
-- Ninguna respuesta se incorporó sin revisión: los errores detectados y las decisiones tomadas se documentan en cada entrada.
+- No ingresamos datos personales reales, credenciales ni información confidencial.
+- Conservamos los prompts completos y un resumen de las respuestas relevantes.
+- No incorporamos ninguna respuesta sin revisarla: los errores que encontramos y las decisiones que tomamos los documentamos en cada entrada.
 
 ## Índice
 
@@ -19,7 +19,7 @@
 |---|---|---|---|---|
 | [P-01](#p-01--plan-de-implementación-por-fases) | 2026-09-16 | G1 (preparación) | Analizar el documento del laboratorio y obtener un plan por fases con los 14 requisitos críticos. | IA-01, IA-02, IA-04, IA-10, IA-11 |
 | [P-02](#p-02--revisión-del-alcance-de-la-respuesta) | 2026-09-16 | G1 (preparación) | Revisar si la respuesta anterior excedía lo solicitado. | IA-01 |
-| [P-03](#p-03--resumen-para-el-equipo) | 2026-09-17 | G1 (preparación) | Obtener un resumen sencillo para socializar con el equipo. | — |
+| [P-03](#p-03--resumen-para-el-grupo) | 2026-09-17 | G1 (preparación) | Obtener un resumen sencillo para socializar entre nosotros. | — |
 | [P-04](#p-04--entendimiento-del-negocio-y-reglas) | 2026-09-17 | G1 | Entender el negocio y proponer al menos 30 reglas verificables. | IA-03, IA-05 a IA-09 |
 | [P-05](#p-05--selección-de-supuestos-y-documentación-de-g1) | 2026-09-17 | G1 | Seleccionar los 5 supuestos y documentar los puntos pendientes de G1. | IA-05 a IA-09 |
 | [Prompt 1 del laboratorio](#prompt-1-del-laboratorio--analizar-el-caso) | 2026-09-17 | G1 | Correspondencia entre el Prompt 1 oficial y los resultados obtenidos. | — |
@@ -165,7 +165,7 @@ Presenta el desglose en esta secuencia:
 
 **Respuesta relevante (resumen):** plan de nueve fases publicado como página web y archivo Markdown. Incluía el análisis del documento, 16 conflictos entre requisitos, la estrategia supertipo/subtipos para clientes, un ERD preliminar, reglas de negocio, estrategias de concurrencia, rendimiento, respaldo, gobernanza y generación de datos, además de fragmentos de SQL de referencia.
 
-**Errores o problemas detectados por el equipo:**
+**Errores o problemas que detectamos:**
 
 - Excedió el alcance solicitado: entregó código SQL casi funcional en una fase declarada de planeación y diseño.
 - Adelantó entregables propios de gates posteriores (catálogo de consultas de G5, diseño del quality gate de G6).
@@ -192,7 +192,7 @@ oye, me puedes explicar SIN HACER OTRO DOCUMENTO que hiciste aca, por que creo q
 
 ---
 
-## P-03 · Resumen para el equipo
+## P-03 · Resumen para el grupo
 
 **Fecha:** 2026-09-17 · **Gate:** preparación de G1
 
@@ -202,7 +202,7 @@ oye, me puedes explicar SIN HACER OTRO DOCUMENTO que hiciste aca, por que creo q
 Ok pero ahorita le voy a decir a mis compañeros de grupo sobre qué trata esto y que hace, me podrías hacer un resumen entendible y súper sencillo de todo lo que me mandaste porfa
 ```
 
-**Respuesta relevante (resumen):** explicación en lenguaje sencillo del laboratorio, de los gates G0–G8, de las condiciones de reprobación técnica y de los primeros pasos. Se utilizó para socializar el proyecto con el equipo.
+**Respuesta relevante (resumen):** explicación en lenguaje sencillo del laboratorio, de los gates G0–G8, de las condiciones de reprobación técnica y de los primeros pasos. La usamos para socializar el proyecto entre nosotros.
 
 **Decisiones derivadas:** ninguna.
 
@@ -220,7 +220,7 @@ Listo ya hicimos el G0 ahora, vamos a empezar a hacer el G1 y necesito que me ay
 
 **Respuesta relevante (resumen):** descripción del método (lectura del caso, actores, entidades, separaciones obligatorias, formulación de reglas verificables), entendimiento del negocio, 40 reglas agrupadas por dominio con su forma de verificación y cinco supuestos para validar.
 
-**Errores o problemas detectados por el equipo:**
+**Errores o problemas que detectamos:**
 
 - Varias reglas eran compuestas y evaluaban más de una condición a la vez.
 - El máximo de 4 titulares no aplicaba de igual forma a todos los productos.
@@ -282,7 +282,7 @@ Entrega en este orden:
 Finaliza con una autocrítica: qué está sobrediseñado, subdiseñado o ambiguo.
 ```
 
-Las salidas exigidas por este prompt se obtuvieron en las sesiones P-01, P-04 y P-05 y, tras la revisión del equipo, quedaron consolidadas así:
+Las salidas exigidas por este prompt se obtuvieron en las sesiones P-01, P-04 y P-05 y, tras la nuestra revisión, quedaron consolidadas así:
 
 | Salida exigida | Ubicación en la entrega |
 |---|---|
@@ -318,9 +318,9 @@ Después entrega el modelo lógico corregido, indicando cada cambio realizado.
 
 **Revisión y verificación:**
 
-- Ningún cambio se aplicó sin prueba: el DDL corregido se ejecutó desde cero, se recargaron los datos (lote 1 = 20/20 PASS, lote 2 = 24/24 PASS) y cada restricción nueva se probó con un caso que debe fallar.
-- La propuesta de agregar la moneda a cada asiento (H-10) se **modificó**: sería una redundancia, porque la moneda depende de la cuenta.
-- La propuesta de cambiar el CHECK de documentos del usuario por una FK compuesta (H-05) se **rechazó**: no mejora ninguna regla.
+- No aplicamos ningún cambio sin probarlo: corrimos el DDL corregido desde cero, recargamos los datos (lote 1 = 20/20 PASS, lote 2 = 24/24 PASS) y probamos cada restricción nueva con un caso que debía fallar.
+- La propuesta de agregar la moneda a cada asiento (H-10) la **modificamos**: sería una redundancia, porque la moneda depende de la cuenta.
+- La propuesta de cambiar el CHECK de documentos del usuario por una FK compuesta (H-05) la **rechazamos**: no mejora ninguna regla.
 
 **Decisiones derivadas:** IA-12 a IA-16 (sección 13 del modelo lógico).
 
@@ -348,10 +348,10 @@ Antes de finalizar, audita tu propia salida y muestra: regla | PASS/FAIL | evide
 
 **Revisión y verificación:**
 
-- `run_all.sql` se ejecutó dos veces seguidas en una base nueva: 49/49 PASS las dos veces.
-- Se cargaron los lotes con los triggers activos en el modelo: 20/20 y 24/24 PASS. Las 49 pruebas también pasan sobre la base con el millón de transacciones.
-- Se detectaron y corrigieron dos problemas de la primera versión: la prueba de `TRUNCATE` (verificaciones diferidas pendientes) y una vista lenta sobre 1.000.000 de filas (de 3 min 25 s a 4 s).
-- Se **rechazó** crear índices en G3 (se justifican en G7) y se **modificó** la auditoría durante la carga masiva.
+- Corrimos `run_all.sql` dos veces seguidas en una base nueva: 49/49 PASS las dos veces.
+- Cargamos los lotes con los triggers activos en el modelo: 20/20 y 24/24 PASS. Las 49 pruebas también nos pasaron sobre la base con el millón de transacciones.
+- Detectamos y corregimos dos problemas de la primera versión: la prueba de `TRUNCATE` (verificaciones diferidas pendientes) y una vista lenta sobre 1.000.000 de filas (de 3 min 25 s a 4 s).
+- **Rechazamos** crear índices en G3 (los justificamos en G7) y **modificamos** la auditoría durante la carga masiva.
 
 **Decisiones derivadas:** IA-17 a IA-21 ([sección 11 de la construcción](../docs/03_construccion.md#11-matriz-ia-nuevas-entradas-de-g3)).
 
@@ -377,7 +377,7 @@ Entrega: generate_data.py, requirements.txt, README, configuración, estrategia 
 
 **Respuesta relevante (resumen):** dos generadores (`generate_data.py` para clientes y cuentas; `generate_transactions.py` para el millón con simulación cronológica), carga con `\copy` en una transacción por lote, 20 + 24 controles de carga y un perfil de 48 métricas que produce `evidence/g4_data_profile.csv`.
 
-**Errores de la IA detectados por el equipo o por las validaciones:**
+**Errores de la IA que detectamos nosotros o con las validaciones:**
 
 - Interpretó "las primeras 10.000 cuentas" como un lote de 10.000; eran 50.000 (IA-22).
 - Una búsqueda web devolvió nombres de municipios que no correspondían a su código DIVIPOLA (IA-23).
@@ -400,11 +400,11 @@ Para cada problema entrega: objetivo de negocio, tablas necesarias, conceptos SQ
 Cuando reciba la consulta del estudiante, evalúala por: corrección, legibilidad, eficiencia, robustez ante NULL/duplicados y semántica de negocio. Da pistas antes de mostrar una solución alternativa.
 ```
 
-**Cómo se usó (transparencia):** el equipo pidió a la IA los 30 problemas **con su solución**, sus resultados sobre el millón de transacciones y una explicación en lenguaje sencillo de cada uno, en lugar del modo tutor paso a paso. Para cumplir el criterio de G5 ("el estudiante puede explicar el resultado de cada una"), `evidence/g5_results.md` incluye la sección **"Cómo explicarla"** en cada consulta, y el equipo se reparte las 30 para practicarlas en pgAdmin 4. El texto oficial del Prompt 4 se puede usar después en modo tutor para repasar.
+**Cómo la usamos (transparencia):** le pedimos a la IA los 30 problemas **con su solución**, sus resultados sobre el millón de transacciones y una explicación en lenguaje sencillo de cada uno, en lugar del modo tutor paso a paso. Para cumplir el criterio de G5 ("el estudiante puede explicar el resultado de cada una"), en `evidence/g5_results.md` agregamos la sección **"Cómo explicarla"** en cada consulta, y nos repartimos las 30 para practicarlas en pgAdmin 4. El texto oficial del Prompt 4 lo dejamos para repasar después en modo tutor.
 
 **Respuesta relevante (resumen):** `sql/19_demo_queries.sql` con 30 consultas (objetivo, tablas, conceptos y criterio de validación en cada una) y 7 validaciones cruzadas; `evidence/g5_results.md` con el resultado real, el tiempo y la explicación de cada consulta.
 
-**Errores detectados al ejecutar sobre los datos reales:**
+**Errores que encontramos al correrlo sobre los datos reales:**
 
 - I06 tardó 2 min 39 s por una subconsulta correlacionada que recalculaba un promedio 50.000 veces (IA-28).
 - A07 comparaba con el límite actual y mostraba días "al 180 %" que en realidad cumplían RN-37 (IA-29).
@@ -429,11 +429,11 @@ Calcula scores solo desde pruebas ejecutadas: Data Quality, Database Design, Int
 No corrijas silenciosamente: primero evidencia el fallo, luego recomienda.
 ```
 
-**Cómo se usó:** se pidió además (1) corregir los FAIL encontrados y repetir el gate, conservando el antes y el después, y (2) demostrar que el gate sí detecta errores metiendo defectos en una copia de la base.
+**Cómo la usamos:** además le pedimos (1) corregir los FAIL encontrados y repetir el gate, conservando el antes y el después, y (2) demostrar que el gate sí detecta errores metiendo defectos en una copia de la base.
 
 **Respuesta relevante (resumen):** `sql/quality_gate.sql` con 76 pruebas en las 12 categorías y puntajes por dimensión; `sql/load/registrar_cargas_en_auditoria.sql` para corregir A04; `sql/tests/quality_gate_defectos.sql` con 7 defectos inyectados (7/7 detectados); `evidence/g6_quality_before_after.md` con el antes (98,3, 1 FAIL ALTA) y el después (99,6, 0 FAIL).
 
-**Errores o vacíos de la IA detectados:**
+**Errores o vacíos de la IA que detectamos:**
 
 - La carga con triggers desactivados que la misma IA propuso en G3 (DC-07) dejó 3,2 millones de filas sin rastro en la auditoría; lo destapó la prueba A04 (IA-32).
 - La primera versión de la prueba de defectos habría sobrescrito la evidencia real con los resultados de la copia dañada (IA-36).
@@ -454,11 +454,11 @@ Para cada consulta identifica cuello de botella, causa probable, selectividad, c
 Devuelve comparación before/after y clasifica la mejora como: no concluyente, menor, relevante o crítica. Señala cuando la mejor decisión sea NO crear índice.
 ```
 
-**Cómo se usó:**
+**Cómo la usamos:**
 
-- Antes de usar el prompt, se pidió a la IA elegir 10 consultas representativas. Se incluyeron las que ejecutan por dentro las funciones del banco (límite diario de `fn_retirar`, trigger de eventos, procedimiento de inactivación) y no solo las más lentas de G5.
-- Se pidió medir también el costo de escritura con operaciones reales y con la carga masiva.
-- Para la seguridad (paso 6 y 7 de la fase), se pidió un script que probara permisos con un usuario de cada rol sin dejar cambios.
+- Antes de usar el prompt, le pedimos a la IA elegir 10 consultas representativas. Incluimos las que ejecutan por dentro las funciones del banco (límite diario de `fn_retirar`, trigger de eventos, procedimiento de inactivación) y no solo las más lentas de G5.
+- Le pedimos medir también el costo de escritura con operaciones reales y con la carga masiva.
+- Para la seguridad (paso 6 y 7 de la fase), le pedimos un script que probara permisos con un usuario de cada rol sin dejar cambios.
 
 **Respuesta relevante (resumen):**
 
@@ -467,11 +467,11 @@ Devuelve comparación before/after y clasifica la mejora como: no concluyente, m
 - `sql/tests/g7_rbac_demo.sql` con 23 pruebas de acceso.
 - `evidence/g7_explain.md` y `evidence/g7_security.md`.
 
-**Errores o vacíos de la IA detectados por las mediciones:**
+**Errores o vacíos de la IA que detectamos con las mediciones:**
 
 - En G5 propuso como candidatas a índice las 5 consultas más lentas. Son reportes que leen casi toda la tabla; los cuellos de botella reales estaban en las operaciones: un retiro tardaba 95 ms por recorrer el millón de transacciones (IA-37).
 - El índice del extracto hizo que el reporte A06/W10 pasara de 1,3 s a 2,8 s, aunque el costo estimado bajó. Sus tres primeras propuestas para corregirlo (índice cubriente, más `work_mem`, reescritura) no mejoraron nada (IA-39, IA-40).
-- Al ejecutarlo en el PC del equipo (Windows, PostgreSQL 18.6) aparecieron dos fallas que no se vieron en PostgreSQL 16: tildes dañadas por la codificación de SQL Shell y filas con decimales en EXPLAIN (IA-45, IA-46).
+- Al ejecutarlo en nuestro PC (Windows, PostgreSQL 18.6) aparecieron dos fallas que no se vieron en PostgreSQL 16: tildes dañadas por la codificación de SQL Shell y filas con decimales en EXPLAIN (IA-45, IA-46).
 
 **Decisiones derivadas:** IA-37 a IA-42 e IA-45 a IA-46 ([`evidence/g7_explain.md`](../evidence/g7_explain.md#9-matriz-ia-nuevas-entradas-de-g7-rendimiento)) e IA-43 a IA-44 ([`evidence/g7_security.md`](../evidence/g7_security.md#6-matriz-ia-nuevas-entradas-de-g7-seguridad)).
 
@@ -481,7 +481,7 @@ Devuelve comparación before/after y clasifica la mejora como: no concluyente, m
 
 **Fecha:** 2026-10-01 · **Gate:** G8
 
-**Lo que se pidió a la IA:**
+**Lo que le pedimos a la IA:**
 
 - Armar la entrega final según la sección 13 de la guía:
   - repositorio reproducible;
@@ -499,9 +499,9 @@ Devuelve comparación before/after y clasifica la mejora como: no concluyente, m
 - `docs/matriz_ia.md`: 46 decisiones consolidadas.
 - `docs/defensa.md` y `sql/tests/g8_demo_defensa.sql`: guía de defensa y 8 demostraciones en vivo sin dejar cambios.
 
-**Errores detectados:**
+**Errores que detectamos:**
 
-- La primera versión del generador del ERD ordenaba las columnas de una FK compuesta (`tipo_documento,tipo_cliente`) distinto al ERD de G2. Se corrigió para ordenar por posición de la columna; ahora los dos archivos son idénticos byte a byte.
-- Los integrantes y el docente no se conocen en esta conversación, así que el informe deja ese dato para que el equipo lo complete.
+- La primera versión del generador del ERD ordenaba las columnas de una FK compuesta (`tipo_documento,tipo_cliente`) distinto al ERD de G2. Corregimos para ordenar por posición de la columna; ahora los dos archivos son idénticos byte a byte.
+- La IA no conocía los nombres de los integrantes ni del docente, así que ese dato lo completamos nosotros en el informe.
 
 **Decisiones derivadas:** ninguna entrada nueva en la matriz. La matriz consolidada está en [`docs/matriz_ia.md`](../docs/matriz_ia.md).

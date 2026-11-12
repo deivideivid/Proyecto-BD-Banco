@@ -8,18 +8,18 @@
 | Workload | [`sql/perf/g7_workload.sql`](../sql/perf/g7_workload.sql): 10 consultas (W01–W10), 2 variantes y 3 operaciones reales |
 | Cambios | [`sql/12_indexes.sql`](../sql/12_indexes.sql) (6 índices) · [`sql/15_procedures.sql`](../sql/15_procedures.sql) (procedimiento reescrito) · [`sql/perf/g7_aplicar.sql`](../sql/perf/g7_aplicar.sql) |
 | Evidencia | PostgreSQL 16 (medición de referencia, secciones 2–7): [`g7_explain_pg16_antes.csv`](g7_explain_pg16_antes.csv) · [`g7_explain_pg16_despues.csv`](g7_explain_pg16_despues.csv) · planes completos en [`g7_planes_antes.txt`](g7_planes_antes.txt) y [`g7_planes_despues.txt`](g7_planes_despues.txt)<br>PostgreSQL 18.6 (PC del equipo, sección 10): [`g7_explain_antes.csv`](g7_explain_antes.csv) · [`g7_explain_despues.csv`](g7_explain_despues.csv) |
-| Resultado | **10 consultas analizadas antes y después**. Se crearon 6 índices, cada uno justificado por una consulta. En 3 casos la decisión fue **no crear índice**. El retiro en caja pasó de **94,9 ms a 1,2 ms**. |
+| Resultado | **Analizamos 10 consultas antes y después**. Creamos 6 índices, cada uno justificado por una consulta. En 3 casos decidimos **no crear índice**. El retiro en caja pasó de **94,9 ms a 1,2 ms**. |
 
 ## 1. Método
 
 1. **Workload.** Se eligieron 10 consultas representativas: 7 de operación diaria (OLTP), 1 de lote nocturno y 2 de reporte. Entre ellas están las que ejecutan por dentro las funciones del banco (`fn_retirar`, el trigger de eventos y el procedimiento de inactivación) y la consulta más lenta de G5.
-2. **Antes.** Cada consulta se corrió con `EXPLAIN (ANALYZE, BUFFERS)` **5 veces** y se tomó la **mediana** del tiempo de ejecución, con caché caliente. No había índices secundarios: es la decisión de G3, documentada en `12_indexes.sql`.
-3. **Análisis.** Para cada consulta se identificaron el cuello de botella, la causa, la selectividad y las columnas de filtro, join y orden (Prompt 6).
-4. **Cambio mínimo.** Se creó un índice solo cuando una consulta lo justificaba. Cuando la mejor opción era otra (reescribir la consulta, o nada), se documentó.
-5. **Después.** Se repitió el mismo script. El script detecta solo en qué fase está.
-6. **Costo.** Se midió el tamaño de cada índice, el tiempo de creación, el tiempo de carga masiva y la latencia de una escritura real (consignación).
+2. **Antes.** Corrimos cada consulta con `EXPLAIN (ANALYZE, BUFFERS)` **5 veces** y tomamos la **mediana** del tiempo de ejecución, con caché caliente. No había índices secundarios: es la decisión de G3, documentada en `12_indexes.sql`.
+3. **Análisis.** Para cada consulta identificamos el cuello de botella, la causa, la selectividad y las columnas de filtro, join y orden (Prompt 6).
+4. **Cambio mínimo.** Creamos un índice solo cuando una consulta lo justificaba. Cuando la mejor opción era otra (reescribir la consulta, o nada), documentamos.
+5. **Después.** Repetimos el mismo script. El script detecta solo en qué fase está.
+6. **Costo.** Medimos el tamaño de cada índice, el tiempo de creación, el tiempo de carga masiva y la latencia de una escritura real (consignación).
 
-Entorno de la medición de referencia: PostgreSQL 16.13, 2 vCPU, 7 GB de RAM y configuración por defecto (`shared_buffers` 128 MB, `work_mem` 4 MB). La misma medición se repitió en el PostgreSQL 18.6 del equipo (Windows) con el mismo script: los tiempos absolutos cambian, pero los planes y las conclusiones se mantienen (sección 10).
+Entorno de la medición de referencia: PostgreSQL 16.13, 2 vCPU, 7 GB de RAM y configuración por defecto (`shared_buffers` 128 MB, `work_mem` 4 MB). La misma medición la repetimos en nuestro PostgreSQL 18.6 (Windows) con el mismo script: los tiempos absolutos cambian, pero los planes y las conclusiones se mantienen (sección 10).
 
 ## 2. Resultados antes y después
 
@@ -38,7 +38,7 @@ Entorno de la medición de referencia: PostgreSQL 16.13, 2 vCPU, 7 GB de RAM y c
 | W10 | Movimientos atípicos (G5 A06) | Reporte | 1.346,7 | **2.760,8** | **× 0,5 (regresión)** | 20.822 → 1.277.467 | Index Scan IX-3 | **NO crear índice** (ver §5) |
 | W10S | W10 con `enable_indexscan = off` en su sesión | Reporte | 1.431,9 | 1.426,1 | igual que antes | 20.822 → 20.829 | Seq Scan | Mitigación |
 
-**Operaciones reales** (se ejecutan y se deshacen con `ROLLBACK`):
+**Operaciones reales** (las ejecutamos y las deshacemos con `ROLLBACK`):
 
 | ID | Operación | Antes | Después | Mejora |
 |---|---|---|---|---|
@@ -74,7 +74,7 @@ Entorno de la medición de referencia: PostgreSQL 16.13, 2 vCPU, 7 GB de RAM y c
 - La PK de `titularidad_cuenta` empieza por `cuenta_id`, así que buscar por cliente recorría las 51.551 filas.
 - **IX-4** `(cliente_id)`: 2,3 → 0,024 ms.
 - **Clasificación: menor**, porque ya era rápida.
-- **Se crea igual** porque cuesta casi nada (592 kB; la tabla casi no se escribe) y también lo usa `fn_cerrar_cuenta` para saber si el cliente queda sin cuentas vigentes.
+- **Lo creamos igual** porque cuesta casi nada (592 kB; la tabla casi no se escribe) y también lo usa `fn_cerrar_cuenta` para saber si el cliente queda sin cuentas vigentes.
 
 **W06 · Último evento de la cuenta.** Lo ejecuta el trigger `trg_evento_validar` en **cada** evento: bloqueo, desbloqueo, cierre, inactivación…
 
@@ -97,11 +97,11 @@ Entorno de la medición de referencia: PostgreSQL 16.13, 2 vCPU, 7 GB de RAM y c
 
 - La condición es por **fecha de transacción**: el 18 % de las transacciones (185.488) caen en la ventana. Con esa baja selectividad, el planificador sigue prefiriendo leer las tablas completas aunque exista IX-3: 428,7 → 418,2 ms.
 - **Índice solo: no concluyente.**
-- La mejora real vino de **reescribirla**. `asiento_contable.registrado_en` siempre es igual a `fecha_contabilizacion` de su transacción: lo garantiza `fn_contabilizar`, y se verificó en los 2.000.000 de asientos con 0 diferencias. Así se puede filtrar en el asiento y quitar el join (W09R):
+- La mejora real vino de **reescribirla**. `asiento_contable.registrado_en` siempre es igual a `fecha_contabilizacion` de su transacción: lo garantiza `fn_contabilizar`, y lo verificamos en los 2.000.000 de asientos con 0 diferencias. Así pudimos filtrar en el asiento y quitar el join (W09R):
   - Sin índice: 152,5 ms.
   - Con IX-3: 74,3 ms (`Nested Loop Anti Join` + `Index Only Scan`).
   - Mismo resultado: **12.365 cuentas** en las dos versiones.
-- Se actualizó `core.pr_inactivar_cuentas_sin_movimiento` (`sql/15_procedures.sql`) con esta forma.
+- Actualizamos `core.pr_inactivar_cuentas_sin_movimiento` (`sql/15_procedures.sql`) con esta forma.
 - Nota: W09R lee **más** buffers (132.248) pero tarda **menos**, porque son lecturas de índice en memoria. **Buffers y tiempo no son lo mismo.**
 
 **W10 · Movimientos atípicos (A06 de G5).** Ver la sección 5.
@@ -146,7 +146,7 @@ Costo de escritura medido:
 
 - **Decisión:**
   - **Para W10, NO crear índice:** ningún índice le sirve, porque lee el 100 % de las filas de clientes.
-  - Se mantiene IX-3, porque sirve a consultas de operación diaria.
+  - Mantuvimos IX-3, porque sirve a consultas de operación diaria.
   - El reporte, que corre una vez al día o al mes, desactiva el index scan solo en su propia transacción.
   - En producción, lo ideal es correr los reportes en una réplica de lectura.
 
@@ -183,7 +183,7 @@ Se corrieron las 30 consultas de `19_demo_queries.sql` en dos bases nuevas e id�
 | Clasificar la mejora y señalar cuándo NO crear índice | **Cumple** | Columna "Clasificación"; secciones 5 y 7 |
 | ≥ 5 consultas críticas analizadas antes y después | **Cumple** | 10 consultas + 3 operaciones reales |
 
-La parte de seguridad (RBAC) se verifica en [`g7_security.md`](g7_security.md).
+La parte de seguridad (RBAC) la verificamos en [`g7_security.md`](g7_security.md).
 
 ## 9. Matriz IA: nuevas entradas de G7 (rendimiento)
 
@@ -193,14 +193,14 @@ La parte de seguridad (RBAC) se verifica en [`g7_security.md`](g7_security.md).
 | IA-38 | P-11 (6) | Índice `asiento_contable (cuenta_id, registrado_en)`. | **Modificar** | IX-3: 39 MB | Se hizo parcial (`cuenta_id IS NOT NULL`): excluye el 36 % de las líneas que ninguna consulta por cuenta usa. |
 | IA-39 | P-11 (6) | Índice cubriente `INCLUDE (naturaleza, valor)` para corregir la regresión de W10. | **Rechazar** | 60 MB; W10 en 2,8 s | No resolvió la regresión y aumentó el tamaño un 54 %. |
 | IA-40 | P-11 (6) | Subir `work_mem` o reescribir W10 con `GROUP BY`. | **Rechazar** | 1,55 s y 1,9 s | Ninguna mejora; el cuello es el cálculo numérico. |
-| IA-41 | P-11 (6) | Desactivar el index scan solo en la transacción del reporte W10. | **Aceptar** | W10S: 1,43 s | Mitigación con alcance limitado; IX-3 se mantiene para la operación diaria. |
+| IA-41 | P-11 (6) | Desactivar el index scan solo en la transacción del reporte W10. | **Aceptar** | W10S: 1,43 s | Mitigación con alcance limitado; mantuvimos IX-3 para la operación diaria. |
 | IA-42 | P-11 (6) | Reescribir W09 y el procedimiento de inactivación con `registrado_en`. | **Aceptar** | 428,7 → 74,3 ms; OP3 22,7 → 1,1 s; mismas 12.365 cuentas | Equivalencia verificada en los 2.000.000 de asientos. |
-| IA-45 | P-11 (6) | Scripts de G7 sin `SET client_encoding = 'UTF8'`. En SQL Shell de Windows las tildes del CSV quedaron dañadas ("OperaciÃ³n"). | **Corregir** | `g7_explain_antes.csv` generado en el PC del equipo | Se forzó UTF-8 en 7 scripts y se reparó el CSV. La misma causa había dañado las tildes de los catálogos creados con `run_all.sql` en G3; se corrige reconstruyendo la base en G8. |
-| IA-46 | P-11 (6) | El script de medición suponía que EXPLAIN devuelve filas enteras; PostgreSQL 18 devuelve "1.00". | **Corregir** | Error en el PC del equipo (PostgreSQL 18.6) | Se redondea el valor; probado en PostgreSQL 16 y 18. |
+| IA-45 | P-11 (6) | Scripts de G7 sin `SET client_encoding = 'UTF8'`. En SQL Shell de Windows las tildes del CSV quedaron dañadas ("OperaciÃ³n"). | **Corregir** | `g7_explain_antes.csv` generado en nuestro PC | Forzamos UTF-8 en 7 scripts y reparamos el CSV. La misma causa había dañado las tildes de los catálogos creados con `run_all.sql` en G3; lo corregimos reconstruyendo la base en G8. |
+| IA-46 | P-11 (6) | El script de medición suponía que EXPLAIN devuelve filas enteras; PostgreSQL 18 devuelve "1.00". | **Corregir** | Error en nuestro PC (PostgreSQL 18.6) | Redondeamos el valor; probado en PostgreSQL 16 y 18. |
 
-## 10. Repetición en PostgreSQL 18.6 (PC del equipo)
+## 10. Repetición en PostgreSQL 18.6 (nuestro PC)
 
-Se ejecutó el mismo procedimiento en el computador del equipo (Windows, PostgreSQL 18.6, SQL Shell): `g7_workload.sql` → `g7_aplicar.sql` → `g7_workload.sql`. Los archivos `g7_explain_antes.csv` y `g7_explain_despues.csv` del repositorio son los de esa ejecución.
+Corrimos el mismo procedimiento en nuestro computador (Windows, PostgreSQL 18.6, SQL Shell): `g7_workload.sql` → `g7_aplicar.sql` → `g7_workload.sql`. Los archivos `g7_explain_antes.csv` y `g7_explain_despues.csv` del repositorio son los de esa ejecución.
 
 | ID | Antes (ms) | Después (ms) | Mejora | Buffers antes → después | Igual que en PG16 |
 |---|---|---|---|---|---|
@@ -220,7 +220,7 @@ Se ejecutó el mismo procedimiento en el computador del equipo (Windows, Postgre
 | W10 Movimientos atípicos | 2.967 | 3.548 | × 0,8 (regresión) | 20.801 → 1.277.467 | Sí, pero menor (+20 % en vez de +105 %) |
 | W10S W10 sin index scan | 2.996 | 3.838 | — | 20.801 → 20.801 | Ver nota 2 |
 
-Lo que se confirma en PostgreSQL 18:
+Lo que confirmamos en PostgreSQL 18:
 
 - **Los planes son los mismos:** los mismos índices se usan en las mismas consultas, con los mismos buffers.
 - **Las mejoras críticas también:** el retiro es 82 veces más rápido y W01–W07 bajan a centésimas de milisegundo.
@@ -229,4 +229,4 @@ Lo que se confirma en PostgreSQL 18:
 Notas:
 
 1. **OP2:** en este PC la consignación subió 0,7 ms (de 1,8 a 2,5 ms). Puede ser el costo de actualizar los índices nuevos en cada escritura, o variación entre ejecuciones (en PG16 no se notó). Aun así, una consignación sigue tardando 2,5 ms.
-2. **W10S:** usa exactamente el mismo plan que W10 antes (Seq Scan, 20.801 buffers, costo ≈ 262.000), pero en esta ejecución tardó 3,8 s frente a 3,0 s. Como el plan y las lecturas son idénticos, la diferencia es variación del equipo (otros programas abiertos, temperatura). Aquí W10 y W10S quedan entre 3,0 y 3,8 s, así que la mitigación resulta **no concluyente** en este PC: la regresión es pequeña (+20 %). La decisión de la sección 5 no cambia: no hay índice que sirva a W10, y si el reporte llega a molestar, se corre con `enable_indexscan = off` o en una réplica.
+2. **W10S:** usa exactamente el mismo plan que W10 antes (Seq Scan, 20.801 buffers, costo ≈ 262.000), pero en esta ejecución tardó 3,8 s frente a 3,0 s. Como el plan y las lecturas son idénticos, la diferencia es variación del computador (otros programas abiertos, temperatura). Aquí W10 y W10S quedan entre 3,0 y 3,8 s, así que la mitigación resulta **no concluyente** en este PC: la regresión es pequeña (+20 %). La decisión de la sección 5 no cambia: no hay índice que sirva a W10, y si el reporte llega a molestar, se corre con `enable_indexscan = off` o en una réplica.

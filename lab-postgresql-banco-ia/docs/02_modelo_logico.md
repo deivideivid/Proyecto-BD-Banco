@@ -10,7 +10,7 @@
 | ERD final | [`02_erd.png`](02_erd.png) y diagrama Mermaid del [Anexo](#anexo--erd-final-mermaid) |
 | Resultado | **G2 = PASS** (ver [sección 11](#11-verificación-del-gate-g2)) |
 
-> **Nota de trazabilidad.** El DDL se escribió antes de cerrar formalmente este gate. Este documento audita ese modelo tal como está implementado, registra los hallazgos y aplica las correcciones antes de avanzar a G3. Los cambios quedan marcados en el DDL con el comentario `G2, hallazgo H-xx`.
+> **Nota de trazabilidad.** Escribimos el DDL antes de cerrar formalmente este gate. En este documento auditamos ese modelo tal como lo implementamos, registramos los hallazgos y aplicamos las correcciones antes de avanzar a G3. Los cambios los marcamos en el DDL con el comentario `G2, hallazgo H-xx`.
 
 ## Contenido
 
@@ -44,7 +44,7 @@ El ERD conceptual de G1 tenía **21 entidades**. El modelo implementado tiene **
 | `ref.tipo_transaccion` | atributo `tipo` de transacción | Tipos controlados; el CHECK de cuentas por tipo se apoya en ellos. |
 | `ref.estado_transaccion` | atributo `estado` de transacción | POSTED / REJECTED / PENDING_APPROVAL controlados (RN-40, RN-45). |
 
-Además de los catálogos, la auditoría de este gate agregó **3 restricciones** (sección 9). No se eliminó ninguna entidad de G1.
+Además de los catálogos, en la auditoría de este gate agregamos **3 restricciones** (sección 9). No eliminamos ninguna entidad de G1.
 
 **Resultado:** 28 tablas · 42 claves foráneas · 59 restricciones CHECK · 23 restricciones UNIQUE · 2 índices únicos parciales.
 
@@ -120,7 +120,7 @@ DF = dependencia funcional. En todas las tablas la clave primaria determina el r
 
 ## 5. Desnormalizaciones y redundancias controladas
 
-Cada excepción a 3FN se documenta con **tres campos**:
+Cada excepción a 3FN la documentamos con **tres campos**:
 
 - **Por qué:** la consulta o necesidad que la justifica.
 - **Cómo se evita la anomalía:** el mecanismo en la base de datos.
@@ -137,7 +137,7 @@ Cada excepción a 3FN se documenta con **tres campos**:
 | **D-07** | En `fin.asiento_contable`: `cuenta_contable_codigo` (derivable del producto cuando hay cuenta de cliente) y `registrado_en` (igual a la fecha de contabilización) | El ledger debe poder leerse y cuadrarse **por sí solo**, sin unir con cuentas ni productos: es la fuente de verdad contable y el insumo de la reconciliación. | Los asientos solo los crean las funciones de G3; **en G3 se agrega un trigger** que valida que la cuenta contable corresponda al producto y que `cuenta_id` exista solo en cuentas de depósito (hallazgo H-03). | Verificado sobre los 2.000.000 de asientos cargados: 0 líneas con cuenta contable distinta del producto y 0 líneas de depósito sin cuenta. Se repite en G6. |
 | **D-08** | `aud.log_auditoria.valores_antes` / `valores_despues` en `jsonb` (no atómicos) | La auditoría debe guardar la **imagen completa** del registro de cualquier tabla (RN-52) sin una tabla de auditoría por cada tabla auditada. | Solo inserción (RN-53, trigger en G3). `CHECK ck_auditoria_imagenes` exige las imágenes correctas según la operación. | Pruebas de auditoría de G3 y G6. |
 
-**Lo que no es redundancia:** `fin.transaccion_financiera.fecha_contable` hoy coincide con el día de la contabilización, pero es un **atributo de negocio**: en un banco real una operación hecha después del corte se contabiliza con fecha del día hábil siguiente. Por eso se guarda y no se calcula.
+**Lo que no es redundancia:** `fin.transaccion_financiera.fecha_contable` hoy coincide con el día de la contabilización, pero es un **atributo de negocio**: en un banco real una operación hecha después del corte se contabiliza con fecha del día hábil siguiente. Por eso decidimos guardarla y no calcularla.
 
 ---
 
@@ -232,7 +232,7 @@ De 145 columnas, **25 aceptan nulo** y todas tienen significado:
 
 ## 8. Auditoría del modelo con IA (Prompt 2A)
 
-Se ejecutó el Prompt 2A del laboratorio con Claude sobre `sql/tablas_banco_andino.sql` y los datos cargados (el registro está en [`prompts/prompts_y_respuestas.md`](../prompts/prompts_y_respuestas.md), entrada P-06). La tabla conserva el formato pedido: hallazgo · severidad · evidencia · impacto · corrección propuesta, más la decisión del equipo.
+Corrimos el Prompt 2A del laboratorio con Claude sobre `sql/tablas_banco_andino.sql` y los datos cargados (el registro está en [`prompts/prompts_y_respuestas.md`](../prompts/prompts_y_respuestas.md), entrada P-06). La tabla conserva el formato pedido: hallazgo · severidad · evidencia · impacto · corrección propuesta, más nuestra decisión.
 
 | ID | Hallazgo | Severidad | Evidencia | Impacto | Corrección propuesta | Decisión |
 |---|---|---|---|---|---|---|
@@ -245,11 +245,11 @@ Se ejecutó el Prompt 2A del laboratorio con Claude sobre `sql/tablas_banco_andi
 | H-07 | Una transacción REJECTED o PENDING podía tener fecha de contabilización. | Media | Solo existía la regla en un sentido (POSTED ⇒ fechas) | Reportes contables que cuenten rechazadas. | CHECK: fechas contables solo en POSTED. | **Aceptar y aplicar** |
 | H-08 | `aprobado_por` podía llenarse en cualquier tipo de transacción. | Baja | Sin restricción | Aprobaciones sin sentido que confunden la auditoría de RN-44. | CHECK: aprobador solo en AJUSTE. | **Aceptar y aplicar** |
 | H-09 | Las reglas entre tablas (RN-02 exactamente un subtipo, RN-08, RN-13 a RN-16, RN-22, RN-31, RN-33 a RN-37) no están en el modelo. | Media | Comentario final del DDL | Datos inválidos si se insertan por fuera de las funciones. | Implementarlas con funciones y triggers en G3, no con más columnas. | **Aceptar** (G3) |
-| H-10 | Los asientos no guardan moneda; mezclan COP y USD en la misma cuenta contable. | Media | `fin.asiento_contable` sin moneda | Un total por cuenta contable que sume pesos y dólares no tiene sentido. | Agregar `moneda_codigo` al asiento. | **Modificar**: no se agrega la columna (sería redundante). La moneda se obtiene de la cuenta de la transacción y todo reporte contable agrupa por moneda (DM-09) |
+| H-10 | Los asientos no guardan moneda; mezclan COP y USD en la misma cuenta contable. | Media | `fin.asiento_contable` sin moneda | Un total por cuenta contable que sume pesos y dólares no tiene sentido. | Agregar `moneda_codigo` al asiento. | **Modificar**: no agregamos la columna (sería redundante). La moneda se obtiene de la cuenta de la transacción y todo reporte contable agrupa por moneda (DM-09) |
 | H-11 | `log_auditoria` usa `jsonb` (no atómico). | Baja | Columnas valores_antes / valores_despues | Consultas por campo menos eficientes. | Mantener: la imagen se lee completa. | **Aceptar** como excepción D-08 |
 | H-12 | Pregunta abierta de G1: ¿las transferencias entre cuentas del mismo titular cuentan para el límite diario? | Baja | Especificación A.11 | Regla ambigua. | Definirla. | **Resuelto**: el límite diario (RN-37) solo cuenta **retiros**; las transferencias no cuentan, sean o no del mismo titular (DM-11) |
 
-**Resumen:** 12 hallazgos (1 alta, 6 media, 5 baja) · **3 correcciones aplicadas al DDL** (H-06, H-07, H-08) · 2 que se implementan en G3 (H-03, H-09) · 4 aceptados como excepción documentada (H-01, H-02, H-04, H-11) · 1 modificado (H-10) · 1 rechazado con justificación (H-05) · 1 ambigüedad de G1 resuelta (H-12). **Anomalías críticas abiertas: 0.**
+**Resumen:** 12 hallazgos (1 alta, 6 media, 5 baja) · **3 correcciones aplicadas al DDL** (H-06, H-07, H-08) · 2 que implementamos en G3 (H-03, H-09) · 4 aceptados como excepción documentada (H-01, H-02, H-04, H-11) · 1 modificado (H-10) · 1 rechazado con justificación (H-05) · 1 ambigüedad de G1 resuelta (H-12). **Anomalías críticas abiertas: 0.**
 
 ---
 
@@ -261,10 +261,10 @@ Se ejecutó el Prompt 2A del laboratorio con Claude sobre `sql/tablas_banco_andi
 | H-07 | `CONSTRAINT ck_tx_fechas_solo_posted CHECK (estado_codigo = 'POSTED' OR (fecha_contabilizacion IS NULL AND fecha_contable IS NULL))` |
 | H-08 | `CONSTRAINT ck_tx_aprobador_solo_ajuste CHECK (aprobado_por IS NULL OR tipo_codigo = 'AJUSTE')` |
 
-**Prueba realizada (PostgreSQL 16.13, base nueva; salida completa en [`evidence/g2_validacion.txt`](../evidence/g2_validacion.txt)):**
+**La prueba que hicimos (PostgreSQL 16.13, base nueva; salida completa en [`evidence/g2_validacion.txt`](../evidence/g2_validacion.txt)):**
 
-1. El DDL corregido se ejecutó desde cero sin errores.
-2. Se recargaron los dos lotes: **lote 1 = 20/20 PASS** y **lote 2 = 24/24 PASS**. Los datos ya cumplían las 3 restricciones nuevas.
+1. Corrimos el DDL corregido desde cero y no dio errores.
+2. Recargamos los dos lotes: **lote 1 = 20/20 PASS** y **lote 2 = 24/24 PASS**. Los datos ya cumplían las 3 restricciones nuevas.
 3. Pruebas negativas: cada restricción rechaza el caso que debe rechazar.
 
 ```
@@ -330,8 +330,8 @@ Continúa la matriz del Anexo C de `01_especificacion.md` (IA-01 a IA-11).
 |---|---|---|---|---|---|
 | IA-12 | P-06 (2A) | Índice único parcial para impedir titular duplicado vigente (H-06). | **Aceptar** | Prueba negativa en la sección 9; recarga 20/20 y 24/24 PASS | Cierra un hueco real de la PK con vigencia. |
 | IA-13 | P-06 (2A) | CHECK: fechas contables solo en POSTED; aprobador solo en AJUSTE (H-07, H-08). | **Aceptar** | Pruebas negativas en la sección 9 | Refuerza RN-44 y RN-45 sin costo. |
-| IA-14 | P-06 (2A) | Agregar `moneda_codigo` a cada asiento (H-10). | **Modificar** | Análisis de dependencias: la moneda depende de la cuenta | Guardarla sería redundante; se deriva de la cuenta y los reportes agrupan por moneda. |
-| IA-15 | P-06 (2A) | Reemplazar el CHECK de documentos de usuario por FK compuesta (H-05). | **Rechazar** | Catálogo de documentos estable (5 valores) | El cambio no mejora ninguna regla; se revisa si el catálogo crece. |
+| IA-14 | P-06 (2A) | Agregar `moneda_codigo` a cada asiento (H-10). | **Modificar** | Análisis de dependencias: la moneda depende de la cuenta | Guardarla sería redundante; la sacamos de la cuenta y los reportes agrupan por moneda. |
+| IA-15 | P-06 (2A) | Reemplazar el CHECK de documentos de usuario por FK compuesta (H-05). | **Rechazar** | Catálogo de documentos estable (5 valores) | El cambio no mejora ninguna regla; lo revisaremos si el catálogo crece. |
 | IA-16 | P-06 (2A) | Mantener saldo, estado y límite en la cuenta como caché con reconciliación (H-01, H-02). | **Aceptar** | RN-48 = 0 diferencias en 2.000.000 de asientos | Necesario para OLTP; controlado y probado. |
 
 ---

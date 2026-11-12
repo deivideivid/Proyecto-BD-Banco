@@ -12,11 +12,11 @@
 
 ## 1. Estructura de los scripts
 
-El DDL de G2 (`tablas_banco_andino.sql`) se dividió en los archivos numerados que pide el laboratorio y se completó con funciones, triggers, roles y pruebas.
+Tomamos el DDL de G2 (`tablas_banco_andino.sql`), lo dividimos en los archivos numerados que pide el laboratorio y lo completamos con funciones, triggers, roles y pruebas.
 
 | Archivo | Contenido |
 |---|---|
-| `00_extensions.sql` | Verifica PostgreSQL 16+. No se necesitan extensiones (`gen_random_uuid()` y `sha256()` son nativas). |
+| `00_extensions.sql` | Verifica PostgreSQL 16+. No necesitamos extensiones (`gen_random_uuid()` y `sha256()` son nativas). |
 | `01_schemas.sql` | Esquemas `ref`, `seg`, `core`, `fin`, `aud`. |
 | `02_catalogs.sql` | Catálogos, plan de cuentas contable y `ref.fn_dv_nit`. |
 | `03_geography.sql` | Departamentos, municipios y oficinas. |
@@ -28,7 +28,7 @@ El DDL de G2 (`tablas_banco_andino.sql`) se dividió en los archivos numerados q
 | `09_ledger.sql` | Asientos contables. |
 | `10_audit.sql` | Registro de auditoría. |
 | `11_constraints.sql` | FK que cruza el orden de archivos (evento → usuario). |
-| `12_indexes.sql` | Sin índices secundarios: se justifican en G7 con `EXPLAIN` (decisión DC-06). |
+| `12_indexes.sql` | Sin índices secundarios: los justificamos en G7 con `EXPLAIN` (decisión DC-06). |
 | `13_views.sql` | Vistas de reconciliación: `fin.v_balance_transaccion`, `core.v_saldo_vs_ledger`, `core.v_estado_vs_eventos`. |
 | `14_functions.sql` | 29 funciones: utilidades y operaciones del negocio. |
 | `15_procedures.sql` | `core.pr_inactivar_cuentas_sin_movimiento`. |
@@ -40,9 +40,9 @@ El DDL de G2 (`tablas_banco_andino.sql`) se dividió en los archivos numerados q
 | `run_all.sql` | Ejecuta 20 → 00…17 → 18. **Corre dos veces seguidas sin error.** |
 | `tests/concurrencia/` | Pruebas CT-0 a CT-4 con dos sesiones (ver `LEEME.md`). |
 
-## 2. Cómo se ejecuta
+## 2. Cómo lo ejecutamos
 
-Desde la carpeta `lab-postgresql-banco-ia`:
+Lo corrimos desde la carpeta `lab-postgresql-banco-ia`:
 
 ```powershell
 psql -U postgres -c "CREATE DATABASE banco_andino_lab"
@@ -51,7 +51,7 @@ psql -U postgres -d banco_andino_lab -f sql/load/carga_lote1.sql              # 
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote2_transacciones.sql  # 1.000.000 transacciones
 ```
 
-`run_all.sql` **borra** el modelo antes de crearlo: si se vuelve a correr, hay que recargar los lotes.
+`run_all.sql` **borra** el modelo antes de crearlo: cada vez que lo volvimos a correr, tuvimos que recargar los lotes.
 
 ## 3. Operaciones del negocio
 
@@ -119,7 +119,7 @@ Todas son funciones `SECURITY DEFINER` con `search_path` fijo. Reciben el usuari
 
 ## 5. Concurrencia
 
-| Riesgo | Cómo se evita | Prueba |
+| Riesgo | Cómo lo evitamos | Prueba |
 |---|---|---|
 | Doble retiro / actualización perdida | `SELECT … FOR UPDATE` sobre la cuenta antes de validar fondos y límite | CT-1: la segunda sesión espera y falla con BA003 |
 | Interbloqueo en transferencias cruzadas | Las cuentas se bloquean **siempre en orden de `cuenta_id`** (`core.fn_bloquear_cuentas`) | CT-2: ambas terminan, sin deadlock |
@@ -139,12 +139,12 @@ Todas son funciones `SECURITY DEFINER` con `search_path` fijo. Reciben el usuari
 | `banco_admin_seg` | Administrar usuarios internos y roles | Ver o mover dinero; borrar asignaciones |
 
 - Ningún rol de la aplicación tiene `INSERT`, `UPDATE` o `DELETE` sobre tablas de negocio: el dinero **solo** se mueve con las funciones.
-- Se quitó el `EXECUTE` que PostgreSQL da a `PUBLIC` en todas las funciones.
+- Le quitamos a `PUBLIC` el `EXECUTE` que PostgreSQL da por defecto en todas las funciones.
 - Las funciones `SECURITY DEFINER` fijan `search_path = pg_catalog, pg_temp` y usan nombres calificados, para que nadie pueda suplantar una tabla o función.
 
 ## 7. Carga masiva con triggers
 
-Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las tablas que cargan (`ALTER TABLE … DISABLE TRIGGER USER`, que solo puede hacer el dueño de la tabla) y los reactivan antes del `COMMIT`. Las mismas reglas se verifican después en bloque (20 controles del lote 1 y 24 del lote 2). Así, cargar el millón toma lo mismo que antes (≈ 1,5 min en local) y no genera 3 millones de filas de auditoría.
+Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las tablas que cargan (`ALTER TABLE … DISABLE TRIGGER USER`, que solo puede hacer el dueño de la tabla) y los reactivan antes del `COMMIT`. Las mismas reglas las verificamos después en bloque (20 controles del lote 1 y 24 del lote 2). Así, cargar el millón nos tomó lo mismo que antes (≈ 1,5 min en local) y no genera 3 millones de filas de auditoría.
 
 ## 8. Autoauditoría (formato del Prompt 2B: regla · PASS/FAIL · evidencia · corrección)
 
@@ -156,17 +156,17 @@ Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las t
 | Clave de idempotencia | PASS | T14, T15, CT-3 | — |
 | Transacciones ACID | PASS | T06, T25, CT-1 a CT-4 | — |
 | Ledger de doble partida | PASS | T06, T07, T23, T25, T46 | — |
-| Inmutabilidad de POSTED | PASS | T05a–d | La primera versión de T05d fallaba: `TRUNCATE` se rechaza si hay verificaciones diferidas pendientes. La prueba fuerza primero `SET CONSTRAINTS ALL IMMEDIATE`. |
+| Inmutabilidad de POSTED | PASS | T05a–d | Nuestra primera versión de T05d fallaba: `TRUNCATE` se rechaza si hay verificaciones diferidas pendientes. Lo arreglamos haciendo que la prueba fuerce primero `SET CONSTRAINTS ALL IMMEDIATE`. |
 | Auditoría | PASS | T39, T40, T41 | — |
 | RBAC y mínimo privilegio | PASS | T19, T20, T42 a T45 | — |
-| Índices justificados | PASS (por decisión) | `12_indexes.sql` | No se crean índices sin `EXPLAIN` que los justifique; se hace en G7. |
+| Índices justificados | PASS (por decisión) | `12_indexes.sql` | No creamos índices sin un `EXPLAIN` que los justifique; eso lo hicimos en G7. |
 | Concurrencia | PASS | CT-0 a CT-4 | — |
 | Operaciones: crear cliente y cuenta, activar, bloquear, desbloquear, consignar, retirar, transferir, reversar y cerrar | PASS | Fixture de `18_tests.sql`, T06, T07, T16, T19, T37 | — |
-| Pruebas sobre la base con 1.000.000 de transacciones | PASS | `g3_tests.txt` §4 | La primera versión tardaba 3 min 25 s: la vista `v_estado_vs_eventos` usaba `LATERAL` por cuenta sin índice. Se reescribió con `DISTINCT ON` (conjunto) y la prueba final se limitó a los datos de prueba: **4 s**. |
+| Pruebas sobre la base con 1.000.000 de transacciones | PASS | `g3_tests.txt` §4 | Nuestra primera versión tardaba 3 min 25 s: la vista `v_estado_vs_eventos` usaba `LATERAL` por cuenta sin índice. La reescribimos con `DISTINCT ON` (conjunto) y limitamos la prueba final a los datos de prueba: **4 s**. |
 
-**Limitaciones conocidas (se tratan en G7):**
+**Limitaciones que identificamos (las tratamos en G7):**
 
-- La función recibe el usuario interno como parámetro. La correspondencia "usuario que se conecta a la base ↔ usuario interno" la garantiza la aplicación; en G7 se documenta cómo validarla.
+- La función recibe el usuario interno como parámetro. La correspondencia "usuario que se conecta a la base ↔ usuario interno" la garantiza la aplicación; en G7 documentamos cómo validarla.
 - Una operación rechazada se deshace completa (error). Si el canal quiere dejar rastro del rechazo (RN-45), llama a `fin.fn_registrar_rechazo` en una transacción aparte.
 
 ## 9. Verificación del gate G3
@@ -180,7 +180,7 @@ Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las t
 | Las 7 pruebas mínimas del laboratorio | **Cumple** | T01 a T07 |
 | Concurrencia (doble retiro, actualización perdida, doble procesamiento) | **Cumple** | CT-0 a CT-4 |
 | Los datos de G4 siguen cargando y validando con los triggers activos | **Cumple** | `g3_tests.txt` §3: 20/20 y 24/24 PASS |
-| Funciona en el entorno del equipo (Windows, PostgreSQL 18.6) | **Cumple** | `g3_tests.txt` §6: 49/49 PASS |
+| Funciona en nuestro entorno (Windows, PostgreSQL 18.6) | **Cumple** | `g3_tests.txt` §6: 49/49 PASS |
 | Evidencia mínima: `/sql` completo + `evidence/g3_tests.txt` | **Cumple** | Carpeta `sql/` y evidencia |
 
 **QUALITY GATE G3 = PASS**
@@ -196,7 +196,7 @@ Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las t
 | DC-05 | Estado, fecha de cierre y límite solo cambian con un evento (`pg_trigger_depth`) | Mantiene D-03 consistente por construcción. |
 | DC-06 | Sin índices secundarios hasta G7 | Cada índice debe tener una consulta y un `EXPLAIN` que lo justifiquen. |
 | DC-07 | Carga masiva con triggers desactivados por el dueño + validación en bloque | Rendimiento y sin auditoría masiva artificial; solo el dueño puede desactivarlos. |
-| DC-08 | Pruebas en una sola transacción con `ROLLBACK` | Se pueden correr en la base con datos sin ensuciarla. |
+| DC-08 | Pruebas en una sola transacción con `ROLLBACK` | Así pudimos correrlas en la base con datos sin ensuciarla. |
 
 ## 11. Matriz IA: nuevas entradas de G3
 
@@ -204,6 +204,6 @@ Los scripts `sql/load/` desactivan los triggers de negocio y auditoría de las t
 |---|---|---|---|---|---|
 | IA-17 | P-07 (2B) | Operaciones como funciones `SECURITY DEFINER` con `search_path` fijo y sin permisos directos a tablas. | **Aceptar** | T42 a T45 | Mínimo privilegio verificable. |
 | IA-18 | P-07 (2B) | `SELECT … FOR UPDATE` en orden de `cuenta_id` y aislamiento `READ COMMITTED`. | **Aceptar** | CT-1 a CT-4 | Evita doble retiro e interbloqueos. |
-| IA-19 | P-07 (2B) | Crear en G3 índices para todas las claves foráneas. | **Rechazar** (por ahora) | Criterio de G7: "un índice sin consulta que lo justifique" | Se crean en G7 con `EXPLAIN` antes y después. |
-| IA-20 | P-07 (2B) | Auditar con trigger cada inserción también durante la carga masiva. | **Modificar** | Carga de 3.000.000 de filas | Los triggers se desactivan en la carga (solo el dueño puede) y se valida en bloque. |
-| IA-21 | P-07 (2B) | Vista de estado por eventos con `LATERAL` por cuenta. | **Modificar** | Prueba sobre 1.000.000: 3 min 25 s → 4 s | Reescrita con `DISTINCT ON`. |
+| IA-19 | P-07 (2B) | Crear en G3 índices para todas las claves foráneas. | **Rechazar** (por ahora) | Criterio de G7: "un índice sin consulta que lo justifique" | Los creamos en G7 con `EXPLAIN` antes y después. |
+| IA-20 | P-07 (2B) | Auditar con trigger cada inserción también durante la carga masiva. | **Modificar** | Carga de 3.000.000 de filas | Desactivamos los triggers en la carga (solo el dueño puede) y validamos en bloque. |
+| IA-21 | P-07 (2B) | Vista de estado por eventos con `LATERAL` por cuenta. | **Modificar** | Prueba sobre 1.000.000: 3 min 25 s → 4 s | La reescribimos con `DISTINCT ON`. |

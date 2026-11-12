@@ -1,19 +1,28 @@
 # Banco Andino Colombia · Laboratorio PostgreSQL aumentado con IA
 
-Base de datos OLTP de un banco ficticio en **PostgreSQL 16 o superior** (el equipo usa 18.6), construida por quality gates (G0–G8).
-Todos los datos son **100 % sintéticos**: no hay información de personas reales.
+Construimos la base de datos OLTP de un banco ficticio en **PostgreSQL** (usamos la versión
+18.6; funciona desde la 16), avanzando por quality gates de G0 a G8.
+Todos los datos los generamos nosotros y son **100 % sintéticos**: no hay información de
+personas reales.
 
-## Estructura
+**Integrantes:** Juan Diego Ortiz, Adrian Daniel Argotte, Miguel Andrés Pava, Jerónimo Soto y
+David González.
+
+> **Fase nueva:** en la rama `fase-bi` estamos llevando el banco a un modelo estrella, a Power
+> BI y a un aplicativo web por perfiles. Todo eso está en la carpeta `fase-bi/`.
+
+## Cómo organizamos el repositorio
 
 ```
 lab-postgresql-banco-ia/
 ├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), ERD final, informe final, matriz IA y guía de defensa
-├── prompts/     Registro de prompts y respuestas de la IA
+├── prompts/     Registro de los prompts que usamos y lo que nos respondió la IA
 ├── sql/         Scripts 00–20, run_all.sql, quality_gate.sql, cargas (sql/load), rendimiento (sql/perf) y pruebas (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
 ├── data/lote1/  CSV del lote 1 (clientes, cuentas, eventos)
-├── data/lote2/  CSV del lote 2 (NO se sube: se genera localmente)
+├── data/lote2/  CSV del lote 2 (no lo subimos: se genera en cada computador)
 └── evidence/    Evidencia de cada gate
+fase-bi/         Modelo estrella, Power BI y aplicativo (fase nueva)
 ```
 
 ## Volumen de datos
@@ -21,86 +30,100 @@ lab-postgresql-banco-ia/
 | Lote | Contenido | Controles |
 |---|---|---|
 | 1 | 10.000 clientes · 50.000 cuentas · titularidades · eventos | 20/20 PASS |
-| 2 | 1.000.000 transacciones POSTED (+ rechazadas y pendientes) · 2.000.000 asientos | 24/24 PASS |
+| 2 | 1.000.000 transacciones POSTED (más rechazadas y pendientes) · 2.000.000 asientos | 24/24 PASS |
 
-La base completa pesa cerca de **475 MB** sin índices secundarios y cerca de **560 MB** con los índices de G7 (86 MB). Supera el límite de 500 MB del plan gratis de Supabase, así que se trabaja en **PostgreSQL local**.
+La base completa nos quedó de unos **475 MB** sin índices secundarios y unos **560 MB** con los
+índices de G7 (86 MB). Como eso supera los 500 MB del plan gratis de Supabase, decidimos
+trabajar con **PostgreSQL local**.
 
 ## Reconstrucción completa en un paso (G8)
 
-Desde la carpeta `lab-postgresql-banco-ia`, con la base `banco_andino_lab` creada y el lote 2 generado (`python src/generate_transactions.py`):
+Para no tener que correr cada script por separado, armamos `sql/g8_reconstruir_todo.sql`.
+Nosotros lo corremos desde la carpeta `lab-postgresql-banco-ia`, con la base
+`banco_andino_lab` creada y el lote 2 ya generado (`python src/generate_transactions.py`):
 
 ```
 psql -U postgres -d banco_andino_lab -f sql/g8_reconstruir_todo.sql
 ```
 
-Hace todo lo de la sección siguiente (modelo + 49 pruebas, lotes 1 y 2, perfil de G4, quality gate de G6 y permisos de G7) y termina con **G8 RECONSTRUCCIÓN = PASS** en 3 a 10 minutos. En SQL Shell: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab`, `\i sql/g8_reconstruir_todo.sql`.
+Hace todo lo de la sección siguiente (modelo y 49 pruebas, lotes 1 y 2, perfil de G4, quality
+gate de G6 y permisos de G7). A nosotros nos terminó con **G8 RECONSTRUCCIÓN = PASS** en un
+tiempo de 3 a 10 minutos, según el computador. Desde SQL Shell lo corrimos así:
+`\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab`, `\i sql/g8_reconstruir_todo.sql`.
 
-Para la defensa: `\i sql/tests/g8_demo_defensa.sql` (8 demostraciones en vivo; no deja cambios).
+Para la defensa preparamos `sql/tests/g8_demo_defensa.sql`: son 8 demostraciones en vivo que
+no dejan cambios en la base.
 
-## Cómo montar la base paso a paso (Windows)
+## Cómo montamos la base paso a paso (Windows)
 
-Requisitos: PostgreSQL 16 o superior (incluye `psql`) y Python 3.10 a 3.13.
-Todos los comandos se ejecutan **desde la carpeta `lab-postgresql-banco-ia`**, porque las rutas de carga son relativas.
+Usamos PostgreSQL 18.6 (trae `psql`) y Python 3.13. Todo lo corrimos **desde la carpeta
+`lab-postgresql-banco-ia`**, porque las rutas de carga son relativas.
 
 ```powershell
 cd lab-postgresql-banco-ia
 
-# 1. Generar el lote 2 (unos 30 s; no necesita instalar nada)
+# 1. Generamos el lote 2 (unos 30 s; no necesita instalar nada)
 python src/generate_transactions.py
-#    Huellas esperadas: asiento_contable 1c68ae9b3d8ca2c0 · transaccion_financiera 8fcf2ec17bc357e3
+#    Las huellas que nos dieron: asiento_contable 1c68ae9b3d8ca2c0 · transaccion_financiera 8fcf2ec17bc357e3
 
-# 2. Crear la base y el modelo completo (tablas, funciones, triggers, roles) + 49 pruebas
+# 2. Creamos la base y el modelo completo (tablas, funciones, triggers, roles) + 49 pruebas
 psql -U postgres -c "CREATE DATABASE banco_andino_lab"
 psql -U postgres -d banco_andino_lab -f sql/run_all.sql
-#    Debe terminar con: G3 PRUEBAS = PASS (49 PASS, 0 FAIL)
+#    Nos terminó con: G3 PRUEBAS = PASS (49 PASS, 0 FAIL)
 
-# 3. Cargar los datos (al final cada script muestra sus controles: todos deben decir PASS)
+# 3. Cargamos los datos (al final cada script muestra sus controles; a nosotros todos nos dieron PASS)
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote1.sql
 psql -U postgres -d banco_andino_lab -f sql/load/carga_lote2_transacciones.sql
 
-# 4. Perfil de datos de G4 (48 métricas; guarda evidence/g4_data_profile.csv)
+# 4. Perfil de datos de G4 (48 métricas; queda en evidence/g4_data_profile.csv)
 psql -U postgres -d banco_andino_lab -f sql/load/perfil_datos_g4.sql
 
 # 5. Las 30 consultas de G5 (unos 10 s)
 psql -U postgres -d banco_andino_lab -f sql/19_demo_queries.sql
 
-# 6. Quality gate de G6 (76 pruebas, cerca de 1 min; guarda evidence/g6_quality_results.csv)
+# 6. Quality gate de G6 (76 pruebas, cerca de 1 min; queda en evidence/g6_quality_results.csv)
 psql -U postgres -d banco_andino_lab -f sql/quality_gate.sql
-#    Debe terminar con: QUALITY_GATE = PASS
-#    Opcional, prueba de las pruebas sobre una copia (cierre pgAdmin antes):
+#    Nos terminó con: QUALITY_GATE = PASS
+#    La prueba de las pruebas la corrimos sobre una copia, con pgAdmin cerrado:
 psql -U postgres -d postgres -f sql/tests/quality_gate_defectos.sql
 
 # 7. Rendimiento y seguridad de G7
-#    (en una base nueva, run_all.sql ya crea los índices: basta con los pasos b y c)
-psql -U postgres -d banco_andino_lab -f sql/perf/g7_workload.sql      # a) antes  → evidence/g7_explain_antes.csv
-psql -U postgres -d banco_andino_lab -f sql/perf/g7_aplicar.sql       #    aplica los 6 índices y el procedimiento
+#    (en una base nueva, run_all.sql ya crea los índices, así que solo hicimos b y c)
+psql -U postgres -d banco_andino_lab -f sql/perf/g7_workload.sql      # a) antes   → evidence/g7_explain_antes.csv
+psql -U postgres -d banco_andino_lab -f sql/perf/g7_aplicar.sql       #    los 6 índices y el procedimiento
 psql -U postgres -d banco_andino_lab -f sql/perf/g7_workload.sql      # b) después → evidence/g7_explain_despues.csv
 psql -U postgres -d banco_andino_lab -f sql/tests/g7_rbac_demo.sql    # c) permisos por rol: G7 RBAC = PASS
 ```
 
-> Si PowerShell dice que `psql` no se reconoce, use **SQL Shell (psql)**: `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`, `\i sql/load/carga_lote1.sql`, etc. O agregue `C:\Program Files\PostgreSQL\18\bin` al PATH de Windows.
+Cosas que aprendimos en el camino:
 
-El lote 1 ya viene en `data/lote1`. Si se quiere regenerar: `pip install -r requirements.txt` y `python src/generate_data.py`.
-Ambos generadores usan la semilla `20260909`, así que producen exactamente los mismos datos en cualquier computador.
+- En un computador PowerShell no reconocía `psql`. Lo solucionamos usando **SQL Shell (psql)**
+  con `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`,
+  `\i sql/load/carga_lote1.sql`, etc. También sirvió agregar `C:\Program Files\PostgreSQL\18\bin`
+  al PATH de Windows.
+- pgAdmin 4 nos sirvió para consultar, pero **no ejecuta `\copy` ni `\ir`**, así que
+  `run_all.sql` y las cargas las corrimos siempre con `psql`.
+- `run_all.sql` **borra y vuelve a crear** el modelo, así que cada vez que lo corrimos tuvimos
+  que volver a cargar los lotes.
 
-> pgAdmin 4 sirve para consultar, pero **no ejecuta `\copy` ni `\ir`**: `run_all.sql` y las cargas se ejecutan con `psql` (SQL Shell).
->
-> ⚠️ `run_all.sql` **borra y recrea** el modelo: después hay que volver a cargar los lotes.
+El lote 1 ya viene en `data/lote1`. Cuando lo regeneramos usamos `pip install -r requirements.txt`
+y `python src/generate_data.py`. Los dos generadores usan la semilla `20260909`, así que dan
+exactamente los mismos datos en cualquier computador.
 
 ## Estado por gates
 
 - [x] **G0** Entorno: PostgreSQL 18.6 + Python 3.13 → `evidence/g0_environment.txt`
-- [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (adoptados por el equipo, no consultados con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
+- [x] **G1** Negocio: 54 reglas, supuestos S1–S5 (los adoptamos nosotros, sin consultarlos con el docente), diagrama ER, matriz IA → `docs/01_especificacion.md`
 - [x] **G2** Modelo lógico: 3FN con 8 excepciones justificadas, ERD final de 28 tablas, 13 decisiones → `docs/02_modelo_logico.md`, `docs/02_erd.png`
 - [x] **G3** Construcción: scripts 00–20, 17 operaciones seguras, 32 triggers, 5 roles, 49 pruebas + 5 de concurrencia → `docs/03_construccion.md`, `evidence/g3_tests.txt`
 - [x] **G4** Datos sintéticos: 10K clientes · 50K cuentas · 1M transacciones, reproducibles, perfil de 48 métricas → `docs/04_datos_sinteticos.md`, `evidence/g4_data_profile.csv`
 - [x] **G5** Consultas: 30 (10 básicas, 10 intermedias, 10 avanzadas) + 7 validaciones cruzadas → `sql/19_demo_queries.sql`, `evidence/g5_results.md`
-- [x] **G6** Quality gate: 76 pruebas en 12 categorías, antes 98,3 (1 FAIL ALTA) → después 99,6 (0 FAIL), 7/7 defectos inyectados detectados → `sql/quality_gate.sql`, `evidence/g6_quality_before_after.md`
-- [x] **G7** Rendimiento y seguridad: 10 consultas con EXPLAIN antes y después, 6 índices justificados (retiro 95 → 1,2 ms), 3 casos sin índice, RBAC 23/23 → `evidence/g7_explain.md`, `evidence/g7_security.md`
+- [x] **G6** Quality gate: 76 pruebas en 12 categorías; pasamos de 98,3 (1 FAIL ALTA) a 99,6 (0 FAIL) y detectamos los 7 defectos que inyectamos → `sql/quality_gate.sql`, `evidence/g6_quality_before_after.md`
+- [x] **G7** Rendimiento y seguridad: 10 consultas con EXPLAIN antes y después, 6 índices justificados (el retiro bajó de 95 a 1,2 ms), 3 casos sin índice, RBAC 23/23 → `evidence/g7_explain.md`, `evidence/g7_security.md`
 - [x] **G8** Cierre: reconstrucción completa en un paso (`sql/g8_reconstruir_todo.sql`), ERD final generado desde el catálogo, informe final (5 páginas), matriz IA de 46 decisiones y guía de defensa → `docs/informe_final.pdf`, `docs/matriz_ia.md`, `docs/defensa.md`
 
-## Reglas del repositorio
+## Reglas que nos pusimos para el repositorio
 
-- Nunca subir contraseñas, cadenas de conexión ni archivos `.env`.
-- No subir los CSV del lote 2 (ya están en `.gitignore`).
-- Hacer **Pull** antes de empezar a trabajar y **commit** al cerrar cada gate.
+- Nunca subimos contraseñas, cadenas de conexión ni archivos `.env`.
+- No subimos los CSV del lote 2 (están en `.gitignore`).
+- Hacemos **Pull** antes de empezar a trabajar y **commit** al cerrar cada gate.

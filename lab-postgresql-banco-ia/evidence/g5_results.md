@@ -11,7 +11,7 @@
 
 ## Cómo usar este documento
 
-Cada consulta tiene su **objetivo de negocio**, los **conceptos SQL** que evalúa, el **resultado real** y **cómo explicarla**. El laboratorio exige que el equipo pueda explicar el resultado de cada una: se recomienda repartirlas (por ejemplo, 10 por integrante) y ejecutarlas en pgAdmin 4 para practicar.
+Cada consulta tiene su **objetivo de negocio**, los **conceptos SQL** que evalúa, el **resultado real** y **cómo explicarla**. El laboratorio exige que podamos explicar el resultado de cada una, así que nos las repartimos y las corrimos en pgAdmin 4 para practicar.
 
 ## Resumen
 
@@ -193,7 +193,7 @@ ORDER BY transacciones DESC;
  AJUSTE        |           255 |   105120793.00 |         412238
 ```
 
-**Cómo explicarla:** En agosto de 2026 las transferencias son las más frecuentes, pero las consignaciones mueven más dinero. Se filtra COP porque sumar pesos con dólares no tiene sentido. La suma total se valida contra el ledger en VC3.
+**Cómo explicarla:** En agosto de 2026 las transferencias son las más frecuentes, pero las consignaciones mueven más dinero. Filtramos COP porque sumar pesos con dólares no tiene sentido. La suma total se valida contra el ledger en VC3.
 
 ### B05 · Clientes vinculados por año
 
@@ -478,7 +478,7 @@ LIMIT 10;
        2879 | JURIDICA     | Comercializadora Rodríguez y Hernández S.A.S. |     103 |  6009382665.35
 ```
 
-**Cómo explicarla:** Los 10 clientes con más dinero son empresas. El primero tiene 282 cuentas vigentes y casi 23 mil millones de pesos. Se usa `LEFT JOIN` a los dos subtipos y `COALESCE` para mostrar el nombre sea persona o empresa. VC4 recalcula su saldo desde el ledger.
+**Cómo explicarla:** Los 10 clientes con más dinero son empresas. El primero tiene 282 cuentas vigentes y casi 23 mil millones de pesos. Usamos `LEFT JOIN` a los dos subtipos y `COALESCE` para mostrar el nombre sea persona o empresa. VC4 recalcula su saldo desde el ledger.
 
 ### I02 · Cuentas activas sin movimientos en los últimos 90 días
 
@@ -688,7 +688,7 @@ ORDER BY cuentas_sobre_promedio DESC;
  NOMINA          |                   1170 |          44839967
 ```
 
-**Cómo explicarla:** Cada cuenta se compara con el promedio de **su** producto, no con el de todas. Lección de rendimiento: la primera versión recalculaba el promedio 50.000 veces y tardó **2 min 39 s**; con la CTE tarda milisegundos. Es un buen ejemplo para G7.
+**Cómo explicarla:** Cada cuenta se compara con el promedio de **su** producto, no con el de todas. Lo que aprendimos de rendimiento: nuestra primera versión recalculaba el promedio 50.000 veces y tardó **2 min 39 s**; con la CTE tarda milisegundos. Es un buen ejemplo para G7.
 
 ### I07 · Flujo neto de dinero por departamento del cliente en 2026
 
@@ -779,7 +779,7 @@ LIMIT 10;
  agomez3   | CAJERO | Oficina Sincelejo          |          3960
 ```
 
-**Cómo explicarla:** Los cajeros más ocupados están en Ibagué y Bello. Se une con los roles vigentes para mostrar que quien registra transacciones es CAJERO o SUPERVISOR (RN-51).
+**Cómo explicarla:** Los cajeros más ocupados están en Ibagué y Bello. La unimos con los roles vigentes para mostrar que quien registra transacciones es CAJERO o SUPERVISOR (RN-51).
 
 ### I09 · Reversos: qué se reversa y cuánto tarda
 
@@ -1291,7 +1291,7 @@ WHERE pct_acumulado >= 0.8;
                7579 |                  38749 |                  19.6
 ```
 
-**Cómo explicarla:** El 19,6 % de las cuentas mueve el 80 % del dinero: la regla de Pareto (80/20) aparece en los datos. Se ordena por volumen y se acumula con una ventana.
+**Cómo explicarla:** El 19,6 % de las cuentas mueve el 80 % del dinero: la regla de Pareto (80/20) aparece en los datos. Ordenamos por volumen y acumulamos con una ventana.
 
 ### A10 · Ráfagas: 3 o más débitos de la misma cuenta en menos de 1 hora
 
@@ -1396,7 +1396,7 @@ Además, I06 y A07 muestran dos errores típicos corregidos durante G5: una subc
 
 | ID | Prompt | Recomendación de la IA | Decisión | Evidencia | Justificación |
 |---|---|---|---|---|---|
-| IA-28 | P-09 (4) | Subconsulta correlacionada que calcula el promedio del producto dentro del `WHERE` (I06). | **Modificar** | 2 min 39 s en la primera ejecución | Se precalcula el promedio en una CTE y la subconsulta solo lo consulta: milisegundos. |
-| IA-29 | P-09 (4) | Comparar los retiros del día con el límite actual de la cuenta (A07). | **Rechazar / corregir** | Días "al 180 %" que no violaban RN-37 | Se compara con el límite vigente ese día, reconstruido desde los eventos. |
-| IA-30 | P-09 (4) | Validación cruzada del saldo AHORROS sumando pesos y dólares (VC1). | **Corregir** | El ledger no separa moneda por cuenta contable | Se filtra COP en los dos caminos (decisión DM-09 de G2). |
-| IA-31 | P-09 (4) | Crear índices ya para acelerar I02, I09 y A06. | **Rechazar** (por ahora) | Tiempos medidos arriba | Se hace en G7 con `EXPLAIN` antes y después, como exige el laboratorio. |
+| IA-28 | P-09 (4) | Subconsulta correlacionada que calcula el promedio del producto dentro del `WHERE` (I06). | **Modificar** | 2 min 39 s en la primera ejecución | Precalculamos el promedio en una CTE y la subconsulta solo lo consulta: milisegundos. |
+| IA-29 | P-09 (4) | Comparar los retiros del día con el límite actual de la cuenta (A07). | **Rechazar / corregir** | Días "al 180 %" que no violaban RN-37 | Comparamos con el límite vigente ese día, reconstruido desde los eventos. |
+| IA-30 | P-09 (4) | Validación cruzada del saldo AHORROS sumando pesos y dólares (VC1). | **Corregir** | El ledger no separa moneda por cuenta contable | Filtramos COP en los dos caminos (decisión DM-09 de G2). |
+| IA-31 | P-09 (4) | Crear índices ya para acelerar I02, I09 y A06. | **Rechazar** (por ahora) | Tiempos medidos arriba | Lo hicimos en G7 con `EXPLAIN` antes y después, como exige el laboratorio. |

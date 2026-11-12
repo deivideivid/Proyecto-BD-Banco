@@ -13,14 +13,14 @@
 
 ## 1. Resumen
 
-1. **Antes:** se auditó la base cargada (10K clientes, 50K cuentas, 1M transacciones) **sin corregir nada**. Resultado: 0 FAIL críticos, pero **1 FAIL de severidad ALTA (A04)**: las cargas masivas no dejaron rastro en la auditoría. También hay 2 WARNING de severidad BAJA.
-2. **Corrección:** se registraron las cargas en `aud.log_auditoria` (quién, cuándo, qué archivo, cuántas filas) y se ajustaron los scripts de carga para que lo hagan solos en el futuro.
-3. **Después:** se repitió el gate. A04 pasó a PASS; Auditability subió de 85,0 a 100; general de 98,3 a 99,6.
-4. **Prueba de las pruebas:** en una copia de la base se metieron 7 defectos a propósito. El gate detectó **los 7** y dio **QUALITY_GATE = FAIL**. Así se demuestra que el PASS de la base real no es porque las pruebas sean débiles.
+1. **Antes:** auditamos la base cargada (10K clientes, 50K cuentas, 1M transacciones) **sin corregir nada**. Resultado: 0 FAIL críticos, pero **1 FAIL de severidad ALTA (A04)**: las cargas masivas no dejaron rastro en la auditoría. También hay 2 WARNING de severidad BAJA.
+2. **Corrección:** registramos las cargas en `aud.log_auditoria` (quién, cuándo, qué archivo, cuántas filas) y ajustamos los scripts de carga para que lo hagan solos en el futuro.
+3. **Después:** repetimos el gate. A04 pasó a PASS; Auditability subió de 85,0 a 100; general de 98,3 a 99,6.
+4. **Prueba de las pruebas:** en una copia de la base metimos 7 defectos a propósito. El gate detectó **los 7** y dio **QUALITY_GATE = FAIL**. Así demostramos que el PASS de la base real no es porque las pruebas sean débiles.
 
-## 2. Cómo se ejecuta
+## 2. Cómo lo ejecutamos
 
-Desde la carpeta `lab-postgresql-banco-ia`, con la base ya cargada:
+Lo corrimos desde la carpeta `lab-postgresql-banco-ia`, con la base ya cargada:
 
 ```
 psql -U postgres -d banco_andino_lab -f sql/quality_gate.sql                  -- el gate (guarda evidence/g6_quality_results.csv)
@@ -65,7 +65,7 @@ Cada prueba devuelve `test_id | categoría | dimensión | regla | tabla | espera
 
 Las otras 73 pruebas dieron PASS, incluidas las 31 críticas: 0 duplicados, 0 huérfanos, 100 % del ledger balanceado (1.000.000 de POSTED), 0 diferencias de saldo en 50.000 cuentas.
 
-**Por qué falló A04.** En G3 se decidió (DC-07) cargar los lotes con los triggers desactivados, para no escribir 3 millones de filas de auditoría ni pagar las validaciones fila a fila. La consecuencia, que la IA no advirtió en su momento, es que las 3,2 millones de filas cargadas **no tenían ningún rastro**: la auditoría no podía responder quién cargó los datos, cuándo ni cuántas filas. Eso incumple "operaciones críticas reconstruibles".
+**Por qué falló A04.** En G3 decidimos (DC-07) cargar los lotes con los triggers desactivados, para no escribir 3 millones de filas de auditoría ni pagar las validaciones fila a fila. La consecuencia, que la IA no advirtió en su momento, es que las 3,2 millones de filas cargadas **no tenían ningún rastro**: la auditoría no podía responder quién cargó los datos, cuándo ni cuántas filas. Eso incumple "operaciones críticas reconstruibles".
 
 ## 5. Corrección
 
@@ -85,14 +85,14 @@ Resultado del registro (15 filas en `aud.log_auditoria`):
 | lote2 | fin.transaccion_financiera · fin.asiento_contable | INSERT | 1.024.178 · 2.000.000 |
 | lote2 | core.cuenta (recálculo de saldos) | UPDATE | 37.884 cuentas con saldo |
 
-Se verificó también desde cero: base nueva → `run_all.sql` (49/49 PASS) → lote 1 → lote 2. Los scripts de carga dejaron los 15 registros solos (con `registro_retroactivo = false`) y los controles de carga siguieron en PASS.
+También lo verificamos desde cero: base nueva → `run_all.sql` (49/49 PASS) → lote 1 → lote 2. Los scripts de carga dejaron los 15 registros solos (con `registro_retroactivo = false`) y los controles de carga siguieron en PASS.
 
-### Hallazgos que se aceptan sin corregir (documentados)
+### Hallazgos que aceptamos sin corregir (documentados)
 
 | Test | Decisión | Justificación |
 |---|---|---|
 | C04 | **Aceptar como WARNING** | El correo es opcional en el modelo (G1). Inventar correos para pasar la prueba sería crear datos falsos. Recomendación: campaña de actualización de datos para los 714 clientes. |
-| DS05 | **Aplazar a G7** | No es un error de integridad: las 34 FK sin índice solo afectan la velocidad de joins y borrados. La guía pide crear índices **solo si una consulta los justifica** con `EXPLAIN (ANALYZE, BUFFERS)`; se evalúan en G7 con las consultas lentas de G5 para no sobreindexar. |
+| DS05 | **Aplazar a G7** | No es un error de integridad: las 34 FK sin índice solo afectan la velocidad de joins y borrados. La guía pide crear índices **solo si una consulta los justifica** con `EXPLAIN (ANALYZE, BUFFERS)`; los evaluamos en G7 con las consultas lentas de G5 para no sobreindexar. |
 
 ## 6. Después: puntajes
 
@@ -109,15 +109,15 @@ Se verificó también desde cero: base nueva → `run_all.sql` (49/49 PASS) → 
 
 Un gate que siempre da PASS no demuestra nada. Por eso `sql/tests/quality_gate_defectos.sql` copia la base (`CREATE DATABASE banco_andino_qg TEMPLATE banco_andino_lab`), mete 7 defectos saltándose constraints y triggers (como lo haría una carga mal hecha o un cambio manual del DBA), corre el mismo gate y borra la copia. La base real no se toca.
 
-| Defecto | Cómo se metió | Detectado por | Estado |
+| Defecto | Cómo lo metimos | Detectado por | Estado |
 |---|---|---|---|
 | D1 Ledger descuadrado | +1.000 en una línea de asiento | F01, S01, S02 (FAIL) | DETECTADO |
 | D2 Saldo alterado a mano | +50.000 en el saldo de una cuenta, sin transacción | S01, S02 (FAIL) | DETECTADO |
 | D3 Movimiento después del cierre | última transacción de una cuenta cerrada movida 10 días después del cierre | T01, T02 (FAIL) | DETECTADO |
-| D4 Documento duplicado | se quitó `uq_cliente_documento` y un cliente copió el documento de otro | U01 (FAIL) | DETECTADO |
-| D5 Titularidad huérfana | se quitó la FK y se agregó un titular inexistente (cliente 999999) | R01, N02 (FAIL) | DETECTADO |
+| D4 Documento duplicado | quitamos `uq_cliente_documento` y un cliente copió el documento de otro | U01 (FAIL) | DETECTADO |
+| D5 Titularidad huérfana | quitamos la FK y agregamos un titular inexistente (cliente 999999) | R01, N02 (FAIL) | DETECTADO |
 | D6 Persona sin nombre | `nombres = ''` en una persona natural | C02 (FAIL) | DETECTADO |
-| D7 Auditoría apagada | se desactivó `trg_auditar_cliente` | A01 (FAIL) | DETECTADO |
+| D7 Auditoría apagada | desactivamos `trg_auditar_cliente` | A01 (FAIL) | DETECTADO |
 
 Resultado en la copia: **10 FAIL (8 críticos) → QUALITY_GATE = FAIL**; puntaje general 83,5 (Integrity 80,0 · Auditability 80,0 · Data Quality 84,7). Detalle en `g6_defectos_results.csv`.
 
@@ -144,11 +144,11 @@ Resultado en la copia: **10 FAIL (8 críticos) → QUALITY_GATE = FAIL**; puntaj
 
 | ID | Prompt | Recomendación o resultado de la IA | Decisión | Evidencia | Justificación |
 |---|---|---|---|---|---|
-| IA-32 | P-07 (2B) / P-10 (5) | En G3 la IA propuso cargar con los triggers desactivados (DC-07) sin advertir que así las cargas no quedaban auditadas. | **Modificar** | A04 = FAIL (7 tablas sin rastro) | Se mantiene la carga rápida, pero ahora cada carga deja su registro en `aud.log_auditoria`: A04 = PASS. |
-| IA-33 | P-10 (5) | Umbral de 5 % para clientes sin correo. | **Aceptar como WARNING** | C04 = 7,1 % | Campo opcional; no se inventan correos. Se recomienda actualización de datos. |
-| IA-34 | P-10 (5) | Prueba de FK sin índice (34 casos). | **Aplazar a G7** | DS05 = WARNING | Solo se crean índices con una consulta que los justifique en `EXPLAIN`; evita sobreindexar. |
+| IA-32 | P-07 (2B) / P-10 (5) | En G3 la IA propuso cargar con los triggers desactivados (DC-07) sin advertir que así las cargas no quedaban auditadas. | **Modificar** | A04 = FAIL (7 tablas sin rastro) | Mantuvimos la carga rápida, pero ahora cada carga deja su registro en `aud.log_auditoria`: A04 = PASS. |
+| IA-33 | P-10 (5) | Umbral de 5 % para clientes sin correo. | **Aceptar como WARNING** | C04 = 7,1 % | Campo opcional; no inventamos correos. Recomendamos actualización de datos. |
+| IA-34 | P-10 (5) | Prueba de FK sin índice (34 casos). | **Aplazar a G7** | DS05 = WARNING | Solo creamos índices con una consulta que los justifique en `EXPLAIN`; evita sobreindexar. |
 | IA-35 | P-10 (5) | Validar el gate metiendo defectos en una copia de la base. | **Aceptar** | 7/7 defectos detectados; QUALITY_GATE = FAIL en la copia | Demuestra que las pruebas sí detectan errores. |
-| IA-36 | P-10 (5) | Primera versión de la prueba de defectos: corría el gate tal cual y sobrescribía `evidence/g6_quality_results.csv` con los resultados de la copia dañada. | **Corregir** | Revisión del equipo antes de ejecutar | Se agregó la variable `qg_sin_csv`; la prueba de defectos guarda su propio archivo (`g6_defectos_results.csv`). |
+| IA-36 | P-10 (5) | Primera versión de la prueba de defectos: corría el gate tal cual y sobrescribía `evidence/g6_quality_results.csv` con los resultados de la copia dañada. | **Corregir** | Lo revisamos antes de ejecutar | Agregamos la variable `qg_sin_csv`; la prueba de defectos guarda su propio archivo (`g6_defectos_results.csv`). |
 
 ## Anexo · Las 76 pruebas (obtenido antes → después)
 
