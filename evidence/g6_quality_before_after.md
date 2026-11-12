@@ -20,7 +20,7 @@
 
 ## 2. Cómo lo ejecutamos
 
-Lo corrimos desde la carpeta `lab-postgresql-banco-ia`, con la base ya cargada:
+Lo corrimos desde la raíz del repositorio, con la base ya cargada:
 
 ```
 psql -U postgres -d banco_andino_lab -f sql/quality_gate.sql                  -- el gate (guarda evidence/g6_quality_results.csv)

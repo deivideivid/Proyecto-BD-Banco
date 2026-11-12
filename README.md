@@ -14,15 +14,15 @@ David González.
 ## Cómo organizamos el repositorio
 
 ```
-lab-postgresql-banco-ia/
+Proyecto-BD-Banco/
 ├── docs/        Especificación (G1), modelo lógico (G2), construcción (G3), datos (G4), ERD final, informe final, matriz IA y guía de defensa
 ├── prompts/     Registro de los prompts que usamos y lo que nos respondió la IA
 ├── sql/         Scripts 00–20, run_all.sql, quality_gate.sql, cargas (sql/load), rendimiento (sql/perf) y pruebas (sql/tests)
 ├── src/         Generadores de datos sintéticos (Python)
 ├── data/lote1/  CSV del lote 1 (clientes, cuentas, eventos)
 ├── data/lote2/  CSV del lote 2 (no lo subimos: se genera en cada computador)
-└── evidence/    Evidencia de cada gate
-fase-bi/         Modelo estrella, Power BI y aplicativo (fase nueva)
+├── evidence/    Evidencia de cada gate
+└── fase-bi/     Modelo estrella, Power BI y aplicativo (fase nueva)
 ```
 
 ## Volumen de datos
@@ -39,7 +39,7 @@ trabajar con **PostgreSQL local**.
 ## Reconstrucción completa en un paso (G8)
 
 Para no tener que correr cada script por separado, armamos `sql/g8_reconstruir_todo.sql`.
-Nosotros lo corremos desde la carpeta `lab-postgresql-banco-ia`, con la base
+Nosotros lo corremos desde la raíz del repositorio, con la base
 `banco_andino_lab` creada y el lote 2 ya generado (`python src/generate_transactions.py`):
 
 ```
@@ -49,18 +49,18 @@ psql -U postgres -d banco_andino_lab -f sql/g8_reconstruir_todo.sql
 Hace todo lo de la sección siguiente (modelo y 49 pruebas, lotes 1 y 2, perfil de G4, quality
 gate de G6 y permisos de G7). A nosotros nos terminó con **G8 RECONSTRUCCIÓN = PASS** en un
 tiempo de 3 a 10 minutos, según el computador. Desde SQL Shell lo corrimos así:
-`\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab`, `\i sql/g8_reconstruir_todo.sql`.
+`\cd 'C:/ruta/a/Proyecto-BD-Banco'`, `\c banco_andino_lab`, `\i sql/g8_reconstruir_todo.sql`.
 
 Para la defensa preparamos `sql/tests/g8_demo_defensa.sql`: son 8 demostraciones en vivo que
 no dejan cambios en la base.
 
 ## Cómo montamos la base paso a paso (Windows)
 
-Usamos PostgreSQL 18.6 (trae `psql`) y Python 3.13. Todo lo corrimos **desde la carpeta
-`lab-postgresql-banco-ia`**, porque las rutas de carga son relativas.
+Usamos PostgreSQL 18.6 (trae `psql`) y Python 3.13. Todo lo corrimos **desde la raíz del
+repositorio**, porque las rutas de carga son relativas.
 
 ```powershell
-cd lab-postgresql-banco-ia
+cd Proyecto-BD-Banco
 
 # 1. Generamos el lote 2 (unos 30 s; no necesita instalar nada)
 python src/generate_transactions.py
@@ -98,7 +98,7 @@ psql -U postgres -d banco_andino_lab -f sql/tests/g7_rbac_demo.sql    # c) permi
 Cosas que aprendimos en el camino:
 
 - En un computador PowerShell no reconocía `psql`. Lo solucionamos usando **SQL Shell (psql)**
-  con `\cd 'C:/ruta/a/lab-postgresql-banco-ia'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`,
+  con `\cd 'C:/ruta/a/Proyecto-BD-Banco'`, `\c banco_andino_lab` y luego `\i sql/run_all.sql`,
   `\i sql/load/carga_lote1.sql`, etc. También sirvió agregar `C:\Program Files\PostgreSQL\18\bin`
   al PATH de Windows.
 - pgAdmin 4 nos sirvió para consultar, pero **no ejecuta `\copy` ni `\ir`**, así que

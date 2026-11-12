@@ -13,10 +13,10 @@
 -- ¡Borra y recrea la base banco_andino_lab! Requisitos:
 --   - La base banco_andino_lab existe (vacía o no).
 --   - Los CSV del lote 2 existen: python src/generate_transactions.py
---   - Se ejecuta DESDE la carpeta lab-postgresql-banco-ia (rutas de \copy relativas).
+--   - Lo corremos DESDE la raíz del repositorio (rutas de \copy relativas).
 -- Uso:
 --   psql -U postgres -d banco_andino_lab -f sql/g8_reconstruir_todo.sql
---   SQL Shell: \cd 'C:/…/lab-postgresql-banco-ia'   \c banco_andino_lab   \i sql/g8_reconstruir_todo.sql
+--   SQL Shell: \cd 'C:/…/Proyecto-BD-Banco'   \c banco_andino_lab   \i sql/g8_reconstruir_todo.sql
 -- Tarda de 3 a 10 minutos según el computador.
 -- Si después Git muestra evidence/g4_data_profile.csv SIN cambios, la
 -- reconstrucción produjo exactamente los mismos datos.

@@ -42,7 +42,7 @@ Tomamos el DDL de G2 (`tablas_banco_andino.sql`), lo dividimos en los archivos n
 
 ## 2. Cómo lo ejecutamos
 
-Lo corrimos desde la carpeta `lab-postgresql-banco-ia`:
+Lo corrimos desde la raíz del repositorio:
 
 ```powershell
 psql -U postgres -c "CREATE DATABASE banco_andino_lab"

@@ -7,7 +7,7 @@ Necesitan **dos sesiones** y datos confirmados, por eso las corrimos en una base
 
 ## Cómo preparamos la base (una vez)
 
-Desde la carpeta `lab-postgresql-banco-ia`, en PowerShell:
+Desde la raíz del repositorio, en PowerShell:
 
 ```powershell
 psql -U postgres -c "CREATE DATABASE banco_andino_ct"
