@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estadísticas · Banco Andino</title>
+  <link rel="stylesheet" href="css/estadisticas.css">
+</head>
+<body>
+  <header class="barra">
+    <a class="marca" href="estadisticas.html" aria-label="Banco Andino, inicio">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M3 25 L12 10 L17 18 L21 12 L29 25 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M2 28 H30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <span>Banco Andino</span>
+    </a>
+    <span class="etiqueta-seccion">Estadísticas</span>
+  </header>
+
+  <main class="contenido">
+    <nav class="pestanas" role="tablist" aria-label="Páginas de estadísticas">
+      <button role="tab" data-pagina="resumen">Resumen</button>
+      <button role="tab" data-pagina="transacciones">Transacciones</button>
+      <button role="tab" data-pagina="clientes">Clientes y cuentas</button>
+      <button role="tab" data-pagina="control">Control y calidad</button>
+    </nav>
+
+    <section class="filtros vidrio" id="filtros" aria-label="Filtros">
+      <label>Mes
+        <select id="f-mes" data-filtro="mes"><option value="">Todos</option></select>
+      </label>
+      <label>Producto
+        <select id="f-producto" data-filtro="producto"><option value="">Todos</option></select>
+      </label>
+      <label>Departamento (oficina)
+        <select id="f-departamento" data-filtro="departamento"><option value="">Todos</option></select>
+      </label>
+      <button class="boton boton-sec" id="limpiar" type="button">Limpiar</button>
+    </section>
+    <p class="nota-filtros" id="nota-filtros"></p>
+
+    <section class="tarjetas" id="tarjetas" aria-live="polite"></section>
+    <section class="graficas" id="graficas"></section>
+    <section class="tablas" id="tablas"></section>
+
+    <p class="pie">Datos sintéticos del Banco Andino (banco ficticio). Los indicadores se calculan en la
+      base con las mismas reglas de Power BI. <span id="estado-carga"></span></p>
+  </main>
+
+  <div class="aviso-error vidrio" id="aviso-error" role="alert" hidden></div>
+
+  <script src="vendor/chart.umd.js"></script>
+  <script src="js/estadisticas.js"></script>
+</body>
+</html>

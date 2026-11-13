@@ -36,3 +36,14 @@ Lo que fuimos decidiendo en grupo y por qué.
 15. **Las páginas de Power BI las generamos como archivos (formato PBIR)** en vez de arrastrar
     cada gráfica a mano. Así quedan iguales en computador y en celular y se pueden volver a
     generar. El tema de colores lo aplicamos cuando definamos la paleta.
+16. **En el aplicativo los indicadores se calculan en la base**, con funciones del esquema `bi`
+    que siguen las mismas reglas de SQL y de Power BI. El servidor solo pide los datos y la
+    página solo los dibuja, para que cada fórmula viva en un solo lugar.
+17. **El servidor guarda en memoria lo que ya calculó.** Sin filtros la base tarda unos 3
+    segundos en recorrer el millón de transacciones; con el caché, la segunda vez sale al
+    instante. El caché se renueva solo si se recarga el modelo estrella.
+18. **Las funciones de Estadísticas ya reciben la oficina**, aunque la página todavía no la
+    usa. En B5 el Supervisor verá solo su oficina pasando ese dato desde su sesión.
+19. **Usamos Chart.js copiado dentro del proyecto** (no desde internet), para que las gráficas
+    funcionen aunque no haya conexión el día de la sustentación. Los colores de la página son
+    provisionales hasta que escojamos la paleta.
