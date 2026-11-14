@@ -1,0 +1,23 @@
+// Banco Andino | B3 | Los 13 indicadores en Power BI, escenarios A y B (igual que b2_05_kpi_referencia.sql).
+// A = todo; B = agosto de 2026 (anio_mes) y producto AHORROS. Porcentajes x 100.
+// Lo corrimos en la vista de consultas DAX de Power BI.
+EVALUATE
+SELECTCOLUMNS(
+{
+    ("K01 Transacciones contabilizadas", ROUND([K01 Transacciones contabilizadas] * 1, 2), ROUND(CALCULATE([K01 Transacciones contabilizadas], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K02 Monto movido COP", ROUND([K02 Monto movido COP] * 1, 2), ROUND(CALCULATE([K02 Monto movido COP], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K03 Monto movido USD", ROUND([K03 Monto movido USD] * 1, 2), ROUND(CALCULATE([K03 Monto movido USD], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K04 Ticket promedio COP", ROUND([K04 Ticket promedio COP] * 1, 2), ROUND(CALCULATE([K04 Ticket promedio COP], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K05 Tasa de rechazo %", ROUND([K05 Tasa de rechazo %] * 100, 2), ROUND(CALCULATE([K05 Tasa de rechazo %], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 100, 2)),
+    ("K06 Reversos", ROUND([K06 Reversos] * 1, 2), ROUND(CALCULATE([K06 Reversos], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K07 Clientes con movimientos", ROUND([K07 Clientes con movimientos] * 1, 2), ROUND(CALCULATE([K07 Clientes con movimientos], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K08 Cuentas activas", ROUND([K08 Cuentas activas] * 1, 2), ROUND(CALCULATE([K08 Cuentas activas], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K09 Saldo total COP", ROUND([K09 Saldo total COP] * 1, 2), ROUND(CALCULATE([K09 Saldo total COP], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K10 Saldo total USD", ROUND([K10 Saldo total USD] * 1, 2), ROUND(CALCULATE([K10 Saldo total USD], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K11 Cuentas en sobregiro", ROUND([K11 Cuentas en sobregiro] * 1, 2), ROUND(CALCULATE([K11 Cuentas en sobregiro], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K12 Puntaje del quality gate", ROUND([K12 Puntaje del quality gate] * 1, 2), ROUND(CALCULATE([K12 Puntaje del quality gate], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2)),
+    ("K13 Controles en PASS", ROUND([K13 Controles en PASS] * 1, 2), ROUND(CALCULATE([K13 Controles en PASS], 'bi dim_fecha'[anio_mes] = "2026-08", 'bi dim_producto'[producto_key] = "AHORROS") * 1, 2))
+},
+"Indicador", [Value1], "A_todo", [Value2], "B_ago2026_ahorros", [Value3]
+)
+ORDER BY [Indicador]

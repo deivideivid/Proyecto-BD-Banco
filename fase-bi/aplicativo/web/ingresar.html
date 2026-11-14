@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ingresar · Banco Andino</title>
+  <link rel="stylesheet" href="css/estadisticas.css">
+  <link rel="stylesheet" href="css/ingresar.css">
+</head>
+<body class="pagina-ingreso">
+  <main class="caja-ingreso vidrio" id="caja">
+    <div class="marca grande">
+      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M3 25 L12 10 L17 18 L21 12 L29 25 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+        <path d="M2 28 H30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <span>Banco Andino</span>
+    </div>
+    <p class="subtitulo">Ingrese con su usuario del aplicativo</p>
+    <form id="form-ingreso" novalidate>
+      <label>Usuario
+        <input id="login" name="login" autocomplete="username" required maxlength="60" autocapitalize="none" spellcheck="false">
+      </label>
+      <label>Contraseña
+        <input id="clave" name="clave" type="password" autocomplete="current-password" required maxlength="200">
+      </label>
+      <button class="boton boton-principal" id="entrar" type="submit">Ingresar</button>
+      <p class="mensaje" id="mensaje" role="alert"></p>
+    </form>
+    <p class="pie">Banco ficticio con datos sintéticos · Proyecto académico</p>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/ingresar.js"></script>
+</body>
+</html>
