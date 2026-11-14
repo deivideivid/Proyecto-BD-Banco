@@ -47,3 +47,17 @@ Lo que fuimos decidiendo en grupo y por qué.
 19. **Usamos Chart.js copiado dentro del proyecto** (no desde internet), para que las gráficas
     funcionen aunque no haya conexión el día de la sustentación. Los colores de la página son
     provisionales hasta que escojamos la paleta.
+20. **El servidor entra a la base con un solo usuario, `app_servidor`, sin permisos propios.** En
+    cada petición se pone el rol del perfil (`SET LOCAL ROLE`). Así la base sigue siendo la que
+    decide qué puede cada perfil, y en la nube basta una sola contraseña.
+21. **Los accesos del aplicativo van en un esquema aparte (`app`) con contraseñas bcrypt.** El
+    banco sigue sin guardar contraseñas en `seg`. Hay un acceso de demostración por perfil y sus
+    contraseñas se generan al arrancar; nunca van al repositorio.
+22. **El Cliente opera con el usuario técnico `canal.digital`**, que solo puede transferir, y con
+    funciones que revisan en la base que la cuenta sea suya.
+23. **El cajero y el supervisor solo operan cuentas de su oficina**, como dice `perfiles.md`. La
+    búsqueda por documento exacto sí muestra clientes sin cuentas, para poder abrirles una.
+24. **Los rechazos del negocio se registran** (estado, fondos o límite) con su motivo, como en los
+    datos de G4 (RN-45).
+25. **La inactivación de cuentas pide vista previa, confirmación y mínimo 180 días**, porque el
+    proceso es de todo el banco y con pocos días inactivaría miles de cuentas.

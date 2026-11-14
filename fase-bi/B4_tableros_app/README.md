@@ -79,3 +79,10 @@ sin avisarle a la página. Lo arreglamos en dos partes:
 - Al volver a arrancarlo, la ventana anterior del servidor seguía abierta ocupando el puerto
   8000, y el navegador le hablaba a esa copia vieja. Ahora `iniciar_local.ps1` revisa si el
   puerto está ocupado, avisa y usa el siguiente libre.
+
+## Desde B5
+
+Las estadísticas ya piden iniciar sesión: el Administrador ve todo, el Supervisor ve las 4
+páginas solo de su oficina y el Auditor de datos solo Control y calidad. `validar_pagina.py`
+ahora entra como `demo.admin` (toma la contraseña de `fase-bi/aplicativo/accesos_demo.local.txt`)
+y la volvimos a correr: las 37 cifras siguen dando igual.

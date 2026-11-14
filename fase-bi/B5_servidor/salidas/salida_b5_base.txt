@@ -1,0 +1,138 @@
+﻿Banco Andino - B5 base del aplicativo - 2026-11-13 21:23:17 - equipo DESKTOP-F1GG12C
+
+===== fase-bi\B5_servidor\sql\b5_01_esquema_app.sql =====
+SET
+CREATE SCHEMA
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+SELECT 5
+INSERT 0 5
+CREATE FUNCTION
+CREATE FUNCTION
+COMMENT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+DO
+COMMENT
+COMMENT
+COMMENT
+REVOKE
+REVOKE
+REVOKE
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT ROLE
+DO
+== Accesos de demostración
+      login      |    perfil     | corresponde_a |                   contrasena                    
+-----------------+---------------+---------------+-------------------------------------------------
+ demo.supervisor | SUPERVISOR    | aarango       | pendiente (la genera el aplicativo al arrancar)
+ demo.cajero     | CAJERO        | fcardenas     | pendiente (la genera el aplicativo al arrancar)
+ demo.auditor    | AUDITOR       | dmoreno       | pendiente (la genera el aplicativo al arrancar)
+ demo.admin      | ADMINISTRADOR | aperez        | pendiente (la genera el aplicativo al arrancar)
+ demo.cliente    | CLIENTE       | cliente 13    | pendiente (la genera el aplicativo al arrancar)
+(5 filas)
+
+Esquema app, usuario del canal digital y app_servidor listos.
+
+===== fase-bi\B5_servidor\sql\b5_02_pruebas_bd.sql =====
+SET
+CREATE TABLE
+GRANT
+CREATE PROCEDURE
+CALL
+CALL
+INSERT 0 1
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+== Detalle
+ n  |                               prueba                                |        rol        |      esperado       |      obtenido       | resultado 
+----+---------------------------------------------------------------------+-------------------+---------------------+---------------------+-----------
+  1 | app_servidor sin SET ROLE no lee cuentas                            | app_servidor      | 42501               | 42501               | PASS
+  2 | app_servidor sin SET ROLE no consigna                               | app_servidor      | 42501               | 42501               | PASS
+  3 | app_servidor puede ponerse banco_cajero pero no hereda sus permisos | app_servidor      | SET sí, herencia no | SET sí, herencia no | PASS
+  4 | Cajero no reversa                                                   | banco_cajero      | 42501               | 42501               | PASS
+  5 | Cajero no desbloquea                                                | banco_cajero      | 42501               | 42501               | PASS
+  6 | Cajero no aprueba ajustes                                           | banco_cajero      | 42501               | 42501               | PASS
+  7 | Cajero no administra usuarios                                       | banco_cajero      | 42501               | 42501               | PASS
+  8 | Cajero no lee la auditoría                                          | banco_cajero      | 42501               | 42501               | PASS
+  9 | Cajero sí consigna (se deshace)                                     | banco_cajero      | OK                  | OK                  | PASS
+ 10 | Rol supervisor con usuario cajero no reversa (permiso del banco)    | banco_supervisor  | BA001               | BA001               | PASS
+ 11 | El usuario del canal digital no consigna (solo transfiere)          | banco_cajero      | BA001               | BA001               | PASS
+ 12 | Auditor no consigna                                                 | banco_auditor     | 42501               | 42501               | PASS
+ 13 | Auditor no escribe en la auditoría                                  | banco_auditor     | 42501               | 42501               | PASS
+ 14 | Auditor no ve contraseñas del aplicativo                            | banco_auditor     | 42501               | 42501               | PASS
+ 15 | Auditor sí lee la auditoría                                         | banco_auditor     | OK                  | OK                  | PASS
+ 16 | Administrador no ve cuentas                                         | banco_admin_seg   | 42501               | 42501               | PASS
+ 17 | Administrador no consigna                                           | banco_admin_seg   | 42501               | 42501               | PASS
+ 18 | Administrador no se asigna roles a sí mismo (RN-50)                 | banco_admin_seg   | 23514               | 23514               | PASS
+ 19 | Administrador no borra asignaciones (se revocan con fecha)          | banco_admin_seg   | 42501               | 42501               | PASS
+ 20 | Cliente no lee la tabla de cuentas                                  | banco_cliente_app | 42501               | 42501               | PASS
+ 21 | Cliente no llama directo a fn_transferir                            | banco_cliente_app | 42501               | 42501               | PASS
+ 22 | Cliente no ve movimientos de una cuenta ajena                       | banco_cliente_app | BA010               | BA010               | PASS
+ 23 | Cliente no transfiere desde una cuenta ajena                        | banco_cliente_app | BA010               | BA010               | PASS
+ 24 | Cliente no transfiere un monto inválido                             | banco_cliente_app | BA005               | BA005               | PASS
+ 25 | Cliente sí ve sus cuentas                                           | banco_cliente_app | OK                  | OK                  | PASS
+ 26 | Cliente sí transfiere desde su cuenta (se deshace)                  | banco_cliente_app | OK                  | OK                  | PASS
+ 27 | El rol de acceso no lee la tabla de accesos                         | banco_app_acceso  | 42501               | 42501               | PASS
+ 28 | El rol de acceso no consigna                                        | banco_app_acceso  | 42501               | 42501               | PASS
+ 29 | Cinco contraseñas malas seguidas bloquean el acceso (se deshace)    | banco_app_acceso  | OK                  | OK                  | PASS
+ 30 | Estadísticas (banco_bi) no usa funciones del cliente                | banco_bi          | 42501               | 42501               | PASS
+
+== Resumen B5 (base)
+ pass | fail | total |           veredicto           
+------+------+-------+-------------------------------
+   30 |    0 |    30 | B5 PERMISOS EN LA BASE = PASS
+
+
+===== Contrasena del usuario app_servidor =====
+Contrasena de app_servidor actualizada.
+
+RESULTADO: OK - todos los scripts corrieron sin errores.
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\B5_servidor\salidas\salida_b5_base.txt

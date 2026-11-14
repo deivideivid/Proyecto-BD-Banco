@@ -1,9 +1,11 @@
 ﻿<#
- Banco Andino | Arranca el aplicativo en este computador (por ahora, la sección Estadísticas).
+ Banco Andino | Arranca el aplicativo en este computador.
 
  La primera vez crea un entorno de Python en la carpeta .venv e instala lo de requirements.txt
- (necesita internet). Pide la contraseña del usuario de solo lectura (powerbi_lector, el mismo de
- Power BI); no la guarda en ningún archivo. Después abre http://localhost:8000 en el navegador.
+ (necesita internet). Pide la contraseña de app_servidor (el usuario con el que el servidor entra
+ a la base, se la pusimos al correr B5_servidor\ejecutar_b5.bat); no la guarda en ningún archivo.
+ Si hay accesos de demostración sin contraseña, las genera y las muestra una vez (quedan en
+ accesos_demo.local.txt, que no va a GitHub). Después abre http://localhost:8000 en el navegador.
  Para apagarlo: Ctrl + C en esta ventana.
 #>
 param(
@@ -11,7 +13,7 @@ param(
     [string]$PgHost = "localhost",
     [int]$PgPort = 5432,
     [string]$Base = "banco_andino_lab",
-    [string]$Usuario = "powerbi_lector"
+    [string]$Usuario = "app_servidor"
 )
 $ErrorActionPreference = "Stop"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -39,7 +41,7 @@ if ($LASTEXITCODE -ne 0) { Write-Host "No se pudieron instalar las librerías (r
 $env:DATABASE_URL = "host=$PgHost port=$PgPort dbname=$Base user=$Usuario"
 $conecto = $false
 for ($intento = 1; $intento -le 3; $intento++) {
-    $seguro = Read-Host ("Contraseña de PostgreSQL para '" + $Usuario + "' (la misma de Power BI)") -AsSecureString
+    $seguro = Read-Host ("Contraseña de PostgreSQL para '" + $Usuario + "'") -AsSecureString
     $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($seguro)
     $env:PGPASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
     [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
@@ -50,16 +52,21 @@ for ($intento = 1; $intento -le 3; $intento++) {
     Write-Host ("Intento " + $intento + " de 3.")
 }
 if (-not $conecto) {
-    Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+    Remove-Item Env:\PGPASSWORD, Env:\APP_SECRET -ErrorAction SilentlyContinue
     Write-Host ""
     Write-Host "No arrancamos el aplicativo porque no pudo entrar a la base."
     Write-Host ("Si no recuerda la contraseña de '" + $Usuario + "', en pgAdmin (como postgres) puede ponerle una nueva:")
     Write-Host ("    ALTER ROLE " + $Usuario + " PASSWORD 'la_nueva';")
-    Write-Host "Después hay que ponerle esa misma en Power BI."
     exit 1
 }
 
-# 4. Buscar un puerto libre: si quedó otra copia del aplicativo abierta, no chocamos con ella
+# 4. Contraseñas de los accesos de demostración (solo las que falten) y clave de la sesión
+& $venvPy -m servidor.crear_accesos
+$bytes = New-Object byte[] 32
+[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
+$env:APP_SECRET = [Convert]::ToBase64String($bytes)
+
+# 5. Buscar un puerto libre: si quedó otra copia del aplicativo abierta, no chocamos con ella
 $inicial = $Puerto
 while (Get-NetTCPConnection -LocalPort $Puerto -State Listen -ErrorAction SilentlyContinue) {
     $Puerto++
@@ -71,11 +78,11 @@ if ($Puerto -ne $inicial) {
     Write-Host "que quedó abierta). Ciérrela para no confundirse. Esta vez usamos el puerto $Puerto."
 }
 
-# 5. Abrir el navegador cuando el servidor ya esté arriba, y arrancar
+# 6. Abrir el navegador cuando el servidor ya esté arriba, y arrancar
 $url = "http://localhost:$Puerto"
 Start-Process cmd -ArgumentList "/c", "timeout /t 6 >nul & start `"`" $url" -WindowStyle Hidden
 Write-Host ""
 Write-Host "Aplicativo en $url  (Ctrl + C para apagarlo)"
 Write-Host "La primera vez las estadísticas tardan unos segundos mientras la base las calcula."
 & $venvPy -m uvicorn servidor.main:app --host 127.0.0.1 --port $Puerto
-Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
+Remove-Item Env:\PGPASSWORD, Env:\APP_SECRET -ErrorAction SilentlyContinue

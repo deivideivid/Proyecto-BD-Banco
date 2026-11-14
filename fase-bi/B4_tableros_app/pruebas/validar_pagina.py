@@ -3,8 +3,11 @@ oficiales de SQL (b2_05_kpi_referencia.sql), que en B3 también dieron igual en 
 
 Uso (con el aplicativo corriendo):
     python fase-bi/B4_tableros_app/pruebas/validar_pagina.py http://localhost:8000
+Desde B5 hay que iniciar sesión: entra como demo.admin con la contraseña de
+fase-bi/aplicativo/accesos_demo.local.txt.
 Necesita:  pip install playwright  y  python -m playwright install chromium
 """
+import re
 import sys
 from decimal import Decimal
 from pathlib import Path
@@ -14,6 +17,24 @@ from playwright.sync_api import sync_playwright
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8000").rstrip("/")
 SALIDA = Path(__file__).resolve().parent.parent / "salidas" / "validacion_pagina.txt"
 CAPTURAS = Path(__file__).resolve().parent.parent / "capturas"
+ACCESOS = Path(__file__).resolve().parents[2] / "aplicativo" / "accesos_demo.local.txt"
+
+
+def ingresar(page):
+    """Entra como administrador (ve todo el banco, igual que Power BI)."""
+    clave = None
+    if ACCESOS.exists():
+        for linea in ACCESOS.read_text(encoding="utf-8").splitlines():
+            m = re.search(r"usuario:\s*demo\.admin\s+contraseña:\s*(\S+)", linea)
+            if m:
+                clave = m.group(1)
+    if not clave:
+        sys.exit("No encontramos la contraseña de demo.admin en accesos_demo.local.txt")
+    page.goto(f"{BASE}/ingresar.html")
+    page.fill("#login", "demo.admin")
+    page.fill("#clave", clave)
+    page.click("#entrar")
+    page.wait_for_url("**/estadisticas.html*", timeout=60000)
 
 # Valores oficiales (catalogo_indicadores.md). A = todo; B = 2026-08 y AHORROS.
 OFICIAL = {
@@ -51,7 +72,9 @@ def main():
     lineas, fallas, comparados = [], 0, set()
     with sync_playwright() as pw:
         nav = pw.chromium.launch()
-        page = nav.new_page(viewport={"width": 1366, "height": 900})
+        contexto = nav.new_context(viewport={"width": 1366, "height": 900})
+        page = contexto.new_page()
+        ingresar(page)
         for esc, consulta in ESCENARIOS.items():
             for pagina in PAGINAS:
                 q = "" if pagina == "control" else consulta
@@ -71,13 +94,15 @@ def main():
                     comparados.add((esc, kpi))
                     lineas.append(f"{'PASS' if ok else 'FAIL'}  {esc}  {pagina:<14} {kpi}  oficial={esperado:<18} página={texto_pantalla}")
         # Capturas: computador y celular (sin animaciones, para que salgan completas)
-        page = nav.new_page(viewport={"width": 1366, "height": 900}, reduced_motion="reduce")
+        page = nav.new_context(viewport={"width": 1366, "height": 900}, reduced_motion="reduce").new_page()
+        ingresar(page)
         for pagina in PAGINAS:
             page.goto(f"{BASE}/estadisticas.html#{pagina}")
             esperar_pagina(page, pagina, "")
             page.screenshot(path=str(CAPTURAS / f"computador_{pagina}.png"), full_page=True)
-        movil = nav.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True,
-                             reduced_motion="reduce")
+        movil = nav.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True,
+                                reduced_motion="reduce").new_page()
+        ingresar(movil)
         for pagina in PAGINAS:
             movil.goto(f"{BASE}/estadisticas.html#{pagina}")
             esperar_pagina(movil, pagina, "")

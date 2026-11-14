@@ -3,16 +3,22 @@
 Todo se calcula en la base con las funciones de b4_01_funciones_estadisticas.sql. Aquí solo
 pedimos los datos, los guardamos un rato en memoria y los entregamos como JSON a la página.
 La conexión es de solo lectura (rol banco_bi).
+
+Desde B5 hay que iniciar sesión: el Administrador ve todo, el Supervisor ve todo pero solo de
+su oficina, y el Auditor de datos solo la página Control y calidad.
 """
 import threading
 import time
 from decimal import Decimal
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from . import db
+from .sesion import Sesion, requiere
 
 router = APIRouter(prefix="/api/estadisticas", tags=["Estadísticas"])
+con_estadisticas = requiere("ADMINISTRADOR", "SUPERVISOR", "AUDITOR")
+PAGINAS_DEL_AUDITOR = {"control"}
 
 # Qué muestra cada página. Es lo mismo que B3_powerbi/powerbi/generar_paginas.py.
 PAGINAS = {
@@ -77,20 +83,20 @@ def _validar(nombre: str, valor: str | None) -> str | None:
     if valor in (None, ""):
         return None
     if valor not in {o["valor"] for o in opciones_filtro()[nombre]}:
-        raise HTTPException(status_code=422, detail=f"El valor '{valor}' no existe en el filtro {nombre}.")
+        raise HTTPException(status_code=422, detail={"mensaje": f"El valor '{valor}' no existe en el filtro {nombre}.", "codigo": "FILTRO"})
     return valor
 
 
-def calcular_pagina(pagina: str, mes=None, producto=None, departamento=None) -> dict:
+def calcular_pagina(pagina: str, mes=None, producto=None, departamento=None, oficina=None) -> dict:
     conf = PAGINAS[pagina]
     if not conf["filtros"]:
-        mes = producto = departamento = None
-    p = {"mes": mes, "producto": producto, "departamento": departamento}
+        mes = producto = departamento = oficina = None
+    p = {"mes": mes, "producto": producto, "departamento": departamento, "oficina": oficina}
     inicio = time.perf_counter()
 
     indicadores = {}
     for f in db.consultar(
-        "SELECT id, indicador, valor FROM bi.fn_indicadores(%(mes)s, %(producto)s, %(departamento)s)", p
+        "SELECT id, indicador, valor FROM bi.fn_indicadores(%(mes)s, %(producto)s, %(departamento)s, %(oficina)s)", p
     ):
         if f["id"] in conf["indicadores"]:
             indicadores[f["id"]] = {"nombre": f["indicador"], "valor": _texto(f["valor"])}
@@ -98,7 +104,7 @@ def calcular_pagina(pagina: str, mes=None, producto=None, departamento=None) -> 
     graficas = {}
     for serie in conf["graficas"]:
         filas = db.consultar(
-            "SELECT etiqueta, valor FROM bi.fn_serie(%(serie)s, %(mes)s, %(producto)s, %(departamento)s)",
+            "SELECT etiqueta, valor FROM bi.fn_serie(%(serie)s, %(mes)s, %(producto)s, %(departamento)s, %(oficina)s)",
             {**p, "serie": serie},
         )
         graficas[serie] = [{"etiqueta": f["etiqueta"], "valor": _texto(f["valor"])} for f in filas]
@@ -107,7 +113,7 @@ def calcular_pagina(pagina: str, mes=None, producto=None, departamento=None) -> 
     for tabla in conf.get("tablas", []):
         if tabla == "top_clientes":
             filas = db.consultar(
-                "SELECT * FROM bi.fn_top_clientes(%(producto)s, %(departamento)s, NULL, 10)", p
+                "SELECT * FROM bi.fn_top_clientes(%(producto)s, %(departamento)s, %(oficina)s, 10)", p
             )
         elif tabla == "controles":
             filas = db.consultar(
@@ -133,12 +139,12 @@ def calcular_pagina(pagina: str, mes=None, producto=None, departamento=None) -> 
     }
 
 
-def pagina_con_cache(pagina: str, mes=None, producto=None, departamento=None) -> dict:
-    llave = (pagina, mes, producto, departamento, _version_datos())
+def pagina_con_cache(pagina: str, mes=None, producto=None, departamento=None, oficina=None) -> dict:
+    llave = (pagina, mes, producto, departamento, oficina, _version_datos())
     with _cache_lock:
         if llave in _cache:
             return {**_cache[llave], "desde_cache": True}
-    datos = calcular_pagina(pagina, mes, producto, departamento)
+    datos = calcular_pagina(pagina, mes, producto, departamento, oficina)
     with _cache_lock:
         if len(_cache) >= _CACHE_MAX:
             _cache.pop(next(iter(_cache)))
@@ -157,7 +163,7 @@ def precalentar() -> None:
 
 
 @router.get("/filtros")
-def filtros():
+def filtros(s: Sesion = Depends(con_estadisticas)):
     return opciones_filtro()
 
 
@@ -167,9 +173,14 @@ def ver_pagina(
     mes: str | None = Query(None, description="anio_mes, por ejemplo 2026-08"),
     producto: str | None = Query(None, description="producto_key, por ejemplo AHORROS"),
     departamento: str | None = Query(None, description="departamento de la oficina"),
+    s: Sesion = Depends(con_estadisticas),
 ):
     if pagina not in PAGINAS:
-        raise HTTPException(status_code=404, detail="Esa página de estadísticas no existe.")
-    return pagina_con_cache(
-        pagina, _validar("mes", mes), _validar("producto", producto), _validar("departamento", departamento)
+        raise HTTPException(status_code=404, detail={"mensaje": "Esa página de estadísticas no existe.", "codigo": "PAGINA"})
+    if s.perfil == "AUDITOR" and pagina not in PAGINAS_DEL_AUDITOR:
+        raise HTTPException(status_code=403, detail={"mensaje": "El auditor de datos solo ve la página Control y calidad.", "codigo": "PERFIL"})
+    oficina = s.oficina_id if s.perfil == "SUPERVISOR" else None   # el supervisor solo ve su oficina
+    datos = pagina_con_cache(
+        pagina, _validar("mes", mes), _validar("producto", producto), _validar("departamento", departamento), oficina
     )
+    return {**datos, "alcance": s.oficina if oficina else "Todo el banco"}

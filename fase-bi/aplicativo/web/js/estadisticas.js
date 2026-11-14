@@ -118,15 +118,8 @@
   }
 
   /* ---------- Conexión con el servidor ---------- */
-  async function pedir(url, senal) {
-    const r = await fetch(url, { signal: senal, headers: { Accept: "application/json" } });
-    if (!r.ok) {
-      let detalle = "El servidor respondió " + r.status;
-      try { detalle = (await r.json()).detail || detalle; } catch (_) { /* sin cuerpo */ }
-      throw new Error(detalle);
-    }
-    return r.json();
-  }
+  // Las llamadas pasan por BancoAPI (js/api.js): manda a ingresar si la sesión se venció
+  const pedir = (url, senal) => BancoAPI.get(url, senal);
 
   function mostrarError(texto) {
     const aviso = $("#aviso-error");
@@ -411,6 +404,7 @@
       ["#tarjetas", "#graficas", "#tablas"].forEach((s) => {
         const e = $(s); e.classList.remove("entrando"); void e.offsetWidth; e.classList.add("entrando");
       });
+      $("#alcance").textContent = "Estadísticas · " + (datos.alcance || "Todo el banco");
       $("#estado-carga").textContent = datos.desde_cache ? "(ya estaba calculado)" : "(calculado en " + (datos.calculado_en_ms / 1000).toLocaleString("es-CO", { maximumFractionDigits: 1 }) + " s)";
       document.body.dataset.listo = estado.pagina + "|" + p.toString();
     } catch (e) {
@@ -423,6 +417,7 @@
   /* ---------- Arranque ---------- */
   async function iniciar() {
     leerDireccion();
+    $("#salir").addEventListener("click", () => BancoAPI.salir());
     document.querySelectorAll(".pestanas button").forEach((b) => {
       b.addEventListener("click", () => { estado.pagina = b.dataset.pagina; cargar(); });
     });

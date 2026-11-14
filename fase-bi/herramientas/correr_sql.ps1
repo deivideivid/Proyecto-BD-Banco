@@ -15,7 +15,10 @@ param(
     [string]$PgUser = "postgres",
     [string]$PgHost = "localhost",
     [int]$PgPort = 5432,
-    [string]$Base = "banco_andino_lab"
+    [string]$Base = "banco_andino_lab",
+    # Si se indica, al final pide (dos veces) la contrasena nueva de ese usuario de la base con
+    # \password de psql: se cifra en este computador y no queda en ningun archivo ni historial.
+    [string]$ClaveDeRol = ""
 )
 
 $ErrorActionPreference = "Continue"
@@ -61,6 +64,18 @@ foreach ($archivo in $lista) {
         Log ("FALLO en " + $archivo + " (se detiene aqui)")
         $todoBien = $false
         break
+    }
+}
+if ($todoBien -and $ClaveDeRol -ne "") {
+    Log ""
+    Log ("===== Contrasena del usuario " + $ClaveDeRol + " =====")
+    Write-Host ("Escriba la contrasena nueva para '" + $ClaveDeRol + "' (dos veces). No se muestra ni se guarda en la salida.")
+    & $psql @con -c ("\password " + $ClaveDeRol)
+    if ($LASTEXITCODE -ne 0) {
+        Log ("FALLO al poner la contrasena de " + $ClaveDeRol + ". Se puede hacer en pgAdmin con ALTER ROLE.")
+        $todoBien = $false
+    } else {
+        Log ("Contrasena de " + $ClaveDeRol + " actualizada.")
     }
 }
 Remove-Item Env:\PGPASSWORD -ErrorAction SilentlyContinue
