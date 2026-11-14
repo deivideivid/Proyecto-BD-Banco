@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Banca en línea · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
+</head>
+<body>
+  <main><div class="ancho">
+    <section data-seccion="cuentas">
+      <div class="encabezado"><div><h1>Mis cuentas</h1><p id="saludo">Sus cuentas y su saldo disponible.</p></div></div>
+      <div class="rejilla auto" id="lista-cuentas"><div class="tarjeta"><div class="esqueleto"></div></div></div>
+    </section>
+
+    <section data-seccion="movimientos">
+      <div class="encabezado"><div><h1>Movimientos</h1><p>Su extracto por cuenta y por fechas.</p></div></div>
+      <form class="tarjeta formulario" id="form-movimientos">
+        <div class="rejilla tres">
+          <label class="campo">Cuenta <select name="cuenta" id="mov-cuenta" required></select></label>
+          <label class="campo">Desde <input type="date" name="desde"></label>
+          <label class="campo">Hasta <input type="date" name="hasta"></label>
+        </div>
+        <div class="fila"><button class="boton primario" type="submit">Consultar</button></div>
+      </form>
+      <div class="tarjeta" id="lista-movimientos"><p class="vacio">Escoja una cuenta.</p></div>
+    </section>
+
+    <section data-seccion="transferir">
+      <div class="encabezado"><div><h1>Transferir</h1><p>A otra cuenta del Banco Andino en la misma moneda.</p></div></div>
+      <form class="tarjeta formulario dos" id="form-transferir" novalidate>
+        <label class="campo completo">Desde mi cuenta <select name="cuenta_origen_id" id="tr-origen" required></select></label>
+        <label class="campo">Número de la cuenta destino
+          <input name="numero_destino" inputmode="numeric" pattern="[0-9]{11}" maxlength="11" required placeholder="11 dígitos">
+        </label>
+        <label class="campo monto">Monto
+          <input name="monto" inputmode="decimal" required placeholder="0">
+          <span class="ayuda" id="tr-disponible"></span>
+        </label>
+        <label class="campo completo">Descripción (opcional) <input name="descripcion" maxlength="140"></label>
+        <div class="fila completo"><button class="boton primario" id="tr-enviar" type="submit">Revisar y transferir</button></div>
+        <p class="mensaje-error completo" id="tr-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section data-seccion="estadisticas">
+      <div class="encabezado"><div><h1>Mis estadísticas</h1><p>Cuánto entró y cuánto salió de sus cuentas en pesos, mes a mes.</p></div></div>
+      <div class="rejilla tres" id="est-totales"></div>
+      <div class="tarjeta"><h3>Entradas y salidas por mes (COP)</h3><div class="lienzo-cliente"><canvas id="est-grafica" role="img" aria-label="Entradas y salidas por mes"></canvas></div></div>
+    </section>
+  </div></main>
+  <script src="vendor/chart.umd.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
+  <script src="js/cliente.js"></script>
+</body>
+</html>

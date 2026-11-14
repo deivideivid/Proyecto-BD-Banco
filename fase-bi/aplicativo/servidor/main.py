@@ -1,6 +1,7 @@
 """Servidor del aplicativo del Banco Andino.
 
 B4: sección Estadísticas. B5: inicio de sesión, los 5 perfiles y las operaciones contra la base.
+B6: las pantallas de cada perfil, Equipo y Tecnologías.
 
 Arranque local:   uvicorn servidor.main:app --port 8000   (desde la carpeta aplicativo)
 En la nube:       uvicorn servidor.main:app --host 0.0.0.0 --port $PORT
@@ -27,7 +28,7 @@ from psycopg import OperationalError
 from psycopg_pool import PoolTimeout
 from starlette.middleware.sessions import SessionMiddleware
 
-from . import db, errores, estadisticas, rutas_admin, rutas_auditor, rutas_caja, rutas_cliente, rutas_supervisor, sesion
+from . import db, errores, estadisticas, rutas_admin, rutas_auditor, rutas_caja, rutas_cliente, rutas_publicas, rutas_supervisor, sesion
 
 WEB = Path(__file__).resolve().parent.parent / "web"
 logging.basicConfig(level=logging.INFO)
@@ -41,9 +42,9 @@ async def ciclo_de_vida(app: FastAPI):
     db.cerrar()
 
 
-app = FastAPI(title="Banco Andino · Aplicativo", version="0.5.0", lifespan=ciclo_de_vida)
+app = FastAPI(title="Banco Andino · Aplicativo", version="0.6.0", lifespan=ciclo_de_vida)
 
-for r in (sesion.router, rutas_cliente.router, rutas_caja.router, rutas_supervisor.router,
+for r in (sesion.router, rutas_publicas.router, rutas_cliente.router, rutas_caja.router, rutas_supervisor.router,
           rutas_auditor.router, rutas_admin.router, estadisticas.router):
     app.include_router(r)
 
@@ -109,7 +110,7 @@ def salud():
 
 @app.get("/", include_in_schema=False)
 def inicio():
-    return RedirectResponse("/ingresar.html")
+    return RedirectResponse("/index.html")
 
 
 app.mount("/", StaticFiles(directory=WEB), name="web")

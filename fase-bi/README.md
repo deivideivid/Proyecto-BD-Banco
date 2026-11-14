@@ -19,7 +19,7 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 | B3 | Tableros en Power BI | Listo |
 | B4 | Tableros dentro del aplicativo | Listo |
 | B5 | Servidor del aplicativo y permisos | Listo |
-| B6 | Interfaces por perfil | Pendiente |
+| B6 | Interfaces por perfil | Listo |
 | B7 | Pruebas y evaluación con el grupo | Pendiente |
 | B8 | Cierre | Pendiente |
 
@@ -32,8 +32,9 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 - `B3_powerbi/` - el archivo de Power BI, las medidas y la comparación con SQL.
 - `B4_tableros_app/` - las funciones de Estadísticas en la base, su validación y la comparación de la página con SQL y Power BI.
 - `B5_servidor/` - lo que el aplicativo necesita en la base (accesos, canal digital, `app_servidor`), la matriz de permisos y las pruebas por perfil.
-- `aplicativo/` - el aplicativo web (servidor en Python y páginas). Tiene el ingreso, las operaciones de los 5 perfiles y la sección Estadísticas.
+- `B6_interfaces/` - la paleta, las capturas en celular, tablet y computador y su revisión.
+- `aplicativo/` - el aplicativo web (servidor en Python y páginas) con las pantallas de los 5 perfiles, Equipo, Tecnologías y Estadísticas.
 - `herramientas/` - el script que usan los `.bat` para correr SQL con la contraseña de PostgreSQL.
 - `despliegue/` - dónde y cómo vamos a publicar el aplicativo (lo lleva Jerónimo).
-- `equipo/hojas_de_vida/` - las hojas de vida de los 5 en PDF.
+- `equipo/` - los datos del equipo (`equipo.json`) y las hojas de vida en PDF, solo con datos profesionales.
 - `IA/` - el registro de cómo usamos la IA en esta fase.

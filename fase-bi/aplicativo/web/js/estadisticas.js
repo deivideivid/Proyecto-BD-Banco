@@ -271,7 +271,7 @@
           labels: etiquetas,
           datasets: [{
             data: valores,
-            backgroundColor: esDona ? c.serie : (def.tipo === "line" ? "rgba(31,58,95,.12)" : c.primario),
+            backgroundColor: esDona ? c.serie : (def.tipo === "line" ? "rgba(11,37,69,.12)" : c.primario),
             borderColor: esDona ? "rgba(255,255,255,.9)" : c.primario,
             borderWidth: esDona ? 2 : (def.tipo === "line" ? 2 : 0),
             borderRadius: def.tipo === "bar" ? 6 : 0,
@@ -295,7 +295,7 @@
             }
           },
           scales: esDona ? {} : {
-            [ejeValor]: { beginAtZero: true, ticks: { color: c.texto, callback: (v) => abreviar(Number(v)) }, grid: { color: "rgba(31,58,95,.07)" } },
+            [ejeValor]: { beginAtZero: true, ticks: { color: c.texto, callback: (v) => abreviar(Number(v)) }, grid: { color: "rgba(11,37,69,.07)" } },
             [ejeValor === "x" ? "y" : "x"]: {
               ticks: {
                 color: c.texto, autoSkip: !def.horizontal,
@@ -374,6 +374,7 @@
 
   /* ---------- Carga de una página ---------- */
   async function cargar() {
+    if (soloControl) estado.pagina = "control";
     escribirDireccion();
     document.querySelectorAll(".pestanas button").forEach((b) => {
       b.setAttribute("aria-selected", String(b.dataset.pagina === estado.pagina));
@@ -386,7 +387,7 @@
 
     if (estado.peticion) estado.peticion.abort();
     estado.peticion = new AbortController();
-    const contenido = $(".contenido");
+    const contenido = document.querySelector("main");
     contenido.classList.add("cargando");
     if (!$("#tarjetas").children.length || $("#tarjetas").dataset.pagina !== estado.pagina) dibujarTarjetas(null, conf);
     $("#estado-carga").textContent = "Calculando…";
@@ -404,7 +405,7 @@
       ["#tarjetas", "#graficas", "#tablas"].forEach((s) => {
         const e = $(s); e.classList.remove("entrando"); void e.offsetWidth; e.classList.add("entrando");
       });
-      $("#alcance").textContent = "Estadísticas · " + (datos.alcance || "Todo el banco");
+      $("#alcance").textContent = "Los mismos tableros de Power BI · " + (datos.alcance || "Todo el banco");
       $("#estado-carga").textContent = datos.desde_cache ? "(ya estaba calculado)" : "(calculado en " + (datos.calculado_en_ms / 1000).toLocaleString("es-CO", { maximumFractionDigits: 1 }) + " s)";
       document.body.dataset.listo = estado.pagina + "|" + p.toString();
     } catch (e) {
@@ -415,9 +416,13 @@
   }
 
   /* ---------- Arranque ---------- */
+  let soloControl = false;
   async function iniciar() {
+    // B6: el marco común (menú y barra) y quién puede ver qué
+    const sesion = await Banco.iniciar({ perfiles: ["ADMINISTRADOR", "SUPERVISOR", "AUDITOR"], titulo: "Estadísticas" });
+    soloControl = sesion.perfil === "AUDITOR";   // el auditor de datos solo ve Control y calidad
+    if (soloControl) document.querySelectorAll(".pestanas button").forEach((b) => { if (b.dataset.pagina !== "control") b.remove(); });
     leerDireccion();
-    $("#salir").addEventListener("click", () => BancoAPI.salir());
     document.querySelectorAll(".pestanas button").forEach((b) => {
       b.addEventListener("click", () => { estado.pagina = b.dataset.pagina; cargar(); });
     });

@@ -1,0 +1,30 @@
+﻿Banco Andino - B6 accesos del administrador - 2026-11-14 14:50:18 - equipo DESKTOP-F1GG12C
+
+===== fase-bi\B6_interfaces\sql\b6_01_accesos_admin.sql =====
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+GRANT
+== Pruebas de las funciones de acceso del administrador
+CREATE TABLE
+GRANT
+DO
+                   prueba                    | esperado | obtenido | resultado 
+---------------------------------------------+----------+----------+-----------
+ El cajero no da accesos                     | 42501    | 42501    | PASS
+ Rol admin con usuario cajero no da accesos  | BA001    | BA001    | PASS
+ El administrador no se da acceso a sí mismo | BA001    | BA001    | PASS
+ No se da un perfil sin el rol vigente       | BA001    | BA001    | PASS
+(4 filas)
+
+     veredicto     
+-------------------
+ B6 ACCESOS = PASS
+(1 fila)
+
+
+RESULTADO: OK - todos los scripts corrieron sin errores.
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\B6_interfaces\salidas\salida_b6.txt

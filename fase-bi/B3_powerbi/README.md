@@ -20,3 +20,10 @@ armamos las 4 páginas, con su versión para celular.
 Lo hicimos el 12 de noviembre de 2026 en el computador de Juan Diego. Los **13 indicadores dan
 exactamente lo mismo que SQL** en los dos escenarios (ver `equivalencia_b3.md`), y quedaron las
 4 páginas con diseño para computador y para celular.
+
+## Tema de colores (B6)
+
+`powerbi/tema_banco_andino.json` es la paleta Azul Andino para Power BI. Para aplicarla:
+**Vista → Temas → Buscar temas** y escoger ese archivo. De paso, para que los días de la semana
+salgan en orden: en la vista de datos, columna `nombre_dia` de `bi dim_fecha` →
+**Herramientas de columnas → Ordenar por columna → dia_semana**. Después, guardar el `.pbix`.

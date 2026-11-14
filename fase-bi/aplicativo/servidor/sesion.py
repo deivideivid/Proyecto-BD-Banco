@@ -120,6 +120,18 @@ def salir(request: Request):
     return {"ok": True}
 
 
+@router.get("/estado")
+def estado(request: Request):
+    """Para las páginas públicas: dice si hay sesión sin responder 401 (null si no hay)."""
+    try:
+        s = sesion_actual(request)
+    except HTTPException as e:
+        if e.status_code == 401:
+            return None
+        raise
+    return {"login": s.login, "perfil": s.perfil, "nombre": s.nombre, "oficina": s.oficina, "menu": MENU[s.perfil]}
+
+
 @router.get("")
 def ver(s: Sesion = Depends(sesion_actual)):
     return {"login": s.login, "perfil": s.perfil, "nombre": s.nombre, "oficina": s.oficina, "menu": MENU[s.perfil]}

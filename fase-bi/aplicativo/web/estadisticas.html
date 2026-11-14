@@ -4,22 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Estadísticas · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
   <link rel="stylesheet" href="css/estadisticas.css">
 </head>
 <body>
-  <header class="barra">
-    <a class="marca" href="estadisticas.html" aria-label="Banco Andino, inicio">
-      <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M3 25 L12 10 L17 18 L21 12 L29 25 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
-        <path d="M2 28 H30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-      </svg>
-      <span>Banco Andino</span>
-    </a>
-    <span class="etiqueta-seccion"><span id="alcance">Estadísticas</span>
-      <button class="boton boton-sec boton-chico" id="salir" type="button">Salir</button></span>
-  </header>
-
-  <main class="contenido">
+  <main><div class="ancho">
+    <div class="encabezado"><div><h1>Estadísticas</h1><p id="alcance">Los mismos tableros de Power BI.</p></div></div>
     <nav class="pestanas" role="tablist" aria-label="Páginas de estadísticas">
       <button role="tab" data-pagina="resumen">Resumen</button>
       <button role="tab" data-pagina="transacciones">Transacciones</button>
@@ -47,12 +37,13 @@
 
     <p class="pie">Datos sintéticos del Banco Andino (banco ficticio). Los indicadores se calculan en la
       base con las mismas reglas de Power BI. <span id="estado-carga"></span></p>
-  </main>
+  </div></main>
 
   <div class="aviso-error vidrio" id="aviso-error" role="alert" hidden></div>
 
   <script src="vendor/chart.umd.js"></script>
   <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
   <script src="js/estadisticas.js"></script>
 </body>
 </html>

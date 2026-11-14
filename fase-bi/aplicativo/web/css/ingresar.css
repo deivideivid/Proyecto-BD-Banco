@@ -1,17 +1,10 @@
-/* Banco Andino · Ingreso (B5). El diseño final de esta pantalla llega en B6. */
-.pagina-ingreso { display: grid; place-items: center; min-height: 100vh; padding: 16px; }
-.caja-ingreso { width: min(100%, 380px); padding: 28px 24px; }
-.marca.grande { font-size: 1.35rem; justify-content: center; margin-bottom: 4px; display: flex; align-items: center; gap: 10px; color: var(--primario); font-weight: 650; }
-.subtitulo { text-align: center; color: var(--texto-suave); margin: 0 0 18px; font-size: .92rem; }
-#form-ingreso { display: flex; flex-direction: column; gap: 12px; }
-#form-ingreso label { display: flex; flex-direction: column; gap: 4px; font-size: .82rem; color: var(--texto-suave); }
-#form-ingreso input { font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(31, 58, 95, .2); background: rgba(255, 255, 255, .9); color: var(--texto); }
-#form-ingreso input:focus-visible { outline: 2px solid var(--acento); outline-offset: 1px; }
-.boton-principal { background: var(--primario); color: #fff; font-weight: 600; padding: 11px 16px; }
-.boton-principal[disabled] { opacity: .7; cursor: progress; }
-.mensaje { min-height: 1.2em; color: var(--peligro); font-size: .88rem; margin: 0; }
-.sacudir { animation: sacudir-caja .4s; }
-@keyframes sacudir-caja { 0%,100% { transform: none; } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-.panel { width: min(100%, 560px); padding: 24px; }
-.panel h1 { font-size: 1.2rem; margin: 0 0 4px; }
-.panel ul { padding-left: 18px; }
+/* Banco Andino · Ingreso (B6) */
+.centro-ingreso { display: grid; place-items: center; min-height: calc(100vh - var(--alto-barra) - 120px); }
+.caja-ingreso { width: min(100%, 400px); padding: 30px 26px; text-align: center; }
+.caja-ingreso .formulario { text-align: left; margin-top: 18px; }
+.caja-ingreso h1 { margin-top: 6px; }
+.caja-ingreso p { margin: 0; }
+.logo-grande { width: 54px; height: 54px; color: var(--primario); }
+/* Al entrar, la tarjeta se desvanece y la siguiente pantalla entra suavemente */
+.caja-ingreso.saliendo { animation: salir .3s ease-in forwards; }
+@keyframes salir { to { opacity: 0; transform: translateY(-10px) scale(.98); } }

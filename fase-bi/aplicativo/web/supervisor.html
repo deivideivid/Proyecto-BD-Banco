@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supervisión · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
+</head>
+<body>
+  <main><div class="ancho">
+    <section data-seccion="pendientes">
+      <div class="encabezado"><div><h1>Pendientes de aprobar</h1><p>Ajustes de su oficina. Quien crea un ajuste no lo puede aprobar (RN-44).</p></div>
+        <button class="boton secundario" id="recargar" type="button">Actualizar</button></div>
+      <div class="tarjeta" id="lista-pendientes"><div class="esqueleto"></div></div>
+    </section>
+
+    <section data-seccion="reversar">
+      <div class="encabezado"><div><h1>Reversar una transacción</h1><p>El reverso crea una transacción nueva con los asientos espejo; la original no se modifica.</p></div></div>
+      <form class="tarjeta fila" id="form-tx">
+        <label class="campo crece">Número de la transacción <input name="id" inputmode="numeric" required placeholder="Ej.: 1024180"></label>
+        <button class="boton primario" type="submit">Buscar</button>
+      </form>
+      <p class="mensaje-error" id="tx-error" role="alert"></p>
+      <div class="tarjeta seccion-margen" id="tx-detalle" hidden></div>
+    </section>
+
+    <section data-seccion="inactivar">
+      <div class="encabezado"><div><h1>Inactivar cuentas sin movimiento</h1><p>Proceso de todo el banco. Primero mire cuántas cuentas quedarían inactivas.</p></div></div>
+      <form class="tarjeta fila" id="form-inactivar">
+        <label class="campo crece">Días sin movimiento (mínimo 180) <input name="dias" type="number" min="180" max="3650" value="180" required></label>
+        <button class="boton secundario" type="submit">Ver cuántas</button>
+      </form>
+      <div class="tarjeta seccion-margen" id="inactivar-resultado" hidden></div>
+    </section>
+  </div></main>
+  <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
+  <script src="js/supervisor.js"></script>
+</body>
+</html>

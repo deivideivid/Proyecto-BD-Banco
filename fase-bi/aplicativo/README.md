@@ -7,7 +7,7 @@ HTML, CSS y JavaScript, adaptables a celular. Lo vamos construyendo por gates:
 |---|---|---|
 | B4 | Sección **Estadísticas** (los tableros de Power BI con gráficas propias) | Listo |
 | B5 | Inicio de sesión, perfiles y operaciones contra la base | Listo |
-| B6 | Interfaces de cada perfil, Equipo y Tecnologías | Pendiente |
+| B6 | Interfaces de cada perfil, Equipo y Tecnologías | Listo |
 
 ## Carpetas
 
@@ -15,7 +15,11 @@ HTML, CSS y JavaScript, adaptables a celular. Lo vamos construyendo por gates:
   `sesion.py` (ingreso y perfiles), `errores.py` (mensajes sencillos), `comun.py`, una ruta por
   perfil (`rutas_cliente.py`, `rutas_caja.py`, `rutas_supervisor.py`, `rutas_auditor.py`,
   `rutas_admin.py`), `estadisticas.py`, `crear_accesos.py` y `probar_conexion.py`.
-- `web/` - las páginas. `vendor/chart.umd.js` es Chart.js 4.4.1 (licencia MIT, en `vendor/`).
+- `web/` - las páginas: `index.html` (inicio), `ingresar.html`, `equipo.html`, `tecnologias.html`,
+  `cliente.html`, `caja.html`, `supervisor.html`, `auditor.html`, `admin.html` y `estadisticas.html`.
+  `css/banco.css` tiene la paleta y todos los componentes; `js/marco.js` arma la barra, el menú
+  plegable y las ventanas, y `js/api.js` hace las llamadas al servidor. `vendor/chart.umd.js` es
+  Chart.js 4.4.1 (licencia MIT, en `vendor/`).
 - `requirements.txt` - librerías de Python.
 - `iniciar_local.bat` - lo arranca en este computador y abre `http://localhost:8000`.
 
@@ -23,14 +27,16 @@ HTML, CSS y JavaScript, adaptables a celular. Lo vamos construyendo por gates:
 
 | Ruta | Quién | Qué hace |
 |---|---|---|
-| `/` | Todos | Lleva a `ingresar.html` |
+| `/` | Todos | Lleva a `index.html` |
+| `/api/equipo`, `/equipo/hv/{archivo}` | Todos | Los integrantes y sus hojas de vida (solo los PDF de `equipo.json`) |
+| `/api/sesion/estado` | Todos | Si hay sesión (sin responder 401), para las páginas públicas |
 | `/salud` | Todos | Responde `{"estado": "ok"}` sin consultar la base (para despertar el servidor en la nube) |
 | `/api/sesion/ingresar`, `/salir`, `/api/sesion` | Todos | Entrar, salir y ver quién inició sesión |
 | `/api/cliente/...` | Cliente | Cuentas, movimientos, resumen mensual y transferir |
 | `/api/caja/...` | Cajero y Supervisor | Buscar, fichas, registrar clientes, abrir y activar cuentas, consignar, retirar, transferir, bloquear y crear ajustes |
 | `/api/supervisor/...` | Supervisor | Ajustes pendientes (aprobar o rechazar), reversar, desbloquear, límite, cerrar e inactivar |
 | `/api/auditor/...` | Auditor de datos | Cuadres, bitácora de auditoría, ingresos al aplicativo y calidad |
-| `/api/admin/...` | Administrador | Usuarios internos, roles y estados |
+| `/api/admin/...` | Administrador | Usuarios internos, roles, estados y accesos al aplicativo |
 | `/api/estadisticas/...` | Administrador, Supervisor (su oficina), Auditor (Control y calidad) | Los tableros de B4 |
 | `/docs` | Todos | La documentación automática de FastAPI con todas las rutas |
 

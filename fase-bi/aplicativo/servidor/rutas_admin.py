@@ -6,6 +6,9 @@ Los roles no se borran: se revocan con fecha (vigente_hasta). Nadie se asigna ro
 """
 from typing import Literal
 
+import secrets
+
+import bcrypt
 import psycopg
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -116,3 +119,33 @@ def cambiar_estado(usuario_id: int, e: Estado, s: Sesion = Depends(admin)):
     if usuario_id == s.usuario_id:
         raise HTTPException(status_code=409, detail={"mensaje": "No puede desactivarse a sí mismo.", "codigo": "PROPIO"})
     return _escribir(s, "UPDATE seg.usuario SET estado = %s WHERE usuario_id = %s RETURNING usuario_id, estado", (e.estado, usuario_id))
+
+
+# ---------- Acceso al aplicativo (B6) ----------
+class Acceso(BaseModel):
+    perfil: Literal["CAJERO", "SUPERVISOR", "AUDITOR", "ADMINISTRADOR"]
+
+
+@router.get("/accesos")
+def accesos(s: Sesion = Depends(admin)):
+    """Empleados que pueden entrar al aplicativo."""
+    return filas(s, "SELECT * FROM app.fn_admin_accesos()")
+
+
+@router.post("/usuarios/{usuario_id}/acceso")
+def dar_acceso(usuario_id: int, a: Acceso, s: Sesion = Depends(admin)):
+    """Genera una contraseña temporal, la muestra una sola vez y guarda solo su hash.
+    Si el empleado ya tenía acceso, sirve para restablecerle la contraseña."""
+    _usuario(s, usuario_id)
+    clave = "".join(secrets.choice("ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789") for _ in range(12))
+    hash_ = bcrypt.hashpw(clave.encode(), bcrypt.gensalt(rounds=12)).decode()
+    fila = _escribir(s, "SELECT app.fn_admin_dar_acceso(%s, %s, %s, %s) AS login", (s.usuario_id, usuario_id, a.perfil, hash_))
+    return {"login": fila["login"], "perfil": a.perfil, "clave_temporal": clave}
+
+
+@router.post("/usuarios/{usuario_id}/acceso/quitar")
+def quitar_acceso(usuario_id: int, s: Sesion = Depends(admin)):
+    fila = _escribir(s, "SELECT app.fn_admin_quitar_acceso(%s, %s) AS quitado", (s.usuario_id, usuario_id))
+    if not fila["quitado"]:
+        raise HTTPException(status_code=404, detail={"mensaje": "Ese empleado no tenía acceso activo.", "codigo": "BA016"})
+    return {"quitado": True}

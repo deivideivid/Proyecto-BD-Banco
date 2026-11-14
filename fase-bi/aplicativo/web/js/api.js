@@ -25,7 +25,14 @@
     }
     return datos;
   }
+  /* Sesión sin obligar a entrar: en las páginas públicas devuelve null si no hay sesión */
+  async function sesionOpcional() {
+    const r = await fetch("api/sesion/estado", { credentials: "same-origin", headers: { Accept: "application/json" } });
+    if (!r.ok) throw new Error("El servidor respondió " + r.status);
+    return r.json();   // null si no hay sesión
+  }
   window.BancoAPI = {
+    sesionOpcional,
     get: (url, senal) => llamar("GET", url, undefined, senal),
     post: (url, cuerpo) => llamar("POST", url, cuerpo || {}),
     salir: async () => { try { await llamar("POST", "api/sesion/salir", {}); } finally { location.href = "ingresar.html"; } }

@@ -278,6 +278,19 @@ def main():
     nuevo_u = r[1]["usuario_id"]
     anotar("Administrador", "Le asigna el rol CAJERO", 200, admin.post(f"/api/admin/usuarios/{nuevo_u}/roles", {"rol": "CAJERO"})[0])
     anotar("Administrador", "Asignar otra vez el mismo rol", 409, admin.post(f"/api/admin/usuarios/{nuevo_u}/roles", {"rol": "CAJERO"})[0])
+    # B6: el administrador le da acceso al aplicativo y el empleado nuevo puede entrar
+    r = admin.post(f"/api/admin/usuarios/{nuevo_u}/acceso", {"perfil": "AUDITOR"})
+    anotar("Administrador", "No da un perfil que no corresponde al rol del empleado", "403 BA001", f"{r[0]} {codigo(r)}")
+    r = admin.post(f"/api/admin/usuarios/{nuevo_u}/acceso", {"perfil": "CAJERO"})
+    anotar("Administrador", "Le da acceso al aplicativo como cajero (contraseña temporal)", 200, r[0])
+    nuevo_nav = Navegador(base)
+    r2 = nuevo_nav.post("/api/sesion/ingresar", {"login": login_nuevo, "clave": (r[1] or {}).get("clave_temporal", "")})
+    anotar("Administrador", "El empleado nuevo entra con esa contraseña", "200 CAJERO", f"{r2[0]} {(r2[1] or {}).get('perfil')}")
+    anotar("Administrador", "Le quita el acceso", 200, admin.post(f"/api/admin/usuarios/{nuevo_u}/acceso/quitar")[0])
+    anotar("Administrador", "Sin acceso, su sesión deja de servir", 401, nuevo_nav.get("/api/sesion")[0])
+    yo_id = next(u["usuario_id"] for u in admin.get("/api/admin/usuarios?q=" + urllib.request.quote(admin.get("/api/sesion")[1]["nombre"]))[1])
+    r = admin.post(f"/api/admin/usuarios/{yo_id}/acceso", {"perfil": "ADMINISTRADOR"})
+    anotar("Administrador", "No se da acceso a sí mismo (lo frena la base)", "403 BA001", f"{r[0]} {codigo(r)}")
     anotar("Administrador", "Revoca el rol (con fecha, no se borra)", 200, admin.post(f"/api/admin/usuarios/{nuevo_u}/roles/CAJERO/revocar")[0])
     anotar("Administrador", "Desactiva el usuario", 200, admin.post(f"/api/admin/usuarios/{nuevo_u}/estado", {"estado": "INACTIVO"})[0])
     yo = admin.get("/api/sesion")[1]["nombre"]

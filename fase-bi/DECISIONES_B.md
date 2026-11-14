@@ -61,3 +61,13 @@ Lo que fuimos decidiendo en grupo y por qué.
     datos de G4 (RN-45).
 25. **La inactivación de cuentas pide vista previa, confirmación y mínimo 180 días**, porque el
     proceso es de todo el banco y con pocos días inactivaría miles de cuentas.
+26. **La paleta es la A, Azul Andino**, escogida en grupo entre tres opciones. Oscurecimos un poco el
+    color de alerta para que cumpla el contraste mínimo. El dorado nunca va como texto.
+27. **Todas las pantallas comparten un marco** (`marco.js` y `banco.css`): barra, menú plegable,
+    ventanas de confirmar y de éxito, y formato del dinero. Cada perfil tiene su página.
+28. **Las hojas de vida que publicamos no tienen datos personales.** Hicimos copias `hv_*.pdf` con
+    esos datos borrados del archivo y el aplicativo solo entrega los PDF que están en `equipo.json`.
+29. **El administrador da acceso al aplicativo a los empleados** con una contraseña temporal que
+    se muestra una sola vez. La base revisa que tenga el rol del perfil y que no sea para sí mismo.
+30. **Seguimos sin framework de pantallas**: HTML, CSS y JavaScript propios, para que cualquiera del
+    grupo pueda leer y cambiar el código.

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Auditoría de datos · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
+</head>
+<body>
+  <main><div class="ancho">
+    <section data-seccion="calidad">
+      <div class="encabezado"><div><h1>Calidad de datos</h1><p>Resultado del quality gate de G6: 76 pruebas con peso por severidad.</p></div></div>
+      <div class="rejilla auto" id="calidad-puntajes"><div class="tarjeta"><div class="esqueleto"></div></div></div>
+      <div class="tarjeta seccion-margen"><h2>Pruebas (primero las que no pasaron)</h2><div id="calidad-pruebas"></div></div>
+    </section>
+
+    <section data-seccion="cuadres">
+      <div class="encabezado"><div><h1>Cuadres y reconciliación</h1><p>Las tres vistas de control del banco. Lo esperado es 0 en las tres.</p></div>
+        <button class="boton secundario" id="revisar-cuadres" type="button">Volver a revisar</button></div>
+      <div class="rejilla tres" id="lista-cuadres"></div>
+      <p class="suave chico">Recorren todas las transacciones y cuentas: tardan unos segundos.</p>
+    </section>
+
+    <section data-seccion="bitacora">
+      <div class="encabezado"><div><h1>Bitácora de auditoría</h1><p>Cada cambio en clientes, cuentas, transacciones y seguridad, con quién lo hizo.</p></div></div>
+      <form class="tarjeta formulario" id="form-bitacora">
+        <div class="rejilla tres">
+          <label class="campo">Tabla <select name="tabla"><option value="">Todas</option><option>transaccion_financiera</option><option>cuenta</option><option>cliente</option><option>titularidad_cuenta</option><option>evento_cuenta</option><option>usuario</option><option>usuario_rol</option></select></label>
+          <label class="campo">Operación <select name="operacion"><option value="">Todas</option><option>INSERT</option><option>UPDATE</option><option>DELETE</option></select></label>
+          <label class="campo">Usuario (login del banco) <input name="login" maxlength="40"></label>
+          <label class="campo">Desde <input name="desde" type="date"></label>
+          <label class="campo">Hasta <input name="hasta" type="date"></label>
+          <label class="campo">Cuántos <select name="limite"><option>50</option><option>100</option><option>200</option></select></label>
+        </div>
+        <div class="fila"><button class="boton primario" type="submit">Consultar</button></div>
+      </form>
+      <div class="tarjeta seccion-margen" id="lista-bitacora"></div>
+    </section>
+
+    <section data-seccion="ingresos">
+      <div class="encabezado"><div><h1>Ingresos al aplicativo</h1><p>Quién entró o intentó entrar, y si lo logró.</p></div>
+        <button class="boton secundario" id="recargar-ingresos" type="button">Actualizar</button></div>
+      <div class="tarjeta" id="lista-ingresos"></div>
+    </section>
+  </div></main>
+  <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
+  <script src="js/auditor.js"></script>
+</body>
+</html>

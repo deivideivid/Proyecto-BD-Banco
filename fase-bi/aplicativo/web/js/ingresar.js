@@ -1,39 +1,24 @@
 /* Banco Andino · Ingreso. Al entrar, lleva a la sección que le toca a cada perfil. */
-(function () {
+(async function () {
   "use strict";
-  const DESTINO = {
-    ADMINISTRADOR: "estadisticas.html",
-    SUPERVISOR: "estadisticas.html",
-    AUDITOR: "estadisticas.html#control",
-    CAJERO: "panel.html",
-    CLIENTE: "panel.html"
-  };
+  const sesion = await Banco.iniciar({ titulo: "Ingresar" });
+  const volver = new URLSearchParams(location.search).get("volver");
+  // Solo páginas propias (sin "//" ni esquemas), para no redirigir a otro sitio
+  const destino = (perfil) => (volver && /^[a-z_]+\.html(#[\w?=&.-]*)?$/i.test(volver)) ? volver : Banco.INICIO[perfil];
+  if (sesion) { location.replace(destino(sesion.perfil)); return; }
+
   const form = document.getElementById("form-ingreso");
   const boton = document.getElementById("entrar");
-  const mensaje = document.getElementById("mensaje");
-
-  function destinoSeguro(perfil) {
-    const volver = new URLSearchParams(location.search).get("volver");
-    // Solo páginas propias (sin "//" ni esquemas), para no redirigir a otro sitio
-    if (volver && /^[a-z_]+\.html(#[\w?=&.-]*)?$/i.test(volver)) return volver;
-    return DESTINO[perfil] || "panel.html";
-  }
+  const caja = document.getElementById("caja");
+  document.getElementById("login").focus();
 
   form.addEventListener("submit", async (ev) => {
     ev.preventDefault();
-    mensaje.textContent = "";
-    boton.disabled = true;
-    boton.textContent = "Verificando…";
-    try {
-      const s = await BancoAPI.post("api/sesion/ingresar", {
-        login: document.getElementById("login").value, clave: document.getElementById("clave").value });
-      location.href = destinoSeguro(s.perfil);
-    } catch (e) {
-      mensaje.textContent = e.message;
-      const caja = document.getElementById("caja");
-      caja.classList.remove("sacudir"); void caja.offsetWidth; caja.classList.add("sacudir");
-      boton.disabled = false;
-      boton.textContent = "Ingresar";
-    }
+    const s = await Banco.enviar(boton, () => BancoAPI.post("api/sesion/ingresar", {
+      login: document.getElementById("login").value, clave: document.getElementById("clave").value }),
+      { errorEn: document.getElementById("mensaje"), sacudir: caja });
+    if (!s) return;
+    caja.classList.add("saliendo");
+    setTimeout(() => { location.href = destino(s.perfil); }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 280);
   });
 })();

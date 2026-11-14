@@ -1,0 +1,55 @@
+B6 · Revisión de pantallas en http://localhost:8000
+
+PASS  celular    inicio                     cargó · desborde lateral 0px
+PASS  celular    equipo                     cargó · desborde lateral 0px
+PASS  celular    tecnologias                cargó · desborde lateral 0px
+PASS  celular    ingresar                   cargó · desborde lateral 0px
+PASS  celular    cliente_cuentas            cargó · desborde lateral 0px
+PASS  celular    cliente_movimientos        cargó · desborde lateral 0px
+PASS  celular    cliente_transferir         cargó · desborde lateral 0px
+PASS  celular    cliente_estadisticas       cargó · desborde lateral 0px
+PASS  celular    cajero_buscar              cargó · desborde lateral 0px
+PASS  celular    cajero_operacion           cargó · desborde lateral 0px
+PASS  celular    cajero_nuevo_cliente       cargó · desborde lateral 0px
+PASS  celular    supervisor_pendientes      cargó · desborde lateral 0px
+PASS  celular    supervisor_reversar        cargó · desborde lateral 0px
+PASS  celular    supervisor_estadisticas    cargó · desborde lateral 0px
+PASS  celular    auditor_calidad            cargó · desborde lateral 0px
+PASS  celular    auditor_bitacora           cargó · desborde lateral 0px
+PASS  celular    admin_usuarios             cargó · desborde lateral 0px
+PASS  celular    admin_accesos              cargó · desborde lateral 0px
+PASS  tablet     inicio                     cargó · desborde lateral 0px
+PASS  tablet     equipo                     cargó · desborde lateral 0px
+PASS  tablet     ingresar                   cargó · desborde lateral 0px
+PASS  tablet     cliente_cuentas            cargó · desborde lateral 0px
+PASS  tablet     cliente_transferir         cargó · desborde lateral 0px
+PASS  tablet     cajero_buscar              cargó · desborde lateral 0px
+PASS  tablet     supervisor_pendientes      cargó · desborde lateral 0px
+PASS  tablet     supervisor_estadisticas    cargó · desborde lateral 0px
+PASS  tablet     auditor_calidad            cargó · desborde lateral 0px
+PASS  tablet     admin_usuarios             cargó · desborde lateral 0px
+PASS  computador inicio                     cargó · desborde lateral 0px
+PASS  computador equipo                     cargó · desborde lateral 0px
+PASS  computador tecnologias                cargó · desborde lateral 0px
+PASS  computador ingresar                   cargó · desborde lateral 0px
+PASS  computador cliente_cuentas            cargó · desborde lateral 0px
+PASS  computador cliente_movimientos        cargó · desborde lateral 0px
+PASS  computador cliente_transferir         cargó · desborde lateral 0px
+PASS  computador cliente_estadisticas       cargó · desborde lateral 0px
+PASS  computador cajero_buscar              cargó · desborde lateral 0px
+PASS  computador cajero_operacion           cargó · desborde lateral 0px
+PASS  computador cajero_nuevo_cliente       cargó · desborde lateral 0px
+PASS  computador supervisor_pendientes      cargó · desborde lateral 0px
+PASS  computador supervisor_reversar        cargó · desborde lateral 0px
+PASS  computador supervisor_estadisticas    cargó · desborde lateral 0px
+PASS  computador auditor_calidad            cargó · desborde lateral 0px
+PASS  computador auditor_bitacora           cargó · desborde lateral 0px
+PASS  computador admin_usuarios             cargó · desborde lateral 0px
+PASS  computador admin_accesos              cargó · desborde lateral 0px
+PASS  computador menú plegable: 248px -> 72px, se recuerda al recargar: True
+PASS  celular menú encima del contenido: se abre True, se cierra tocando afuera True
+PASS  celular transferencia de punta a punta: número de transacción 1024249
+PASS  celular error en lenguaje sencillo: Fondos insuficientes. (quedó registrado el rechazo n.º 1024250)
+
+Pantallas revisadas: 50 · con problemas: 0
+B6 PANTALLAS = PASS

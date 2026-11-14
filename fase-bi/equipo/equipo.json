@@ -1,0 +1,10 @@
+{
+  "nota": "Datos que muestra la sección Equipo del aplicativo. Cada uno puede editar su rol en el proyecto. 'hoja_de_vida' es el nombre del PDF dentro de hojas_de_vida/ (solo datos profesionales).",
+  "integrantes": [
+    {"nombre": "Juan Diego Ortiz Duero", "rol_proyecto": "", "programa": "Ingeniería de Sistemas y Telecomunicaciones", "hoja_de_vida": "hv_juan_diego_ortiz.pdf"},
+    {"nombre": "Jerónimo Soto Villada", "rol_proyecto": "Despliegue del aplicativo", "programa": "Ingeniería de Sistemas y Telecomunicaciones", "hoja_de_vida": "hv_jeronimo_soto.pdf"},
+    {"nombre": "Adrián Daniel Argotte Marichal", "rol_proyecto": "", "programa": "Ingeniería de Sistemas y Telecomunicaciones", "hoja_de_vida": "hv_adrian_argotte.pdf"},
+    {"nombre": "Miguel Andrés Pava Gaviria", "rol_proyecto": "", "programa": "Ingeniería de Sistemas y Telecomunicaciones", "hoja_de_vida": "hv_miguel_pava.pdf"},
+    {"nombre": "David González", "rol_proyecto": "", "programa": "Ingeniería de Sistemas y Telecomunicaciones", "hoja_de_vida": "hv_david_gonzalez.pdf"}
+  ]
+}

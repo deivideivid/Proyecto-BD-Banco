@@ -34,7 +34,7 @@ def ingresar(page):
     page.fill("#login", "demo.admin")
     page.fill("#clave", clave)
     page.click("#entrar")
-    page.wait_for_url("**/estadisticas.html*", timeout=60000)
+    page.wait_for_url(lambda url: "ingresar.html" not in url, timeout=60000)
 
 # Valores oficiales (catalogo_indicadores.md). A = todo; B = 2026-08 y AHORROS.
 OFICIAL = {
