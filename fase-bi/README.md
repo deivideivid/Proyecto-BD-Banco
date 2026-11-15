@@ -20,8 +20,9 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 | B4 | Tableros dentro del aplicativo | Listo |
 | B5 | Servidor del aplicativo y permisos | Listo |
 | B6 | Interfaces por perfil | Listo |
-| B7 | Pruebas y evaluación con el grupo | Pendiente |
-| B8 | Cierre | Pendiente |
+| B7 | Despliegue en la nube (Neon + Render) | Pendiente |
+| B8 | Pruebas y evaluación con el grupo | Pendiente |
+| B9 | Cierre | Pendiente |
 
 El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, en `DECISIONES_B.md`.
 
@@ -35,6 +36,6 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 - `B6_interfaces/` - la paleta, las capturas en celular, tablet y computador y su revisión.
 - `aplicativo/` - el aplicativo web (servidor en Python y páginas) con las pantallas de los 5 perfiles, Equipo, Tecnologías y Estadísticas.
 - `herramientas/` - el script que usan los `.bat` para correr SQL con la contraseña de PostgreSQL.
-- `despliegue/` - dónde y cómo vamos a publicar el aplicativo (lo lleva Jerónimo).
+- `despliegue/` - dónde y cómo vamos a publicar el aplicativo (lo lleva Jerónimo, es el gate B7).
 - `equipo/` - los datos del equipo (`equipo.json`) y las hojas de vida en PDF, solo con datos profesionales.
 - `IA/` - el registro de cómo usamos la IA en esta fase.
