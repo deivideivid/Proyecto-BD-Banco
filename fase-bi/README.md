@@ -8,7 +8,7 @@ En esta fase tomamos la base del laboratorio (G0 a G8) y la llevamos a dos cosas
    tecnologías que usamos.
 
 El aplicativo está publicado en **https://banco-andino.onrender.com** (si estaba dormido, tarda
-cerca de un minuto en abrir). Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entrega-final`.
+cerca de un minuto en abrir). La trabajamos en la rama `fase-bi` y al terminar B8 la unimos a `main`; Render sigue publicando desde `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entrega-final`.
 
 ## Cómo vamos
 
@@ -23,7 +23,7 @@ cerca de un minuto en abrir). Trabajamos en la rama `fase-bi`. Lo de G0 a G8 que
 | B6 | Interfaces por perfil | Listo |
 | B7 | Despliegue en la nube (Neon + Render) | Listo: https://banco-andino.onrender.com |
 | B8 | Pruebas y evaluación con el grupo | Listo: los 5 evaluamos, 7 hallazgos corregidos y 110/110 en la nube |
-| B9 | Cierre | Pendiente |
+| B9 | Cierre | En curso: informe final, guía del aplicativo y guiones de la sustentación |
 
 El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, en `DECISIONES_B.md`.
 
@@ -38,6 +38,6 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 - `B8_evaluacion/` - la guía y la planilla de la evaluación del grupo sobre el enlace publicado.
 - `aplicativo/` - el aplicativo web (servidor en Python y páginas) con las pantallas de los 5 perfiles, Equipo, Tecnologías y Estadísticas.
 - `herramientas/` - el script que usan los `.bat` para correr SQL con la contraseña de PostgreSQL.
-- `despliegue/` - dónde y cómo vamos a publicar el aplicativo (gate B7: Jerónimo hizo la comparación y David lo monta; el paso a paso está en `despliegue/GUIA_B7.md`).
+- `despliegue/` - dónde y cómo publicamos el aplicativo (gate B7: Jerónimo comparó los proveedores y David lo montó; el paso a paso está en `despliegue/GUIA_B7.md`).
 - `equipo/` - los datos del equipo (`equipo.json`) y las hojas de vida en PDF, solo con datos profesionales.
 - `IA/` - el registro de cómo usamos la IA en esta fase.

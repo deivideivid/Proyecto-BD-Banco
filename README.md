@@ -8,8 +8,9 @@ personas reales.
 **Integrantes:** Juan Diego Ortiz, Adrian Daniel Argotte, Miguel Andrés Pava, Jerónimo Soto y
 David González.
 
-> **Fase nueva:** en la rama `fase-bi` estamos llevando el banco a un modelo estrella, a Power
-> BI y a un aplicativo web por perfiles. Todo eso está en la carpeta `fase-bi/`.
+> **Fase BI:** después de G8 llevamos el banco a un modelo estrella, a Power BI y a un
+> aplicativo web por perfiles, publicado en https://banco-andino.onrender.com. Todo eso está en
+> la carpeta [`fase-bi/`](fase-bi/README.md).
 
 ## Cómo organizamos el repositorio
 
@@ -22,7 +23,7 @@ Proyecto-BD-Banco/
 ├── data/lote1/  CSV del lote 1 (clientes, cuentas, eventos)
 ├── data/lote2/  CSV del lote 2 (no lo subimos: se genera en cada computador)
 ├── evidence/    Evidencia de cada gate
-└── fase-bi/     Modelo estrella, Power BI y aplicativo (fase nueva)
+└── fase-bi/     Modelo estrella, Power BI y aplicativo (fase BI)
 ```
 
 ## Volumen de datos
@@ -121,6 +122,7 @@ exactamente los mismos datos en cualquier computador.
 - [x] **G6** Quality gate: 76 pruebas en 12 categorías; pasamos de 98,3 (1 FAIL ALTA) a 99,6 (0 FAIL) y detectamos los 7 defectos que inyectamos → `sql/quality_gate.sql`, `evidence/g6_quality_before_after.md`
 - [x] **G7** Rendimiento y seguridad: 10 consultas con EXPLAIN antes y después, 6 índices justificados (el retiro bajó de 95 a 1,2 ms), 3 casos sin índice, RBAC 23/23 → `evidence/g7_explain.md`, `evidence/g7_security.md`
 - [x] **G8** Cierre: reconstrucción completa en un paso (`sql/g8_reconstruir_todo.sql`), ERD final generado desde el catálogo, informe final (5 páginas), matriz IA de 46 decisiones y guía de defensa → `docs/informe_final.pdf`, `docs/matriz_ia.md`, `docs/defensa.md`
+- [x] **Fase BI (B0–B8)**: modelo estrella, Power BI, aplicativo web para 5 perfiles publicado en la nube y evaluación del grupo (110/110 pruebas) → `fase-bi/README.md`
 
 ## Reglas que nos pusimos para el repositorio
 
