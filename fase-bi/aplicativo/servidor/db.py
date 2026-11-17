@@ -40,6 +40,9 @@ def abrir() -> None:
             min_size=1,
             max_size=int(os.environ.get("DB_MAX_CONEXIONES", "6")),
             timeout=15,  # si la base no responde, avisamos en 15 s en vez de dejar la página esperando
+            # En la nube la base se duerme sola y corta las conexiones abiertas: antes de usar una
+            # conexión del pool revisamos que siga viva, y si no, el pool abre otra.
+            check=ConnectionPool.check_connection,
             kwargs={"row_factory": dict_row, "autocommit": True,
                     "options": "-c statement_timeout=60000 -c TimeZone=America/Bogota"},
             open=True,

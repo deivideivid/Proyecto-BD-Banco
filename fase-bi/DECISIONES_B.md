@@ -71,3 +71,13 @@ Lo que fuimos decidiendo en grupo y por qué.
     se muestra una sola vez. La base revisa que tenga el rol del perfil y que no sea para sí mismo.
 30. **Seguimos sin framework de pantallas**: HTML, CSS y JavaScript propios, para que cualquiera del
     grupo pueda leer y cambiar el código.
+31. **El despliegue es un gate propio (B7)** y la evaluación del grupo la hacemos sobre el enlace
+    publicado (B8). El cierre pasa a B9.
+32. **David monta el despliegue** porque Jerónimo estuvo ausente. Seguimos lo que Jerónimo comparó:
+    Neon Free para la base completa y Render Free para el servidor. David crea las cuentas y guarda
+    las cadenas; nunca van al repositorio.
+33. **La base de la nube se monta con los mismos scripts de local**, cada uno en su conexión y con
+    `createrole_self_grant = 'set'`, porque en Neon no somos superusuario. Lo probamos antes en un
+    PostgreSQL sin superusuario: todo en PASS, `evidence/` sin cambios y 784 MB de 1 GB.
+34. **Render usa la cadena directa de Neon** (sin `-pooler`) con el usuario `app_servidor`, y el
+    servidor revisa cada conexión antes de usarla porque Neon las corta cuando la base se duerme.

@@ -12,6 +12,9 @@
 Uso (con el aplicativo prendido):
     python fase-bi/B5_servidor/pruebas/probar_perfiles.py [http://localhost:8000]
 Lee las contraseñas de fase-bi/aplicativo/accesos_demo.local.txt. Solo usa la librería estándar.
+Contra la nube (B7):
+    python fase-bi/B5_servidor/pruebas/probar_perfiles.py https://<servicio>.onrender.com
+En ese caso lee accesos_demo_nube.local.txt y guarda la salida en salida_pruebas_perfiles_nube.txt.
 
 OJO: hace operaciones reales (quedan con la descripción "Prueba B5"), como cualquier uso del
 aplicativo. Mueve montos pequeños y deja todo cuadrado.
@@ -113,7 +116,12 @@ def buscar_servidor(base):
 
 
 def main():
+    global ARCHIVO_ACCESOS, SALIDA
     base = buscar_servidor(sys.argv[1] if len(sys.argv) > 1 else None)
+    if not base.startswith(("http://localhost", "http://127.0.0.1")):
+        # Es la nube: sus accesos y su salida van aparte de los de la base local
+        ARCHIVO_ACCESOS = ARCHIVO_ACCESOS.with_name("accesos_demo_nube.local.txt")
+        SALIDA = SALIDA.with_name("salida_pruebas_perfiles_nube.txt")
     claves = leer_accesos()
     print(f"Servidor: {base}\n")
     D = Decimal

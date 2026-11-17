@@ -1,6 +1,7 @@
 # Despliegue del aplicativo
 
-**Encargado:** Jerónimo Soto. · **Comparación hecha el 12/11/2026.** Los planes gratis cambian
+**Investigación y comparación:** Jerónimo Soto, el 12/11/2026. **Montaje (gate B7):** David González,
+porque Jerónimo estuvo ausente. El paso a paso que seguimos está en [`GUIA_B7.md`](GUIA_B7.md). Los planes gratis cambian
 seguido, así que volvemos a mirar los límites el día que creemos las cuentas.
 
 Aquí decidimos dónde publicar el aplicativo para que el profesor y cualquiera del grupo lo
@@ -148,6 +149,10 @@ Render.
 
 ## Cómo lo montaríamos (Neon + Render)
 
+> En B7 lo montamos con los tres `.bat` de esta carpeta (`b7_1_montar_base.bat`,
+> `b7_2_clave_y_accesos.bat` y `b7_3_probar_nube.bat`), que hacen lo de abajo en orden y además
+> cargan B2, B4, B5 y B6. El paso a paso está en [`GUIA_B7.md`](GUIA_B7.md).
+
 ### Base en Neon (unos 30 min, la mayoría esperando la carga)
 
 1. Entramos a neon.com con GitHub (no pide tarjeta) y creamos el proyecto `banco-andino`, con
@@ -181,13 +186,19 @@ Render.
 1. Entramos a render.com con GitHub → *New* → *Web Service* y conectamos el repositorio. Lo
    tiene que autorizar quien administra `deivideivid/Proyecto-BD-Banco` en GitHub (David), o
    David nos da permiso de administrador.
-2. Rama `fase-bi`, carpeta raíz la del aplicativo, entorno Python, tipo de instancia **Free**
-   y región **Virginia (US East)**.
-3. En *Environment* ponemos `DATABASE_URL` con la cadena del **usuario del aplicativo** (no
-   la del dueño de Neon) y `sslmode=require`. Para el aplicativo sí podemos usar la cadena con
-   `-pooler`.
+2. Rama `fase-bi`, entorno Python, tipo de instancia **Free** y región **Virginia (US East)**.
+   La carpeta raíz la dejamos vacía (el aplicativo lee `fase-bi/equipo/`, que queda fuera de
+   `fase-bi/aplicativo/`), así que los comandos entran a la carpeta del aplicativo.
+3. En *Environment* ponemos `DATABASE_URL` con la cadena del **usuario del aplicativo**
+   (`app_servidor`, no el dueño de Neon) y `sslmode=require`. Usamos la cadena **directa** (sin
+   `-pooler`): el servidor abre pocas conexiones y así evitamos que el pooler rechace las opciones
+   de conexión que manda el aplicativo (hora de Colombia y tiempo máximo por consulta).
 
 ### Lo que el servidor de B5 tiene que cumplir para poder publicarlo
+
+En B5 y B6 lo dejamos cumpliendo todo esto. En B7 además le agregamos que revise cada conexión
+antes de usarla, porque Neon corta las conexiones cuando la base se duerme.
+
 
 - Leer la conexión de `os.environ["DATABASE_URL"]`, nunca escrita en el código.
 - Escuchar en `0.0.0.0` y en el puerto que Render le da en la variable `PORT`.
@@ -206,20 +217,16 @@ Render.
 - Tenemos de respaldo la base local de Juan Diego y el aplicativo corriendo en local, por si
   falla el internet del salón.
 
-## Qué tenemos que decidir
-
-- [ ] Dónde va el servidor del aplicativo. **Propuesta:** Render Free.
-- [ ] Dónde va la base (completa o reducida). **Propuesta:** completa en Neon Free; si no cabe
-      con `bi`, Azure for Students.
-- [ ] Si el enlace tiene que quedar encendido todo el tiempo o solo el día de la sustentación.
-      **Propuesta:** queda publicado siempre, se duerme solo y lo despertamos antes de mostrarlo.
-- [ ] Quién tiene las credenciales del servicio. **Propuesta:** Jerónimo crea las cuentas y
-      guarda las cadenas. Al grupo le pasa por mensaje privado solo la del rol de solo lectura
-      para Power BI. Nunca van al repositorio ni al chat del grupo.
-
 ## Lo que decidimos
 
-(Pendiente: lo aprobamos en grupo con esta comparación.)
+Lo aprobamos en grupo con esta comparación al arrancar B7 (17/11/2026):
+
+- El servidor va en **Render Free** y la base **completa** en **Neon Free**. Si con `bi` no cabe
+  en 1 GB, pasamos la base a Azure for Students.
+- El enlace queda publicado siempre: se duerme solo y lo despertamos antes de mostrarlo.
+- **David** crea las cuentas de Neon y Render (también administra el repositorio en GitHub) y
+  guarda las cadenas de conexión. Al grupo solo le pasa por mensaje privado lo que necesite cada
+  uno. Nunca van al repositorio ni al chat del grupo.
 
 ## Fuentes (consultadas el 12/11/2026)
 

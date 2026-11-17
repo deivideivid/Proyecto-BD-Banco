@@ -7,7 +7,12 @@ En la base solo queda el hash bcrypt.
 Para volver a generar la de un acceso (por ejemplo si se pierde el archivo), en pgAdmin como
 postgres:  UPDATE app.acceso SET clave_hash = NULL WHERE login = 'demo.cajero';
 y volver a arrancar el aplicativo.
+
+Para la base de la nube (B7) lo corre despliegue/b7_2_clave_y_accesos.bat con
+ACCESOS_ARCHIVO=accesos_demo_nube.local.txt, así las contraseñas de la nube no se mezclan con
+las de la base local. Ese archivo tampoco se sube (.gitignore: *.local.txt).
 """
+import os
 import secrets
 from datetime import datetime
 from pathlib import Path
@@ -16,7 +21,7 @@ import bcrypt
 
 from . import db
 
-ARCHIVO = Path(__file__).resolve().parent.parent / "accesos_demo.local.txt"
+ARCHIVO = Path(__file__).resolve().parent.parent / os.environ.get("ACCESOS_ARCHIVO", "accesos_demo.local.txt")
 ALFABETO = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"
 
 
