@@ -1,0 +1,10 @@
+/* Banco Andino · Ingreso (B6) */
+.centro-ingreso { display: grid; place-items: center; min-height: calc(100vh - var(--alto-barra) - 120px); }
+.caja-ingreso { width: min(100%, 400px); padding: 30px 26px; text-align: center; }
+.caja-ingreso .formulario { text-align: left; margin-top: 18px; }
+.caja-ingreso h1 { margin-top: 6px; }
+.caja-ingreso p { margin: 0; }
+.logo-grande { width: 54px; height: 54px; color: var(--primario); }
+/* Al entrar, la tarjeta se desvanece y la siguiente pantalla entra suavemente */
+.caja-ingreso.saliendo { animation: salir .3s ease-in forwards; }
+@keyframes salir { to { opacity: 0; transform: translateY(-10px) scale(.98); } }

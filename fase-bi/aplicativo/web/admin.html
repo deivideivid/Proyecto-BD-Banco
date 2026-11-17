@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administración · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
+</head>
+<body>
+  <main><div class="ancho">
+    <section data-seccion="usuarios">
+      <div class="encabezado"><div><h1>Usuarios y roles</h1><p>Empleados del banco. Los roles no se borran: se revocan con fecha.</p></div>
+        <a class="boton primario" href="#nuevo">Nuevo usuario</a></div>
+      <form class="tarjeta formulario" id="form-usuarios">
+        <div class="rejilla tres">
+          <label class="campo">Buscar por login o nombre <input name="q" maxlength="60"></label>
+          <label class="campo">Rol <select name="rol" id="filtro-rol"><option value="">Todos</option></select></label>
+          <div class="fila fin"><button class="boton primario" type="submit">Buscar</button></div>
+        </div>
+      </form>
+      <div class="tarjeta seccion-margen" id="lista-usuarios"><div class="esqueleto"></div></div>
+    </section>
+
+    <section data-seccion="nuevo">
+      <div class="encabezado"><div><h1>Nuevo usuario</h1><p>Primero se crea el empleado; después se le asigna el rol y, si lo necesita, acceso al aplicativo.</p></div></div>
+      <form class="tarjeta formulario dos" id="form-nuevo" novalidate>
+        <label class="campo">Login <input name="login" maxlength="40" required placeholder="ej.: ana.perez" autocapitalize="none"><span class="ayuda">Minúsculas, números, punto o guion bajo (4 a 40)</span></label>
+        <label class="campo">Oficina <select name="oficina_id" id="nuevo-oficina"><option value="">Sin oficina (auditor o administrador)</option></select></label>
+        <label class="campo">Tipo de documento <select name="tipo_documento"><option value="CC">Cédula de ciudadanía</option><option value="CE">Cédula de extranjería</option><option value="PA">Pasaporte</option><option value="PPT">PPT</option></select></label>
+        <label class="campo">Número de documento <input name="numero_documento" maxlength="15" required></label>
+        <label class="campo">Nombres <input name="nombres" maxlength="120" required></label>
+        <label class="campo">Apellidos <input name="apellidos" maxlength="120" required></label>
+        <div class="fila completo"><button class="boton primario" type="submit">Crear usuario</button></div>
+        <p class="mensaje-error completo" role="alert"></p>
+      </form>
+    </section>
+
+    <section data-seccion="accesos">
+      <div class="encabezado"><div><h1>Accesos al aplicativo</h1><p>Empleados que pueden entrar. La contraseña temporal se muestra una sola vez.</p></div></div>
+      <div class="tarjeta" id="lista-accesos"><div class="esqueleto"></div></div>
+    </section>
+  </div></main>
+  <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

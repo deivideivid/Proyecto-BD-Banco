@@ -1,0 +1,105 @@
+﻿Banco Andino - B4 estadisticas del aplicativo - 2026-11-13 14:41:09 - equipo DESKTOP-F1GG12C
+
+===== fase-bi\B4_tableros_app\sql\b4_01_funciones_estadisticas.sql =====
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+Funciones de Estadísticas creadas en el esquema bi.
+
+===== fase-bi\B4_tableros_app\sql\b4_02_validar_estadisticas.sql =====
+SET
+CREATE TABLE
+INSERT 0 3
+SELECT 39
+SELECT 45
+CREATE TABLE
+INSERT 0 39
+INSERT 0 27
+INSERT 0 3
+== Detalle
+            prueba            |                             detalle                              |     esperado     |     obtenido     | resultado 
+------------------------------+------------------------------------------------------------------+------------------+------------------+-----------
+ Gráfica A cuentas_estado     | suma de la serie = CTA                                           |            50000 |            50000 | PASS
+ Gráfica A cuentas_producto   | suma de la serie = CTA                                           |            50000 |            50000 | PASS
+ Gráfica A monto_mes          | suma de la serie = K02                                           | 1767796946066.07 | 1767796946066.07 | PASS
+ Gráfica A monto_tipo         | suma de la serie = K02                                           | 1767796946066.07 | 1767796946066.07 | PASS
+ Gráfica A rechazo_motivo     | suma de la serie = TXR                                           |            24104 |            24104 | PASS
+ Gráfica A saldo_departamento | suma de la serie = K09                                           | 1004471074520.73 | 1004471074520.73 | PASS
+ Gráfica A tx_dia             | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica A tx_hora            | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica A tx_tipo            | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica B cuentas_estado     | suma de la serie = CTA                                           |            20547 |            20547 | PASS
+ Gráfica B cuentas_producto   | suma de la serie = CTA                                           |            20547 |            20547 | PASS
+ Gráfica B monto_mes          | suma de la serie = K02                                           |   12643399220.02 |   12643399220.02 | PASS
+ Gráfica B monto_tipo         | suma de la serie = K02                                           |   12643399220.02 |   12643399220.02 | PASS
+ Gráfica B rechazo_motivo     | suma de la serie = TXR                                           |              883 |              883 | PASS
+ Gráfica B saldo_departamento | suma de la serie = K09                                           |  126700742889.73 |  126700742889.73 | PASS
+ Gráfica B tx_dia             | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica B tx_hora            | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica B tx_tipo            | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica C cuentas_estado     | suma de la serie = CTA                                           |              956 |              956 | PASS
+ Gráfica C cuentas_producto   | suma de la serie = CTA                                           |              956 |              956 | PASS
+ Gráfica C monto_mes          | suma de la serie = K02                                           |    1895119129.88 |    1895119129.88 | PASS
+ Gráfica C monto_tipo         | suma de la serie = K02                                           |    1895119129.88 |    1895119129.88 | PASS
+ Gráfica C rechazo_motivo     | suma de la serie = TXR                                           |               25 |               25 | PASS
+ Gráfica C saldo_departamento | suma de la serie = K09                                           |   18093249066.05 |   18093249066.05 | PASS
+ Gráfica C tx_dia             | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Gráfica C tx_hora            | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Gráfica C tx_tipo            | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Indicador A K01              | Transacciones contabilizadas                                     |          1000000 |          1000000 | PASS
+ Indicador A K02              | Monto movido COP                                                 | 1767796946066.07 | 1767796946066.07 | PASS
+ Indicador A K03              | Monto movido USD                                                 |       1768114.58 |       1768114.58 | PASS
+ Indicador A K04              | Ticket promedio COP                                              |       1775276.18 |       1775276.18 | PASS
+ Indicador A K05              | Tasa de rechazo %                                                |             2.35 |             2.35 | PASS
+ Indicador A K06              | Reversos                                                         |             9530 |             9530 | PASS
+ Indicador A K07              | Clientes con movimientos                                         |             9070 |             9070 | PASS
+ Indicador A K08              | Cuentas activas                                                  |            43557 |            43557 | PASS
+ Indicador A K09              | Saldo total COP                                                  | 1004471074520.73 | 1004471074520.73 | PASS
+ Indicador A K10              | Saldo total USD                                                  |       1051931.27 |       1051931.27 | PASS
+ Indicador A K11              | Cuentas en sobregiro                                             |             1000 |             1000 | PASS
+ Indicador A K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador A K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Indicador B K01              | Transacciones contabilizadas                                     |            11834 |            11834 | PASS
+ Indicador B K02              | Monto movido COP                                                 |   12643399220.02 |   12643399220.02 | PASS
+ Indicador B K03              | Monto movido USD                                                 |         18151.07 |         18151.07 | PASS
+ Indicador B K04              | Ticket promedio COP                                              |       1077317.59 |       1077317.59 | PASS
+ Indicador B K05              | Tasa de rechazo %                                                |             6.94 |             6.94 | PASS
+ Indicador B K06              | Reversos                                                         |              135 |              135 | PASS
+ Indicador B K07              | Clientes con movimientos                                         |             3947 |             3947 | PASS
+ Indicador B K08              | Cuentas activas                                                  |            17851 |            17851 | PASS
+ Indicador B K09              | Saldo total COP                                                  |  126700742889.73 |  126700742889.73 | PASS
+ Indicador B K10              | Saldo total USD                                                  |        253402.31 |        253402.31 | PASS
+ Indicador B K11              | Cuentas en sobregiro                                             |                0 |                0 | PASS
+ Indicador B K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador B K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Indicador C K01              | Transacciones contabilizadas                                     |             1130 |             1130 | PASS
+ Indicador C K02              | Monto movido COP                                                 |    1895119129.88 |    1895119129.88 | PASS
+ Indicador C K03              | Monto movido USD                                                 |          1114.66 |          1114.66 | PASS
+ Indicador C K04              | Ticket promedio COP                                              |       1680070.15 |       1680070.15 | PASS
+ Indicador C K05              | Tasa de rechazo %                                                |             2.16 |             2.16 | PASS
+ Indicador C K06              | Reversos                                                         |               11 |               11 | PASS
+ Indicador C K07              | Clientes con movimientos                                         |              131 |              131 | PASS
+ Indicador C K08              | Cuentas activas                                                  |              825 |              825 | PASS
+ Indicador C K09              | Saldo total COP                                                  |   18093249066.05 |   18093249066.05 | PASS
+ Indicador C K10              | Saldo total USD                                                  |         29378.10 |         29378.10 | PASS
+ Indicador C K11              | Cuentas en sobregiro                                             |               16 |               16 | PASS
+ Indicador C K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador C K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Permiso banco_bi ejecuta     | banco_bi puede ejecutar bi.fn_indicadores                        |                1 |                1 | PASS
+ Permiso banco_bi solo lee    | banco_bi no puede escribir en bi.fact_transaccion                |                1 |                1 | PASS
+ Permiso PUBLIC no ejecuta    | ningún otro usuario puede ejecutar las funciones de Estadísticas |                1 |                1 | PASS
+
+== Resumen B4
+ pass | fail | total |       veredicto        
+------+------+-------+------------------------
+   69 |    0 |    69 | B4 ESTADÍSTICAS = PASS
+
+
+RESULTADO: OK - todos los scripts corrieron sin errores.
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\B4_tableros_app\salidas\salida_b4.txt

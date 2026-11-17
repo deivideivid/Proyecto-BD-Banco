@@ -1,0 +1,43 @@
+B4 · Página de Estadísticas contra los valores oficiales de SQL
+Servidor: http://localhost:8000
+
+PASS  A  resumen        K01  oficial=1000000            página=1.000.000
+PASS  A  resumen        K02  oficial=1767796946066.07   página=1.767.796.946.066,07COP
+PASS  A  resumen        K07  oficial=9070               página=9.070
+PASS  A  resumen        K08  oficial=43557              página=43.557
+PASS  A  resumen        K09  oficial=1004471074520.73   página=1.004.471.074.520,73COP
+PASS  A  resumen        K05  oficial=2.35               página=2,35%
+PASS  A  transacciones  K01  oficial=1000000            página=1.000.000
+PASS  A  transacciones  K04  oficial=1775276.18         página=1.775.276,18COP
+PASS  A  transacciones  K03  oficial=1768114.58         página=1.768.114,58USD
+PASS  A  transacciones  K05  oficial=2.35               página=2,35%
+PASS  A  transacciones  K06  oficial=9530               página=9.530
+PASS  A  clientes       K08  oficial=43557              página=43.557
+PASS  A  clientes       K11  oficial=1000               página=1.000
+PASS  A  clientes       K09  oficial=1004471074520.73   página=1.004.471.074.520,73COP
+PASS  A  clientes       K10  oficial=1051931.27         página=1.051.931,27USD
+PASS  A  clientes       K07  oficial=9070               página=9.070
+PASS  A  control        K12  oficial=99.6               página=99,6
+PASS  A  control        K13  oficial=6                  página=6
+PASS  A  control        K01  oficial=1000000            página=1.000.000
+PASS  B  resumen        K01  oficial=11834              página=11.834
+PASS  B  resumen        K02  oficial=12643399220.02     página=12.643.399.220,02COP
+PASS  B  resumen        K07  oficial=3947               página=3.947
+PASS  B  resumen        K08  oficial=17851              página=17.851
+PASS  B  resumen        K09  oficial=126700742889.73    página=126.700.742.889,73COP
+PASS  B  resumen        K05  oficial=6.94               página=6,94%
+PASS  B  transacciones  K01  oficial=11834              página=11.834
+PASS  B  transacciones  K04  oficial=1077317.59         página=1.077.317,59COP
+PASS  B  transacciones  K03  oficial=18151.07           página=18.151,07USD
+PASS  B  transacciones  K05  oficial=6.94               página=6,94%
+PASS  B  transacciones  K06  oficial=135                página=135
+PASS  B  clientes       K08  oficial=17851              página=17.851
+PASS  B  clientes       K11  oficial=0                  página=0
+PASS  B  clientes       K09  oficial=126700742889.73    página=126.700.742.889,73COP
+PASS  B  clientes       K10  oficial=253402.31          página=253.402,31USD
+PASS  B  clientes       K07  oficial=3947               página=3.947
+PASS  B  control        K12  oficial=99.6               página=99,6
+PASS  B  control        K13  oficial=6                  página=6
+
+Comparaciones: 37 · indicadores distintos cubiertos: 26 de 26 · fallas: 0
+B4 PÁGINA = PASS

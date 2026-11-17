@@ -1,0 +1,115 @@
+B5 · Pruebas por perfil contra el servidor (https://banco-andino.onrender.com) · 2026-11-17 13:50
+
+PASS  [Sesión] Sin sesión no se ven las cuentas: esperado 401, obtenido 401
+PASS  [Sesión] Sin sesión no se ven las estadísticas: esperado 401, obtenido 401
+PASS  [Sesión] Operación sin la cabecera del aplicativo (CSRF): esperado 403, obtenido 403
+PASS  [Sesión] Contraseña equivocada: esperado 401, obtenido 401
+PASS  [Sesión] Usuario que no existe: mismo mensaje que contraseña mala (no delata usuarios): esperado Usuario o contraseña incorrectos., obtenido Usuario o contraseña incorrectos.
+PASS  [Sesión] Ingresa demo.cliente: esperado 200 CLIENTE, obtenido 200 CLIENTE
+PASS  [Sesión] Ingresa demo.cajero: esperado 200 CAJERO, obtenido 200 CAJERO
+PASS  [Sesión] Ingresa demo.supervisor: esperado 200 SUPERVISOR, obtenido 200 SUPERVISOR
+PASS  [Sesión] Ingresa demo.auditor: esperado 200 AUDITOR, obtenido 200 AUDITOR
+PASS  [Sesión] Ingresa demo.admin: esperado 200 ADMINISTRADOR, obtenido 200 ADMINISTRADOR
+PASS  [Matriz] CLIENTE → Cliente: esperado 200, obtenido 200
+PASS  [Matriz] CLIENTE → Caja: esperado 403, obtenido 403
+PASS  [Matriz] CLIENTE → Supervisor: esperado 403, obtenido 403
+PASS  [Matriz] CLIENTE → Auditor: esperado 403, obtenido 403
+PASS  [Matriz] CLIENTE → Administrador: esperado 403, obtenido 403
+PASS  [Matriz] CLIENTE → Estadísticas: Resumen: esperado 403, obtenido 403
+PASS  [Matriz] CLIENTE → Estadísticas: Control: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Cliente: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Caja: esperado 200, obtenido 200
+PASS  [Matriz] CAJERO → Supervisor: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Auditor: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Administrador: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Estadísticas: Resumen: esperado 403, obtenido 403
+PASS  [Matriz] CAJERO → Estadísticas: Control: esperado 403, obtenido 403
+PASS  [Matriz] SUPERVISOR → Cliente: esperado 403, obtenido 403
+PASS  [Matriz] SUPERVISOR → Caja: esperado 200, obtenido 200
+PASS  [Matriz] SUPERVISOR → Supervisor: esperado 200, obtenido 200
+PASS  [Matriz] SUPERVISOR → Auditor: esperado 403, obtenido 403
+PASS  [Matriz] SUPERVISOR → Administrador: esperado 403, obtenido 403
+PASS  [Matriz] SUPERVISOR → Estadísticas: Resumen: esperado 200, obtenido 200
+PASS  [Matriz] SUPERVISOR → Estadísticas: Control: esperado 200, obtenido 200
+PASS  [Matriz] AUDITOR → Cliente: esperado 403, obtenido 403
+PASS  [Matriz] AUDITOR → Caja: esperado 403, obtenido 403
+PASS  [Matriz] AUDITOR → Supervisor: esperado 403, obtenido 403
+PASS  [Matriz] AUDITOR → Auditor: esperado 200, obtenido 200
+PASS  [Matriz] AUDITOR → Administrador: esperado 403, obtenido 403
+PASS  [Matriz] AUDITOR → Estadísticas: Resumen: esperado 403, obtenido 403
+PASS  [Matriz] AUDITOR → Estadísticas: Control: esperado 200, obtenido 200
+PASS  [Matriz] ADMINISTRADOR → Cliente: esperado 403, obtenido 403
+PASS  [Matriz] ADMINISTRADOR → Caja: esperado 403, obtenido 403
+PASS  [Matriz] ADMINISTRADOR → Supervisor: esperado 403, obtenido 403
+PASS  [Matriz] ADMINISTRADOR → Auditor: esperado 403, obtenido 403
+PASS  [Matriz] ADMINISTRADOR → Administrador: esperado 200, obtenido 200
+PASS  [Matriz] ADMINISTRADOR → Estadísticas: Resumen: esperado 200, obtenido 200
+PASS  [Matriz] ADMINISTRADOR → Estadísticas: Control: esperado 200, obtenido 200
+PASS  [Cajero] Consigna 50.000: esperado 200, obtenido 200
+PASS  [Cajero] El saldo sube exactamente 50.000: esperado 2891567.00, obtenido 2891567.00
+PASS  [Cajero] Repetir la misma solicitud no cobra dos veces (idempotencia): esperado 1024208 2891567.00, obtenido 1024208 2891567.00
+PASS  [Cajero] Retira 20.000: esperado 200, obtenido 200
+PASS  [Cajero] Retiro imposible: rechazado y registrado (RN-45): esperado 409 con rechazo, obtenido 409 con rechazo
+PASS  [Cajero] Transfiere 10.000 entre cuentas del cliente: esperado 200, obtenido 200
+PASS  [Cajero] Monto con tres decimales: esperado 422, obtenido 422
+PASS  [Cajero] Consignar en una cuenta de otra oficina: esperado 403 OFICINA, obtenido 403 OFICINA
+PASS  [Cajero] Reversar (solo supervisor): esperado 403, obtenido 403
+PASS  [Cajero] Crea un ajuste (queda pendiente): esperado 200 PENDING_APPROVAL, obtenido 200 PENDING_APPROVAL
+PASS  [Cajero] Aprobar su ajuste (solo supervisor): esperado 403, obtenido 403
+PASS  [Cajero] Registra un cliente nuevo (persona natural): esperado 200, obtenido 200
+PASS  [Cajero] Registrar el mismo documento otra vez: esperado 409 23505, obtenido 409 23505
+PASS  [Cajero] Abre una cuenta de ahorros: esperado 200 CREADA, obtenido 200 CREADA
+PASS  [Cajero] Activa la cuenta nueva: esperado 200, obtenido 200
+PASS  [Cajero] Consigna 5.000 en la cuenta nueva: esperado 200, obtenido 200
+PASS  [Cajero] Bloquea la cuenta nueva: esperado 200, obtenido 200
+PASS  [Cajero] Retirar de una cuenta bloqueada: esperado 409 BA002, obtenido 409 BA002
+PASS  [Cajero] Desbloquear (solo supervisor, RN-28): esperado 403, obtenido 403
+PASS  [Supervisor] Desbloquea la cuenta: esperado 200, obtenido 200
+PASS  [Supervisor] Reversa la consignación de 5.000: esperado 200, obtenido 200
+PASS  [Supervisor] Reversar dos veces lo mismo (RN-42): esperado 409 BA008, obtenido 409 BA008
+PASS  [Supervisor] Cambia el límite diario: esperado 200, obtenido 200
+PASS  [Supervisor] Cierra la cuenta (quedó en 0): esperado 200, obtenido 200
+PASS  [Supervisor] Ve el ajuste del cajero en pendientes: esperado True, obtenido True
+PASS  [Supervisor] Aprueba el ajuste del cajero: esperado 200, obtenido 200
+PASS  [Supervisor] Aprobar su propio ajuste (RN-44): esperado 409 BA013, obtenido 409 BA013
+PASS  [Supervisor] Rechaza su ajuste con motivo: esperado 200, obtenido 200
+PASS  [Supervisor] Vista previa de inactivación (no cambia nada): esperado 200, obtenido 200
+PASS  [Supervisor] Inactivar sin confirmar: esperado 422, obtenido 422
+PASS  [Supervisor] Inactivar con menos de 180 días: esperado 422, obtenido 422
+PASS  [Cliente] Ve sus movimientos (incluida la consignación del cajero): esperado True, obtenido True
+PASS  [Cliente] Movimientos de una cuenta ajena: esperado 403 BA010, obtenido 403 BA010
+PASS  [Cliente] Transfiere 1.000 a su otra cuenta: esperado 200, obtenido 200
+PASS  [Cliente] Transferir desde una cuenta ajena: esperado 403 BA010, obtenido 403 BA010
+PASS  [Cliente] Transferir más de lo que tiene: rechazado y registrado: esperado 409 BA003 con rechazo, obtenido 409 BA003 con rechazo
+PASS  [Cliente] Transferir a una cuenta que no existe: esperado 404 BA016, obtenido 404 BA016
+PASS  [Cliente] Ve su resumen mensual: esperado 200, obtenido 200
+PASS  [Cliente] Intenta consignar como cajero: esperado 403, obtenido 403
+PASS  [Administrador] Crea un usuario interno: esperado 200, obtenido 200
+PASS  [Administrador] Le asigna el rol CAJERO: esperado 200, obtenido 200
+PASS  [Administrador] Asignar otra vez el mismo rol: esperado 409, obtenido 409
+PASS  [Administrador] No da un perfil que no corresponde al rol del empleado: esperado 403 BA001, obtenido 403 BA001
+PASS  [Administrador] Le da acceso al aplicativo como cajero (contraseña temporal): esperado 200, obtenido 200
+PASS  [Administrador] El empleado nuevo entra con esa contraseña: esperado 200 CAJERO, obtenido 200 CAJERO
+PASS  [Administrador] Le quita el acceso: esperado 200, obtenido 200
+PASS  [Administrador] Sin acceso, su sesión deja de servir: esperado 401, obtenido 401
+PASS  [Administrador] No se da acceso a sí mismo (lo frena la base): esperado 403 BA001, obtenido 403 BA001
+PASS  [Administrador] Revoca el rol (con fecha, no se borra): esperado 200, obtenido 200
+PASS  [Administrador] Desactiva el usuario: esperado 200, obtenido 200
+PASS  [Administrador] Asignarse un rol a sí mismo (RN-50, lo frena la base): esperado 422 23514, obtenido 422 23514
+PASS  [Administrador] Desactivarse a sí mismo: esperado 409, obtenido 409
+PASS  [Administrador] Tocar el usuario técnico del canal digital: esperado 409, obtenido 409
+PASS  [Administrador] Intenta consignar: esperado 403, obtenido 403
+PASS  [Administrador] Al revocarle el rol al auditor, su sesión deja de servir al instante: esperado 401, obtenido 401
+PASS  [Administrador] Le devuelve el rol de auditor: esperado 200, obtenido 200
+PASS  [Auditor] Después de todas las pruebas la contabilidad sigue cuadrada (3 controles en 0): esperado 200 [0, 0, 0], obtenido 200 [0, 0, 0]
+PASS  [Auditor] La bitácora muestra las operaciones hechas desde el aplicativo: esperado True, obtenido True
+PASS  [Auditor] Ve el intento fallido de ingreso: esperado True, obtenido True
+PASS  [Auditor] Ve las 76 pruebas del quality gate: esperado 76, obtenido 76
+PASS  [Auditor] Intenta consignar: esperado 403, obtenido 403
+PASS  [Auditor] Intenta crear usuarios: esperado 403, obtenido 403
+PASS  [Estadísticas] El administrador ve todo el banco (K01 = 1.000.000): esperado Todo el banco 1000000, obtenido Todo el banco 1000000
+PASS  [Estadísticas] El supervisor solo ve su oficina: esperado True, obtenido True
+PASS  [Sesión] Después de salir, la sesión ya no sirve: esperado 401, obtenido 401
+
+Pruebas: 110 · PASS: 110 · FAIL: 0
+B5 PERFILES = PASS

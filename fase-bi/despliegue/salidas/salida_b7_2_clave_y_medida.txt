@@ -1,0 +1,58 @@
+﻿Banco Andino - B7 paso 2 - 2026-11-16 23:57:51 - equipo DESKTOP-F1GG12C
+
+== 1) Contrasena de app_servidor (el usuario con el que entra el aplicativo)
+Contrasena de app_servidor puesta.
+
+== 2) Cuanto ocupa la base (limite de Neon Free: 1 GB)
+SET
+== 1) Tamaño total frente al límite del plan
+ tamano_base | limite_plan | porcentaje_usado | margen 
+-------------+-------------+------------------+--------
+ 781 MB      | 1024 MB     |             76.3 | 243 MB
+
+== 2) Por esquema (incluye el esquema bi cuando exista)
+ esquema | tablas | tamano 
+---------+--------+--------
+ fin     |      2 | 532 MB
+ bi      |     11 | 189 MB
+ core    |      8 | 50 MB
+ ref     |     12 | 480 kB
+ seg     |      5 | 288 kB
+ aud     |      1 | 112 kB
+
+== 3) Las 8 tablas más grandes
+           tabla            |  datos  | indices |  total  
+----------------------------+---------+---------+---------
+ fin.asiento_contable       | 162 MB  | 114 MB  | 276 MB
+ fin.transaccion_financiera | 132 MB  | 125 MB  | 256 MB
+ bi.fact_transaccion        | 119 MB  | 56 MB   | 175 MB
+ core.evento_cuenta         | 9672 kB | 12 MB   | 21 MB
+ core.cuenta                | 11 MB   | 4976 kB | 16 MB
+ core.titularidad_cuenta    | 3624 kB | 5392 kB | 9048 kB
+ bi.fact_saldo_cuenta       | 5008 kB | 2104 kB | 7144 kB
+ bi.dim_cuenta              | 4560 kB | 1344 kB | 5936 kB
+
+== 4) Los conteos son los mismos que en local
+       control        | esperado | obtenido | resultado 
+----------------------+----------+----------+-----------
+ Clientes             |    10000 |    10000 | PASS
+ Cuentas              |    50000 |    50000 | PASS
+ Transacciones POSTED |  1000000 |  1000000 | PASS
+ Asientos contables   |  2000000 |  2000000 | PASS
+
+== 5) Veredicto
+                    veredicto                    
+-------------------------------------------------
+ CABE JUSTO: el esquema bi tiene que ser liviano
+
+
+== 3) El aplicativo entra con app_servidor y crea los accesos de demostracion de la nube
+Accesos de demostracion de la nube: en fase-bi\aplicativo\accesos_demo_nube.local.txt (no va a GitHub).
+
+== 4) Para Render
+Quedo COPIADA en el portapapeles la DATABASE_URL para Render (con app_servidor, no con neondb_owner).
+Tiene esta forma: postgresql://app_servidor:<contrasena>@ep-young-mode-bcavf9z0.c-16.us-east-1.aws.neon.tech/banco_andino_lab?sslmode=require
+Peguela en Render > Environment > DATABASE_URL y despues copie cualquier otra cosa para borrarla del portapapeles.
+
+RESULTADO: OK
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\despliegue\salidas\salida_b7_2_clave_y_medida.txt

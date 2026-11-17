@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caja · Banco Andino</title>
+  <link rel="stylesheet" href="css/banco.css">
+</head>
+<body>
+  <main><div class="ancho">
+    <section data-seccion="buscar">
+      <div class="encabezado"><div><h1>Buscar cliente</h1><p id="oficina-texto">Por número de cuenta, documento o nombre.</p></div></div>
+      <form class="tarjeta fila" id="form-buscar" role="search">
+        <label class="campo crece">Buscar <input name="q" id="q" minlength="3" maxlength="80" placeholder="Ej.: 10000006860, 1020304050 o Sandoval" required></label>
+        <button class="boton primario" type="submit">Buscar</button>
+      </form>
+      <div class="tarjeta seccion-margen" id="resultados"><p class="vacio">Escriba al menos 3 caracteres.</p></div>
+    </section>
+
+    <section data-seccion="ficha">
+      <div class="encabezado">
+        <div><h1 id="ficha-nombre">Ficha del cliente</h1><p id="ficha-sub"></p></div>
+        <div class="fila"><a class="boton secundario" href="#buscar">Volver a buscar</a><button class="boton primario" id="abrir-cuenta" type="button">Abrir cuenta</button></div>
+      </div>
+      <div class="rejilla tres" id="ficha-datos"></div>
+      <div class="tarjeta seccion-margen"><h2>Cuentas</h2><div id="ficha-cuentas"></div></div>
+    </section>
+
+    <section data-seccion="operacion">
+      <div class="encabezado"><div><h1>Operación de caja</h1><p>Consignar, retirar o transferir con el número de la cuenta.</p></div></div>
+      <form class="tarjeta formulario dos" id="form-operacion" novalidate>
+        <label class="campo">Operación
+          <select name="tipo" id="op-tipo"><option value="consignar">Consignar</option><option value="retirar">Retirar</option><option value="transferir">Transferir</option></select>
+        </label>
+        <label class="campo">Número de la cuenta <input name="numero" inputmode="numeric" maxlength="11" required placeholder="11 dígitos"></label>
+        <label class="campo" id="op-destino" hidden>Cuenta destino <input name="numero_destino" inputmode="numeric" maxlength="11" placeholder="11 dígitos"></label>
+        <label class="campo monto">Monto <input name="monto" inputmode="decimal" required placeholder="0"></label>
+        <label class="campo completo">Descripción (opcional) <input name="descripcion" maxlength="140"></label>
+        <div class="fila completo"><button class="boton primario" id="op-enviar" type="submit">Revisar y confirmar</button></div>
+        <p class="mensaje-error completo" id="op-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section data-seccion="nuevo">
+      <div class="encabezado"><div><h1>Nuevo cliente</h1><p>Registrar una persona natural o una empresa.</p></div></div>
+      <nav class="pestanas" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-tipo="natural">Persona natural</button>
+        <button type="button" role="tab" aria-selected="false" data-tipo="juridico">Empresa (persona jurídica)</button>
+      </nav>
+      <form class="tarjeta formulario dos" id="form-natural" novalidate>
+        <label class="campo">Tipo de documento <select name="tipo_documento"><option value="CC">Cédula de ciudadanía</option><option value="CE">Cédula de extranjería</option><option value="PA">Pasaporte</option><option value="PPT">Permiso por protección temporal</option></select></label>
+        <label class="campo">Número de documento <input name="numero_documento" maxlength="15" required></label>
+        <label class="campo">Nombres <input name="nombres" maxlength="120" required></label>
+        <label class="campo">Apellidos <input name="apellidos" maxlength="120" required></label>
+        <label class="campo">Fecha de nacimiento <input name="fecha_nacimiento" type="date" required></label>
+        <label class="campo">Municipio <input name="municipio" list="municipios" required placeholder="Escriba y escoja"></label>
+        <label class="campo">Correo (opcional) <input name="email" type="email" maxlength="254"></label>
+        <label class="campo">Teléfono (opcional) <input name="telefono" inputmode="tel" maxlength="20"></label>
+        <div class="fila completo"><button class="boton primario" type="submit">Registrar cliente</button></div>
+        <p class="mensaje-error completo" role="alert"></p>
+      </form>
+      <form class="tarjeta formulario dos" id="form-juridico" novalidate hidden>
+        <label class="campo">NIT (9 dígitos, sin dígito de verificación) <input name="nit" inputmode="numeric" maxlength="9" required></label>
+        <label class="campo">Razón social <input name="razon_social" maxlength="200" required></label>
+        <label class="campo">Fecha de constitución <input name="fecha_constitucion" type="date" required></label>
+        <label class="campo">Actividad económica (CIIU, 4 dígitos) <input name="actividad_economica" inputmode="numeric" maxlength="4" required></label>
+        <label class="campo">Municipio <input name="municipio" list="municipios" required placeholder="Escriba y escoja"></label>
+        <label class="campo">Correo (opcional) <input name="email" type="email" maxlength="254"></label>
+        <label class="campo">Teléfono (opcional) <input name="telefono" inputmode="tel" maxlength="20"></label>
+        <div class="fila completo"><button class="boton primario" type="submit">Registrar empresa</button></div>
+        <p class="mensaje-error completo" role="alert"></p>
+      </form>
+      <datalist id="municipios"></datalist>
+    </section>
+  </div></main>
+  <script src="js/api.js"></script>
+  <script src="js/marco.js"></script>
+  <script src="js/caja.js"></script>
+</body>
+</html>
