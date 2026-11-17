@@ -22,7 +22,7 @@ cerca de un minuto en abrir). Trabajamos en la rama `fase-bi`. Lo de G0 a G8 que
 | B5 | Servidor del aplicativo y permisos | Listo |
 | B6 | Interfaces por perfil | Listo |
 | B7 | Despliegue en la nube (Neon + Render) | Listo: https://banco-andino.onrender.com |
-| B8 | Pruebas y evaluación con el grupo | Pendiente |
+| B8 | Pruebas y evaluación con el grupo | En curso |
 | B9 | Cierre | Pendiente |
 
 El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, en `DECISIONES_B.md`.
@@ -35,6 +35,7 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 - `B4_tableros_app/` - las funciones de Estadísticas en la base, su validación y la comparación de la página con SQL y Power BI.
 - `B5_servidor/` - lo que el aplicativo necesita en la base (accesos, canal digital, `app_servidor`), la matriz de permisos y las pruebas por perfil.
 - `B6_interfaces/` - la paleta, las capturas en celular, tablet y computador y su revisión.
+- `B8_evaluacion/` - la guía y la planilla de la evaluación del grupo sobre el enlace publicado.
 - `aplicativo/` - el aplicativo web (servidor en Python y páginas) con las pantallas de los 5 perfiles, Equipo, Tecnologías y Estadísticas.
 - `herramientas/` - el script que usan los `.bat` para correr SQL con la contraseña de PostgreSQL.
 - `despliegue/` - dónde y cómo vamos a publicar el aplicativo (gate B7: Jerónimo hizo la comparación y David lo monta; el paso a paso está en `despliegue/GUIA_B7.md`).

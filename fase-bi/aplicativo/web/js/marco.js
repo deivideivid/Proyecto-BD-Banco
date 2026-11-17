@@ -57,15 +57,15 @@
     ],
     CLIENTE: [
       { grupo: "Banca en línea" },
-      { nombre: "Mis cuentas", href: "cliente.html#cuentas", icono: "cuentas", abajo: true },
+      { nombre: "Mis cuentas", href: "cliente.html#cuentas", icono: "cuentas", abajo: true, corto: "Cuentas" },
       { nombre: "Movimientos", href: "cliente.html#movimientos", icono: "movimientos", abajo: true },
       { nombre: "Transferir", href: "cliente.html#transferir", icono: "transferir", abajo: true },
-      { nombre: "Mis estadísticas", href: "cliente.html#estadisticas", icono: "estadisticas", abajo: true }
+      { nombre: "Mis estadísticas", href: "cliente.html#estadisticas", icono: "estadisticas", abajo: true, corto: "Estadísticas" }
     ],
     CAJERO: [
       { grupo: "Caja" },
       { nombre: "Buscar cliente", href: "caja.html#buscar", icono: "buscar", abajo: true },
-      { nombre: "Operación de caja", href: "caja.html#operacion", icono: "caja", abajo: true },
+      { nombre: "Operación de caja", href: "caja.html#operacion", icono: "caja", abajo: true, corto: "Operación" },
       { nombre: "Nuevo cliente", href: "caja.html#nuevo", icono: "usuario_mas", abajo: true }
     ],
     SUPERVISOR: [
@@ -81,18 +81,18 @@
     ],
     AUDITOR: [
       { grupo: "Auditoría de datos" },
-      { nombre: "Calidad de datos", href: "auditor.html#calidad", icono: "calidad", abajo: true },
+      { nombre: "Calidad de datos", href: "auditor.html#calidad", icono: "calidad", abajo: true, corto: "Calidad" },
       { nombre: "Cuadres", href: "auditor.html#cuadres", icono: "cuadres", abajo: true },
       { nombre: "Bitácora", href: "auditor.html#bitacora", icono: "bitacora", abajo: true },
       { nombre: "Ingresos al aplicativo", href: "auditor.html#ingresos", icono: "ingresos" },
-      { nombre: "Control y calidad (tablero)", href: "estadisticas.html#control", icono: "estadisticas", abajo: true }
+      { nombre: "Control y calidad (tablero)", href: "estadisticas.html#control", icono: "estadisticas", abajo: true, corto: "Tablero" }
     ],
     ADMINISTRADOR: [
       { grupo: "Seguridad" },
-      { nombre: "Usuarios y roles", href: "admin.html#usuarios", icono: "ficha", abajo: true },
-      { nombre: "Nuevo usuario", href: "admin.html#nuevo", icono: "usuario_mas", abajo: true },
-      { nombre: "Accesos al aplicativo", href: "admin.html#accesos", icono: "llave", abajo: true },
-      { nombre: "Estadísticas", href: "estadisticas.html#resumen", icono: "estadisticas", abajo: true }
+      { nombre: "Usuarios y roles", href: "admin.html#usuarios", icono: "ficha", abajo: true, corto: "Usuarios" },
+      { nombre: "Nuevo usuario", href: "admin.html#nuevo", icono: "usuario_mas", abajo: true, corto: "Nuevo" },
+      { nombre: "Accesos al aplicativo", href: "admin.html#accesos", icono: "llave", abajo: true, corto: "Accesos" },
+      { nombre: "Estadísticas", href: "estadisticas.html#resumen", icono: "estadisticas", abajo: true, corto: "Estadísticas" }
     ]
   };
   const INICIO = {
@@ -302,16 +302,35 @@
   }
 
   /* ---------- Tablas que en celular se vuelven tarjetas ---------- */
+  /* En el celular las tablas se ven como tarjetas (la primera columna es el título de cada una)
+     y, si son largas, mostramos de a 10 con un botón para ver más. En computador se ven todas. */
+  const POR_TANDA_CELULAR = 10;
   function tabla(columnas, filas, { vacio = "No hay datos." } = {}) {
     if (!filas.length) return el("p", { class: "vacio", text: vacio });
+    const enCelular = window.matchMedia("(max-width: 900px)").matches;
+    let visibles = enCelular ? POR_TANDA_CELULAR : filas.length;
     const thead = el("thead", {}, el("tr", {}, columnas.map((c) => el("th", { class: c.num ? "num" : null, text: c.titulo }))));
-    const tbody = el("tbody", {}, filas.map((f) => el("tr", {}, columnas.map((c) => {
-      const td = el("td", { class: (c.num ? "num " : "") + (c.acciones ? "acciones" : ""), "data-col": c.titulo });
+    const tbody = el("tbody", {}, filas.map((f, n) => el("tr", { class: n >= visibles ? "fila-oculta" : null }, columnas.map((c, i) => {
+      const td = el("td", { class: (c.num ? "num " : "") + (c.acciones ? "acciones " : "") + (i === 0 && !c.acciones ? "titulo-fila" : ""), "data-col": c.titulo });
       const v = c.valor ? c.valor(f) : f[c.campo];
       if (v instanceof Node) td.append(v); else if (Array.isArray(v)) td.append(...v); else td.textContent = v === null || v === undefined ? "—" : v;
       return td;
     }))));
-    return el("div", { class: "tabla-caja" }, el("table", { class: "tabla responsiva" }, thead, tbody));
+    const caja = el("div", { class: "tabla-caja" }, el("table", { class: "tabla responsiva" }, thead, tbody));
+    if (filas.length > visibles) {
+      const mas = el("button", { class: "boton secundario mas-filas", type: "button" });
+      const texto = () => { const quedan = filas.length - visibles; mas.textContent = "Mostrar " + Math.min(POR_TANDA_CELULAR, quedan) + " más (quedan " + quedan + ")"; };
+      mas.addEventListener("click", () => {
+        visibles += POR_TANDA_CELULAR;
+        [...tbody.children].forEach((tr, n) => tr.classList.toggle("fila-oculta", n >= visibles));
+        if (visibles >= filas.length) mas.remove(); else texto();
+      });
+      texto();
+      caja.append(el("p", { class: "conteo-filas", text: "Mostrando " + visibles + " de " + filas.length }), mas);
+      const conteo = caja.querySelector(".conteo-filas");
+      mas.addEventListener("click", () => { conteo.textContent = visibles >= filas.length ? filas.length + " en total" : "Mostrando " + visibles + " de " + filas.length; });
+    }
+    return caja;
   }
   function chip(texto, clase) { return el("span", { class: "chip " + (clase || texto), text: texto }); }
 
@@ -401,7 +420,7 @@
     const abajo = el("nav", { class: "barra-abajo", "aria-label": "Accesos rápidos" },
       items.filter((i) => i.abajo).slice(0, 4).map((i) => {
         const a = el("a", { href: i.href, html: icono(i.icono) + "<span></span>" });
-        a.querySelector("span").textContent = i.nombre.split(" ")[0] === "Pendientes" ? "Pendientes" : i.nombre.replace(/ \(.*\)$/, "").replace(/ de la oficina$/, "");
+        a.querySelector("span").textContent = i.corto ? i.corto : i.nombre.split(" ")[0] === "Pendientes" ? "Pendientes" : i.nombre.replace(/ \(.*\)$/, "").replace(/ de la oficina$/, "");
         return a;
       }));
 

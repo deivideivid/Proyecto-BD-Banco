@@ -84,3 +84,7 @@ Lo que fuimos decidiendo en grupo y por qué.
 35. **En Neon la contraseña de `app_servidor` la ponemos con `ALTER ROLE`** por la conexión cifrada,
     porque Neon no acepta el `\password` de psql. Exigimos 20 o más caracteres, solo letras y números,
     para que también sirva dentro de la `DATABASE_URL` de Render.
+36. **Evaluamos cada uno por su cuenta** (B8), no en una llamada: cada uno prueba su perfil cuando
+    puede y manda sus respuestas. Las tareas se reorganizaron para depender poco de los demás.
+37. **En el celular las tablas son tarjetas y las listas van de a 10** con un botón para ver más.
+    Salió de la evaluación de Juan Diego; en computador las tablas se ven igual que antes.

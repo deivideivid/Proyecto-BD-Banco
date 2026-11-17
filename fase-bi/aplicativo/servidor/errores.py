@@ -53,8 +53,18 @@ def codigo(error: psycopg.Error) -> str | None:
     return getattr(error, "sqlstate", None)
 
 
+# Reglas del banco que la base frena con una restricción: mensaje propio en vez del genérico (B8)
+POR_RESTRICCION = {
+    "ck_usuario_rol_no_autoasignado": (422, "No puede asignarse roles a sí mismo: otro administrador debe hacerlo."),
+}
+
+
 def traducir(error: psycopg.Error) -> HTTPException:
     estado = codigo(error)
+    restriccion = error.diag.constraint_name if error.diag else None
+    if restriccion in POR_RESTRICCION:
+        http, mensaje = POR_RESTRICCION[restriccion]
+        return HTTPException(status_code=http, detail={"mensaje": mensaje, "codigo": estado, "regla": restriccion})
     if estado in MENSAJES:
         http, mensaje = MENSAJES[estado]
         detalle_base = error.diag.message_primary if error.diag else None

@@ -337,6 +337,27 @@ table.tabla { width: 100%; border-collapse: collapse; font-size: .9rem; }
   .tabla.responsiva td.num { white-space: normal; }
   .tabla.responsiva .acciones { justify-content: flex-end; }
   .tabla.responsiva .acciones::before { content: none; }
+  /* B8: cada fila es una tarjeta propia, con título, y los botones ocupan todo el ancho */
+  .tarjeta:has(> .tabla-caja) { background: transparent; border: 0; box-shadow: none; padding: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .tabla-caja { overflow: visible; }
+  .tabla.responsiva tbody { display: grid; gap: 10px; }
+  .tabla.responsiva tr { background: var(--vidrio-fuerte); border: 1px solid var(--vidrio-borde); border-radius: var(--radio); padding: 12px 14px; box-shadow: var(--sombra); }
+  .tabla.responsiva tbody tr:hover { background: var(--vidrio-fuerte); }
+  .tabla.responsiva td { padding: 5px 0; align-items: center; font-size: .92rem; }
+  .tabla.responsiva td.titulo-fila { justify-content: flex-start; text-align: left; font-weight: 650; font-size: 1rem; padding: 0 0 8px; margin-bottom: 4px; border-bottom: 1px solid var(--linea); overflow-wrap: anywhere; }
+  .tabla.responsiva td.titulo-fila::before { content: none; }
+  .tabla.responsiva td.acciones { padding-top: 10px; }
+  .tabla.responsiva .acciones > .fila, .tabla.responsiva .acciones { gap: 8px; flex-wrap: nowrap; width: 100%; }
+  .tabla.responsiva .acciones .boton { flex: 1 1 0; min-height: 42px; justify-content: center; }
+  .fila-oculta { display: none !important; }
+  .conteo-filas { margin: 12px 2px 6px; color: var(--texto-suave); font-size: .85rem; text-align: center; }
+  .mas-filas { width: 100%; min-height: 44px; }
+  /* Que el teléfono no haga zoom al escribir y que los botones sean fáciles de tocar */
+  .campo input, .campo select, .campo textarea { font-size: 16px; min-height: 44px; }
+  .boton { min-height: 44px; }
+  .encabezado > .boton, .encabezado > a.boton { width: 100%; justify-content: center; }
+  .formulario .fila .boton[type="submit"], .formulario .fila.fin .boton { width: 100%; justify-content: center; }
+  .barra-abajo a span { line-height: 1.15; text-align: center; }
 }
 
 /* Si el equipo pidió reducir el movimiento, quitamos las animaciones */
