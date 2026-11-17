@@ -123,9 +123,22 @@ if ($Paso -eq "2") {
 
     Log ""
     Log "== 1) Contrasena de app_servidor (el usuario con el que entra el aplicativo)"
-    Write-Host "Invente una contrasena de 20 o mas caracteres, SOLO letras y numeros (sin simbolos), y"
-    Write-Host "escribala dos veces. No se muestra. Guardela donde guarda sus contrasenas: va en Render."
-    & $psql -X -d $url -c "\password app_servidor"
+    Write-Host "Invente una contrasena de 20 o mas caracteres, SOLO letras y numeros (sin simbolos)."
+    Write-Host "No se muestra. Guardela donde guarda sus contrasenas: va en Render."
+    # Neon no acepta \password de psql (manda la contrasena ya cifrada): pide el texto y la cifra
+    # el mismo Neon. Por eso la mandamos con ALTER ROLE por la conexion cifrada (sslmode=require),
+    # por la entrada de psql y no como argumento, y solo letras y numeros (no hay comillas que romper).
+    $clave = $null
+    for ($i = 1; $i -le 3; $i++) {
+        $c1 = LeerSecreto "Contrasena nueva para app_servidor"
+        $c2 = LeerSecreto "Escribala otra vez"
+        if ($c1 -cne $c2) { Write-Host "No coinciden. Otra vez."; continue }
+        if ($c1 -notmatch '^[A-Za-z0-9]{20,}$') { Write-Host "Tiene que tener 20 o mas caracteres y solo letras y numeros. Otra vez."; continue }
+        $clave = $c1; break
+    }
+    $c1 = $null; $c2 = $null
+    if (-not $clave) { Log "FALLO: no recibimos una contrasena valida para app_servidor."; Terminar $false }
+    ("ALTER ROLE app_servidor PASSWORD '" + $clave + "';") | & $psql -X -q -v ON_ERROR_STOP=1 -d $url -f -
     if ($LASTEXITCODE -ne 0) { Log "FALLO al poner la contrasena de app_servidor."; Terminar $false }
     Log "Contrasena de app_servidor puesta."
 
@@ -137,16 +150,10 @@ if ($Paso -eq "2") {
     Log ""
     Log "== 3) El aplicativo entra con app_servidor y crea los accesos de demostracion de la nube"
     $env:DATABASE_URL = "host=$servidorNeon port=5432 dbname=banco_andino_lab user=app_servidor sslmode=require"
-    $clave = $null
+    $env:PGPASSWORD = $clave
     Push-Location (Join-Path $raiz "fase-bi\aplicativo")
-    for ($i = 1; $i -le 3; $i++) {
-        $clave = LeerSecreto "Escriba otra vez la contrasena de app_servidor (para probarla)"
-        $env:PGPASSWORD = $clave
-        & $venvPy -m servidor.probar_conexion
-        if ($LASTEXITCODE -eq 0) { break }
-        $clave = $null
-    }
-    if (-not $clave) { Pop-Location; Log "FALLO: el aplicativo no pudo entrar a Neon con app_servidor."; Terminar $false }
+    & $venvPy -m servidor.probar_conexion
+    if ($LASTEXITCODE -ne 0) { Pop-Location; Log "FALLO: el aplicativo no pudo entrar a Neon con app_servidor."; Terminar $false }
     if ($clave -notmatch '^[A-Za-z0-9]+$') {
         Write-Host "OJO: la contrasena tiene simbolos. Funciona aqui, pero en la DATABASE_URL de Render puede fallar."
     }

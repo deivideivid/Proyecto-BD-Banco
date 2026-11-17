@@ -62,11 +62,13 @@ Si algo sale con `FALLO`, paramos y revisamos `salida_b7_1_montaje.txt` antes de
 1. Doble clic en `fase-bi\despliegue\b7_2_clave_y_accesos.bat` y pegamos otra vez la cadena de
    Neon.
 2. Inventamos la contraseña de `app_servidor` (el usuario con el que entra el aplicativo):
-   **20 o más caracteres, solo letras y números**. La escribimos dos veces.
+   **20 o más caracteres, solo letras y números**. La escribimos dos veces. Neon no acepta el
+   `\password` de psql (pide la contraseña en texto y la cifra él mismo), así que el `.bat` la
+   manda con `ALTER ROLE` por la conexión cifrada; lo encontramos en el primer intento.
 3. Sale la medida de la base. Esperamos `CABE CON MARGEN` o `CABE JUSTO`. Si dice `NO CABE`,
    paramos: toca el plan B (Azure for Students).
-4. Pide la contraseña de `app_servidor` una vez más. Con eso el aplicativo prueba que entra a
-   Neon y crea las contraseñas de los 5 accesos de demostración. Se muestran una sola vez y
+4. Con esa contraseña el aplicativo prueba que entra a Neon y crea las contraseñas de los 5
+   accesos de demostración. Se muestran una sola vez y
    quedan en `fase-bi\aplicativo\accesos_demo_nube.local.txt` (no va a GitHub).
 5. Al final deja **copiada en el portapapeles** la `DATABASE_URL` para Render. Pasamos de una vez
    al punto 4 sin copiar nada más.

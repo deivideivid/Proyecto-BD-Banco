@@ -1,0 +1,1206 @@
+﻿Banco Andino - B7 paso 1 - 2026-11-16 23:30:23 - equipo DESKTOP-F1GG12C
+
+Montando la base en Neon. Sube unos 300 MB de CSV: no cierre esta ventana ni apague el computador.
+
+===== fase-bi\despliegue\preparar_nube.sql + sql\g8_reconstruir_todo.sql =====
+SET
+SET
+DO
+   usuario    |       base       |    version     | superusuario | crea_roles | crea_bases 
+--------------+------------------+----------------+--------------+------------+------------
+ neondb_owner | banco_andino_lab | 18.7 (a21afb5) | f            | t          | t
+(1 fila)
+
+DO
+SET
+DO
+SET
+DO
+== preparar_nube: listo. Ahora sigue sql/g8_reconstruir_todo.sql en la misma conexión.
+SET
+######## 1/6 · Modelo + pruebas de G3 (run_all.sql)
+SET
+== Banco Andino · run_all: 1) borrar el modelo anterior
+== 2) crear el modelo (00 a 17) en una sola transacción
+== 3) pruebas de G3 (se deshacen al final: no dejan datos)
+== Resultado de las pruebas de G3
+ prueba |                                          descripcion                                          |  esperado   |                                                obtenido                                                | resultado 
+--------+-----------------------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------------------------+-----------
+ T01    | Dos clientes con el mismo documento                                                           | error 23505 | 23505: duplicate key value violates unique constraint "uq_cliente_documento"                           | PASS
+ T02    | Crear cuenta con cliente inexistente                                                          | error BA016 | BA016: El cliente -1 no existe                                                                         | PASS
+ T03    | Retiro superior al saldo sin sobregiro                                                        | error BA003 | BA003: Fondos insuficientes en la cuenta 10000000001: disponible 1000000.00 + cupo 0.00, solicita      | PASS
+ T04    | Transferir con origen = destino                                                               | error BA006 | BA006: La cuenta origen y la cuenta destino deben ser distintas                                        | PASS
+ T05a   | Modificar el monto de una transacción POSTED                                                  | error BA007 | BA007: La transacción 1 (POSTED) es inmutable: los errores se corrigen con un reverso (RN-40, RN-      | PASS
+ T05b   | Eliminar una transacción POSTED                                                               | error BA007 | BA007: Las transacciones no se eliminan (transacción 1)                                                | PASS
+ T05c   | Modificar un asiento contable                                                                 | error BA007 | BA007: fin.asiento_contable no permite UPDATE (registro inmutable)                                     | PASS
+ T05d   | Vaciar (TRUNCATE) los asientos                                                                | error BA007 | BA007: fin.asiento_contable no permite TRUNCATE (registro inmutable)                                   | PASS
+ T06    | Transferencia válida: débito y crédito juntos y cuadrados                                     | verdadero   | origen 1000000.00→750000.00, destino 0.00→250000.00, 2 líneas, cuadrada=t                              | PASS
+ T07    | Reverso: nueva transacción, original intacta, saldos restituidos                              | verdadero   | original 4 sigue POSTED; reverso 5 con cuentas invertidas; saldos 1000000.00 / 0.00; asientos espejo=t | PASS
+ T08    | Reversar dos veces la misma transacción (RN-42)                                               | error BA008 | BA008: La transacción 4 ya fue reversada                                                               | PASS
+ T09    | Reversar un reverso (RN-42)                                                                   | error BA008 | BA008: Solo se reversan transacciones POSTED que no sean reversos (tipo REVERSO, estado POSTED)        | PASS
+ T10    | Monto con 3 decimales (RN-30)                                                                 | error BA005 | BA005: Monto inválido: 10.555 (debe ser mayor que 0 y tener máximo 2 decimales)                        | PASS
+ T11    | Monto cero (RN-30)                                                                            | error BA005 | BA005: Monto inválido: 0 (debe ser mayor que 0 y tener máximo 2 decimales)                             | PASS
+ T12    | Transferir entre COP y USD (RN-33)                                                            | error BA006 | BA006: No se puede transferir entre monedas distintas (COP → USD)                                      | PASS
+ T13    | Retiros del día por encima del límite diario (RN-37)                                          | error BA004 | BA004: Excede el límite diario de retiro: retirado hoy 2500000.00, solicitado 600000, límite 3000      | PASS
+ T14    | Misma solicitud dos veces: una sola transacción (RN-38)                                       | verdadero   | primera 8, segunda 8, filas con la clave: 1                                                            | PASS
+ T15    | Misma clave con otro monto (RN-38)                                                            | error BA015 | BA015: La clave 44668020-45eb-480f-80a1-b04c61c2268b ya se usó para otra solicitud                     | PASS
+ T16    | Cuenta BLOQUEADA recibe una consignación (S1, RN-35)                                          | verdadero   | consignación 9 contabilizada                                                                           | PASS
+ T17    | Retiro desde cuenta BLOQUEADA (S1, RN-34)                                                     | error BA002 | BA002: La cuenta 10000000002 está BLOQUEADA y no puede originar débitos                                | PASS
+ T18    | Reversar una consignación hecha a cuenta ahora BLOQUEADA (RN-43)                              | error BA002 | BA002: La cuenta 10000000002 está BLOQUEADA y no puede originar débitos                                | PASS
+ T19    | Cajero intenta desbloquear (RN-28)                                                            | error BA001 | BA001: El usuario 1 no tiene el permiso CTA_DESBLOQUEAR                                                | PASS
+ T20    | Cajero intenta reversar (RN-51)                                                               | error BA001 | BA001: El usuario 1 no tiene el permiso TX_REVERSAR                                                    | PASS
+ T21    | Usuario opera una cuenta de la que es titular (RN-54)                                         | error BA009 | BA009: El usuario 4 es titular de la cuenta 6 y no puede operarla                                      | PASS
+ T22    | El creador aprueba su propio ajuste (RN-44)                                                   | error BA013 | BA013: Quien crea un ajuste no puede aprobarlo (RN-44)                                                 | PASS
+ T23    | Ajuste aprobado por otro supervisor queda POSTED con asientos                                 | verdadero   | estado POSTED, aprobado por 3                                                                          | PASS
+ T24    | Rechazo registrado con motivo, sin asientos ni efecto en saldo (RN-45)                        | verdadero   | transacción 11 REJECTED sin asientos                                                                   | PASS
+ T25    | Transacción POSTED con un solo asiento (RN-46, RN-47)                                         | error BA014 | BA014: Transacción -25 descuadrada: débitos 100.00, créditos 0 (RN-46, RN-47)                          | PASS
+ T26    | Asiento con cuenta contable que no corresponde al producto (G2, H-03)                         | error BA014 | BA014: La cuenta 1 pertenece a PAS_DEP_AHORROS, no a PAS_DEP_CORRIENTE                                 | PASS
+ T27    | Cliente sin subtipo (RN-02)                                                                   | error BA017 | BA017: El cliente 7 debe tener exactamente un subtipo (natural o jurídica)                             | PASS
+ T28    | Titular menor de 18 años (RN-08, S2)                                                          | error BA010 | BA010: El titular debe tener 18 años cumplidos a la fecha de apertura (RN-08)                          | PASS
+ T29    | Cuenta EMPRESARIAL para persona natural (RN-15, S4)                                           | error BA010 | BA010: El producto EMPRESARIAL solo admite clientes JURIDICA, no NATURAL (RN-14, RN-15)                | PASS
+ T30    | Segundo titular en cuenta NOMINA (máximo 1, RN-16, S3)                                        | error BA010 | BA010: El producto NOMINA admite máximo 1 titular(es) (RN-16)                                          | PASS
+ T31    | Cupo de sobregiro en cuenta de AHORROS (RN-17)                                                | error BA017 | BA017: El producto AHORROS no permite cupo de sobregiro (RN-17)                                        | PASS
+ T32    | Cambiar la moneda de una cuenta (RN-22)                                                       | error BA017 | BA017: La moneda de una cuenta no cambia (RN-22)                                                       | PASS
+ T33    | Cambiar el estado sin registrar evento (RN-25)                                                | error BA011 | BA011: Estado, fecha de cierre y límite solo cambian registrando un evento de cuenta (RN-25, RN-2      | PASS
+ T34    | Evento con transición no permitida (RN-24)                                                    | error BA011 | BA011: Transición no permitida para la cuenta 10000000002: ACTIVACION de ACTIVA a ACTIVA               | PASS
+ T35    | Cerrar una cuenta con saldo (RN-20)                                                           | error BA012 | BA012: La cuenta 10000000001 tiene saldo 3512345.67 (retenido 0.00) y no se puede cerrar               | PASS
+ T36    | Borrar un cliente (RN-09)                                                                     | error BA007 | BA007: No se eliminan registros de core.cliente (se inactivan o se cierran, RN-09)                     | PASS
+ T37    | Cambio de límite y cierre actualizan la cuenta a través de eventos (RN-25, RN-27)             | verdadero   | límite 1500000.00, estado CERRADA, estado = último evento: t                                           | PASS
+ T38    | Consignar en una cuenta CERRADA (RN-35)                                                       | error BA002 | BA002: La cuenta 30000000005 está CERRADA y no puede recibir créditos                                  | PASS
+ T39    | La transferencia quedó auditada con usuario, registro y valores (RN-52)                       | verdadero   | 1 registro(s) de auditoría, usuario 1                                                                  | PASS
+ T40    | Modificar un registro de auditoría (RN-53)                                                    | error BA007 | BA007: aud.log_auditoria no permite UPDATE (registro inmutable)                                        | PASS
+ T41    | Borrar registros de auditoría (RN-53)                                                         | error BA007 | BA007: aud.log_auditoria no permite DELETE (registro inmutable)                                        | PASS
+ T42    | Rol banco_cajero no puede hacer UPDATE directo a transacciones                                | error 42501 | 42501: permission denied for table transaccion_financiera                                              | PASS
+ T43    | Rol banco_cajero no puede ejecutar fn_reversar                                                | error 42501 | 42501: permission denied for function fn_reversar                                                      | PASS
+ T44    | Rol banco_consulta no puede leer la auditoría                                                 | error 42501 | 42501: permission denied for schema aud                                                                | PASS
+ T45    | Rol banco_cajero sí consigna a través de la función                                           | verdadero   | consignación 12 como banco_cajero                                                                      | PASS
+ T46    | Todas las transacciones cuadran; saldo = ledger; estado = último evento (RN-47, RN-48, RN-25) | verdadero   | descuadradas 0, cuentas con diferencia 0, estados distintos 0                                          | PASS
+(49 filas)
+
+ pass | fail |     veredicto     
+------+------+-------------------
+   49 |    0 | G3 PRUEBAS = PASS
+(1 fila)
+
+== run_all terminado
+######## 2/6 · Lote 1
+ setval 
+--------
+     87
+(1 fila)
+
+ setval 
+--------
+    269
+(1 fila)
+
+ setval 
+--------
+  10000
+(1 fila)
+
+ setval 
+--------
+  50000
+(1 fila)
+
+ setval 
+--------
+ 112145
+(1 fila)
+
+ lote  |          tabla          | operacion | filas  |  usuario_bd  |    registrado    
+-------+-------------------------+-----------+--------+--------------+------------------
+ lote1 | ref.departamento        | INSERT    | 33     | neondb_owner | 2026-11-16 23:32
+ lote1 | ref.municipio           | INSERT    | 51     | neondb_owner | 2026-11-16 23:32
+ lote1 | ref.oficina             | INSERT    | 87     | neondb_owner | 2026-11-16 23:32
+ lote1 | seg.usuario             | INSERT    | 269    | neondb_owner | 2026-11-16 23:32
+ lote1 | seg.usuario_rol         | INSERT    | 269    | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cliente            | INSERT    | 10000  | neondb_owner | 2026-11-16 23:32
+ lote1 | core.persona_natural    | INSERT    | 8500   | neondb_owner | 2026-11-16 23:32
+ lote1 | core.persona_juridica   | INSERT    | 1500   | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cuenta             | INSERT    | 50000  | neondb_owner | 2026-11-16 23:32
+ lote1 | core.titularidad_cuenta | INSERT    | 51551  | neondb_owner | 2026-11-16 23:32
+ lote1 | core.evento_cuenta      | INSERT    | 112145 | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cambio_limite      | INSERT    | 3018   | neondb_owner | 2026-11-16 23:32
+(12 filas)
+
+                        control                        | esperado | obtenido | resultado 
+-------------------------------------------------------+----------+----------+-----------
+ Clientes                                              |    10000 |    10000 | PASS
+ Personas naturales                                    |     8500 |     8500 | PASS
+ Personas jurídicas                                    |     1500 |     1500 | PASS
+ Cuentas                                               |    50000 |    50000 | PASS
+ RN-02 clientes sin subtipo o con ambos                |        0 |        0 | PASS
+ RN-08 titulares menores de 18 años al abrir           |        0 |        0 | PASS
+ RN-13 cuentas no cerradas sin exactamente 1 principal |        0 |        0 | PASS
+ RN-14/15 producto no permitido para el titular        |        0 |        0 | PASS
+ RN-16 cuentas con más titulares que el máximo         |        0 |        0 | PASS
+ RN-17 sobregiro fuera de CORRIENTE                    |        0 |        0 | PASS
+ RN-23 primer evento distinto de CREACION              |        0 |        0 | PASS
+ RN-25 estado distinto del último evento               |        0 |        0 | PASS
+ RN-27 límite distinto del último cambio               |        0 |        0 | PASS
+ RN-28 desbloqueo/cierre/cambio sin SUPERVISOR         |        0 |        0 | PASS
+ RN-48 saldo distinto de 0 sin asientos contables      |        0 |        0 | PASS
+ RN-54 usuarios que también son clientes               |        0 |        0 | PASS
+ Apertura anterior a la vinculación                    |        0 |        0 | PASS
+ Clientes sin ninguna cuenta como titular principal    |        0 |        0 | PASS
+ Clientes INACTIVO con titularidad vigente             |        0 |        0 | PASS
+ Personas naturales con más de 1 cuenta NOMINA         |        0 |        0 | PASS
+(20 filas)
+
+ estado_cuenta | cuentas | porcentaje 
+---------------+---------+------------
+ ACTIVA        |   43557 |       87.1
+ CERRADA       |    2364 |        4.7
+ INACTIVA      |    2090 |        4.2
+ BLOQUEADA     |    1989 |        4.0
+(4 filas)
+
+ producto_codigo | cuentas 
+-----------------+---------
+ AHORROS         |   20547
+ CORRIENTE       |   16033
+ EMPRESARIAL     |   10686
+ NOMINA          |    2734
+(4 filas)
+
+ tipo_cliente | clientes | cuentas | promedio | mediana | p95 | maximo 
+--------------+----------+---------+----------+---------+-----+--------
+ JURIDICA     |     1500 |   21866 |    14.58 |       8 |  51 |    300
+ NATURAL      |     8500 |   28134 |     3.31 |       3 |   9 |     12
+(2 filas)
+
+    departamento    | clientes 
+--------------------+----------
+ Bogotá, D.C.       |     2902
+ Antioquia          |     1354
+ Valle del Cauca    |     1173
+ Atlántico          |      695
+ Bolívar            |      510
+ Santander          |      324
+ Risaralda          |      300
+ Norte de Santander |      266
+ Caldas             |      220
+ Meta               |      212
+(10 filas)
+
+ anio | clientes_vinculados 
+------+---------------------
+ 2015 |                 327
+ 2016 |                 344
+ 2017 |                 439
+ 2018 |                 565
+ 2019 |                 610
+ 2020 |                 716
+ 2021 |                 726
+ 2022 |                 762
+ 2023 |                 834
+ 2024 |                1119
+ 2025 |                1956
+ 2026 |                1602
+(12 filas)
+
+######## 3/6 · Lote 2 (la parte más larga)
+Duraci�n: 75,063 ms
+Duraci�n: 71,828 ms
+Duraci�n: 83,280 ms
+Duraci�n: 71,810 ms
+Duraci�n: 72,185 ms
+Duraci�n: 72,001 ms
+Duraci�n: 75,081 ms
+Duraci�n: 55027,104 ms (00:55,027)
+Duraci�n: 49288,391 ms (00:49,288)
+Duraci�n: 1399,690 ms (00:01,400)
+ setval  
+---------
+ 1024178
+(1 fila)
+
+Duraci�n: 70,216 ms
+Duraci�n: 72,388 ms
+Duraci�n: 86,604 ms
+Duraci�n: 71,575 ms
+Duraci�n: 70,682 ms
+Duraci�n: 73,978 ms
+Duraci�n: 76,471 ms
+Duraci�n: 69,087 ms
+Duraci�n: 413,738 ms
+Duraci�n: 73,082 ms
+ lote  |           tabla            | operacion |  filas  |  usuario_bd  |    registrado    
+-------+----------------------------+-----------+---------+--------------+------------------
+ lote1 | ref.departamento           | INSERT    | 33      | neondb_owner | 2026-11-16 23:32
+ lote1 | ref.municipio              | INSERT    | 51      | neondb_owner | 2026-11-16 23:32
+ lote1 | ref.oficina                | INSERT    | 87      | neondb_owner | 2026-11-16 23:32
+ lote1 | seg.usuario                | INSERT    | 269     | neondb_owner | 2026-11-16 23:32
+ lote1 | seg.usuario_rol            | INSERT    | 269     | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cliente               | INSERT    | 10000   | neondb_owner | 2026-11-16 23:32
+ lote1 | core.persona_natural       | INSERT    | 8500    | neondb_owner | 2026-11-16 23:32
+ lote1 | core.persona_juridica      | INSERT    | 1500    | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cuenta                | INSERT    | 50000   | neondb_owner | 2026-11-16 23:32
+ lote1 | core.titularidad_cuenta    | INSERT    | 51551   | neondb_owner | 2026-11-16 23:32
+ lote1 | core.evento_cuenta         | INSERT    | 112145  | neondb_owner | 2026-11-16 23:32
+ lote1 | core.cambio_limite         | INSERT    | 3018    | neondb_owner | 2026-11-16 23:32
+ lote2 | fin.transaccion_financiera | INSERT    | 1024178 | neondb_owner | 2026-11-16 23:34
+ lote2 | fin.asiento_contable       | INSERT    | 2000000 | neondb_owner | 2026-11-16 23:34
+ lote2 | core.cuenta                | UPDATE    | 37884   | neondb_owner | 2026-11-16 23:34
+(15 filas)
+
+Duraci�n: 72,541 ms
+Duraci�n: 213,365 ms
+Duraci�n: 427,168 ms
+Duraci�n: 227,517 ms
+Duraci�n: 106,145 ms
+Duraci�n: 119,092 ms
+Duraci�n: 88,556 ms
+Duraci�n: 1564,291 ms (00:01,564)
+Duraci�n: 316,783 ms
+                           control                           | esperado | obtenido | resultado 
+-------------------------------------------------------------+----------+----------+-----------
+ S5 transacciones POSTED                                     |  1000000 |  1000000 | PASS
+ Asientos contables (2 por transacción POSTED)               |  2000000 |  2000000 | PASS
+ RN-45 REJECTED/PENDING con asientos                         |        0 |        0 | PASS
+ RN-46 POSTED sin débito o sin crédito                       |        0 |        0 | PASS
+ RN-47 transacciones descuadradas (Σ D ≠ Σ C)                |        0 |        0 | PASS
+ Asientos cuyo valor ≠ monto de la transacción               |        0 |        0 | PASS
+ RN-48 saldo almacenado ≠ saldo según asientos               |        0 |        0 | PASS
+ RN-31 momentos con saldo por debajo del cupo de sobregiro   |        0 |        0 | PASS
+ RN-32/33 transferencias a la misma cuenta u otra moneda     |        0 |        0 | PASS
+ RN-34 débitos POSTED sobre cuenta no ACTIVA                 |        0 |        0 | PASS
+ RN-35 créditos POSTED sobre cuenta no ACTIVA/BLOQUEADA      |        0 |        0 | PASS
+ RN-36 movimientos antes de la apertura o después del cierre |        0 |        0 | PASS
+ RN-37 cuenta-día con retiros sobre el límite vigente        |        0 |        0 | PASS
+ RN-41 reversos con monto o cuentas distintos a la original  |        0 |        0 | PASS
+ RN-41 asientos del reverso que no espejan la original       |        0 |        0 | PASS
+ RN-42 reversos de un reverso                                |        0 |        0 | PASS
+ RN-44 ajustes POSTED sin aprobación de otro SUPERVISOR      |        0 |        0 | PASS
+ RN-51 reversos registrados por usuario sin rol SUPERVISOR   |        0 |        0 | PASS
+ RN-20 cuentas CERRADA con saldo distinto de 0               |        0 |        0 | PASS
+ RN-54 operaciones sobre cuentas donde el usuario es titular |        0 |        0 | PASS
+ Solicitudes fuera de la ventana 2024-09-01 a 2026-08-31     |        0 |        0 | PASS
+ fecha_contable ≠ día de contabilización (hora Colombia)     |        0 |        0 | PASS
+ Movimientos en los 180 días previos a una inactivación      |        0 |        0 | PASS
+ Cuentas con saldo que viola el cupo de sobregiro hoy        |        0 |        0 | PASS
+(24 filas)
+
+Duraci�n: 12074,081 ms (00:12,074)
+  tipo_codigo  |  estado_codigo   | transacciones 
+---------------+------------------+---------------
+ AJUSTE        | PENDING_APPROVAL |            74
+ AJUSTE        | POSTED           |          4255
+ AJUSTE        | REJECTED         |           127
+ AJUSTE        |                  |          4456
+ CONSIGNACION  | POSTED           |        244023
+ CONSIGNACION  |                  |        244023
+ CREDITO       | POSTED           |        189145
+ CREDITO       |                  |        189145
+ DEBITO        | POSTED           |        194653
+ DEBITO        | REJECTED         |          8516
+ DEBITO        |                  |        203169
+ RETIRO        | POSTED           |         78850
+ RETIRO        | REJECTED         |          7753
+ RETIRO        |                  |         86603
+ REVERSO       | POSTED           |          9530
+ REVERSO       | REJECTED         |           197
+ REVERSO       |                  |          9727
+ TRANSFERENCIA | POSTED           |        279544
+ TRANSFERENCIA | REJECTED         |          7511
+ TRANSFERENCIA |                  |        287055
+               |                  |       1024178
+(21 filas)
+
+Duraci�n: 437,279 ms
+                  motivo_rechazo                   | rechazadas 
+---------------------------------------------------+------------
+ Fondos insuficientes                              |      17842
+ Cuenta bloqueada: no puede originar débitos       |       5239
+ Excede el límite diario de retiro                 |        699
+ Cuenta bloqueada: el reverso no puede debitarla   |        191
+ Rechazado por el supervisor: soporte insuficiente |        127
+ Fondos insuficientes para el reverso              |          6
+(6 filas)
+
+Duraci�n: 131,795 ms
+   mes   | posted 
+---------+--------
+ 2024-09 |  20955
+ 2024-10 |  27148
+ 2024-11 |  27934
+ 2024-12 |  39278
+ 2025-01 |  27322
+ 2025-02 |  29089
+ 2025-03 |  31652
+ 2025-04 |  34078
+ 2025-05 |  35962
+ 2025-06 |  37572
+ 2025-07 |  38152
+ 2025-08 |  37878
+ 2025-09 |  39407
+ 2025-10 |  42923
+ 2025-11 |  39964
+ 2025-12 |  60264
+ 2026-01 |  40914
+ 2026-02 |  43801
+ 2026-03 |  48939
+ 2026-04 |  52124
+ 2026-05 |  53607
+ 2026-06 |  62398
+ 2026-07 |  63572
+ 2026-08 |  65067
+(24 filas)
+
+Duraci�n: 421,054 ms
+       tipo_dia        | promedio_diario 
+-----------------------+-----------------
+ quincena / fin de mes |            2087
+ resto de días         |            1194
+(2 filas)
+
+Duraci�n: 884,916 ms
+ cuentas_con_movimientos | promedio | mediana | p95 | maximo 
+-------------------------+----------+---------+-----+--------
+                   39103 |     32.7 |      12 | 121 |   2339
+(1 fila)
+
+Duraci�n: 931,663 ms
+ tamano_base 
+-------------
+ 591 MB
+(1 fila)
+
+Duraci�n: 75,138 ms
+           tabla            | tamano_total 
+----------------------------+--------------
+ fin.asiento_contable       | 276 MB
+ fin.transaccion_financiera | 256 MB
+ core.evento_cuenta         | 21 MB
+ core.cuenta                | 16 MB
+ core.titularidad_cuenta    | 9048 kB
+ core.cliente               | 2368 kB
+(6 filas)
+
+Duraci�n: 116,993 ms
+######## 4/6 · Perfil de datos de G4
+Duraci�n: 74,813 ms
+Duraci�n: 71,666 ms
+Duraci�n: 73,897 ms
+Duraci�n: 1498,421 ms (00:01,498)
+Duraci�n: 209,423 ms
+Duraci�n: 105,063 ms
+Duraci�n: 1076,243 ms (00:01,076)
+Duraci�n: 416,823 ms
+Duraci�n: 73,300 ms
+Duraci�n: 72,323 ms
+Duraci�n: 72,882 ms
+Duraci�n: 77,604 ms
+Duraci�n: 78,485 ms
+Duraci�n: 138,012 ms
+Duraci�n: 218,602 ms
+Duraci�n: 72,432 ms
+Duraci�n: 165,775 ms
+Duraci�n: 81,517 ms
+Duraci�n: 92,327 ms
+Duraci�n: 917,183 ms
+Duraci�n: 68,739 ms
+Duraci�n: 75,757 ms
+Duraci�n: 97,300 ms
+Duraci�n: 93,263 ms
+Duraci�n: 891,363 ms
+Duraci�n: 397,031 ms
+Duraci�n: 75,549 ms
+Duraci�n: 442,060 ms
+Duraci�n: 352,660 ms
+Duraci�n: 440,224 ms
+Duraci�n: 130,039 ms
+Duraci�n: 524,831 ms
+Duraci�n: 331,928 ms
+Duraci�n: 2319,415 ms (00:02,319)
+Duraci�n: 845,704 ms
+Duraci�n: 1922,801 ms (00:01,923)
+Duraci�n: 359,166 ms
+Duraci�n: 79,436 ms
+Duraci�n: 305,773 ms
+Duraci�n: 292,665 ms
+Duraci�n: 74,039 ms
+Duraci�n: 73,151 ms
+Duraci�n: 72,777 ms
+Duraci�n: 72,643 ms
+Duraci�n: 87,702 ms
+Duraci�n: 1167,642 ms (00:01,168)
+Duraci�n: 250,294 ms
+Duraci�n: 896,502 ms
+Duraci�n: 1033,874 ms (00:01,034)
+Duraci�n: 499,316 ms
+Duraci�n: 1441,267 ms (00:01,441)
+Duraci�n: 82,505 ms
+Duraci�n: 263,894 ms
+Duraci�n: 79,329 ms
+Duraci�n: 257,419 ms
+Duraci�n: 190,168 ms
+Duraci�n: 159,417 ms
+Duraci�n: 69,126 ms
+   categoria    |                                  metrica                                  |          esperado          |                                                           obtenido                                                            | resultado 
+----------------+---------------------------------------------------------------------------+----------------------------+-------------------------------------------------------------------------------------------------------------------------------+-----------
+ Conteos        | Clientes                                                                  | 10000                      | 10000                                                                                                                         | PASS
+ Conteos        | Personas naturales (≈85 %)                                                | 8500                       | 8500                                                                                                                          | PASS
+ Conteos        | Personas jurídicas (≈15 %)                                                | 1500                       | 1500                                                                                                                          | PASS
+ Conteos        | Cuentas                                                                   | 50000                      | 50000                                                                                                                         | PASS
+ Conteos        | Transacciones POSTED (supuesto S5)                                        | 1000000                    | 1000000                                                                                                                       | PASS
+ Conteos        | Asientos contables (ledger)                                               | 2000000                    | 2000000                                                                                                                       | PASS
+ Conteos        | Usuarios internos (cantidad razonable)                                    | entre 100 y 1000           | 269                                                                                                                           | PASS
+ Conteos        | Transacciones REJECTED y PENDING (adicionales, sin asientos)              | > 0                        | 24178                                                                                                                         | PASS
+ Duplicados     | Documentos de cliente repetidos (incluye NIT)                             | 0                          | 0                                                                                                                             | PASS
+ Duplicados     | Números de cuenta repetidos                                               | 0                          | 0                                                                                                                             | PASS
+ Duplicados     | Claves de idempotencia repetidas                                          | 0                          | 0                                                                                                                             | PASS
+ Duplicados     | Documentos de usuario interno repetidos                                   | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Clientes sin subtipo o con ambos                                          | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Cuentas no cerradas sin titular principal vigente                         | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Cuentas sin evento de creación                                            | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Transacciones POSTED sin asientos                                         | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Transacciones REJECTED o PENDING con asientos                             | 0                          | 0                                                                                                                             | PASS
+ Huérfanos      | Municipios de clientes y oficinas fuera del catálogo                      | 0                          | 0                                                                                                                             | PASS
+ Temporal       | Movimientos antes de la apertura o después del cierre                     | 0                          | 0                                                                                                                             | PASS
+ Temporal       | Débitos desde una cuenta que no estaba ACTIVA (bloqueos respetados)       | 0                          | 0                                                                                                                             | PASS
+ Temporal       | Créditos a una cuenta que no estaba ACTIVA ni BLOQUEADA                   | 0                          | 0                                                                                                                             | PASS
+ Temporal       | Apertura de cuenta anterior a la vinculación del titular                  | 0                          | 0                                                                                                                             | PASS
+ Temporal       | Meses con actividad (mínimo 24)                                           | ≥ 24                       | 24                                                                                                                            | PASS
+ Temporal       | Reversos con fecha anterior a la transacción original                     | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Transacciones POSTED descuadradas (Σ D ≠ Σ C)                             | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Cuentas con saldo distinto del ledger (RN-48)                             | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Momentos con saldo negativo sin sobregiro (o por debajo del cupo)         | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Transferencias con origen = destino o entre monedas distintas             | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Cuentas CERRADAS con saldo distinto de 0                                  | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Cuenta-día con retiros por encima del límite diario vigente               | 0                          | 0                                                                                                                             | PASS
+ Financiera     | Montos con más de 2 decimales o ≤ 0                                       | 0                          | 0                                                                                                                             | PASS
+ Privacidad     | Correos fuera del dominio reservado example.com                           | 0                          | 0                                                                                                                             | PASS
+ Privacidad     | Cédulas de clientes fuera del rango sintético 1.000.000.000–1.299.999.999 | 0                          | 0                                                                                                                             | PASS
+ Privacidad     | NIT fuera del rango sintético 960.000.000–989.999.999                     | 0                          | 0                                                                                                                             | PASS
+ Distribución   | Clientes por departamento: mayor / promedio                               | > 3 (no uniforme)          | 9.6 (33 departamentos, máx 2902, mín 2)                                                                                       | PASS
+ Distribución   | Cuentas por cliente: máximo / mediana                                     | ≥ 10 (cola larga)          | 100.0 (mediana 3, p95 12, máx 300)                                                                                            | PASS
+ Distribución   | Transacciones por cuenta: p99 / mediana                                   | ≥ 5                        | 41.3 (mediana 7, p99 289, máx 2339, cuentas con ≤ 2 movimientos: 16749)                                                       | PASS
+ Distribución   | Transacciones por hora: hora pico / hora más baja                         | ≥ 5 (patrón horario)       | 22.7 (pico a las 11 h, mínimo a las 1 h)                                                                                      | PASS
+ Distribución   | Promedio diario domingo / lunes a viernes                                 | < 0,7                      | 0.37                                                                                                                          | PASS
+ Distribución   | Promedio diario en quincena y fin de mes / resto de días                  | > 1,2                      | 1.75                                                                                                                          | PASS
+ Distribución   | Diciembre / promedio de noviembre y enero (cada año)                      | > 1,2 en ambos diciembres  | 2024-12: 1.42 · 2025-12: 1.49                                                                                                 | PASS
+ Distribución   | Montos COP: mediana < promedio y P99 ≥ 10 × mediana                       | verdadero                  | mediana 842898.00 · promedio 1775276 · P95 6486000.00 · P99 14470000.00 · máx 258380571.00                                    | PASS
+ Distribución   | Estados de cuenta: ACTIVA > 50 % y las demás presentes                    | verdadero                  | ACTIVA 87.1 % · CERRADA 4.7 % · INACTIVA 4.2 % · BLOQUEADA 4.0 %                                                              | PASS
+ Distribución   | Tipos de transacción POSTED presentes (7 tipos)                           | 7                          | 7 (TRANSFERENCIA 28.0 % · CONSIGNACION 24.4 % · DEBITO 19.5 % · CREDITO 18.9 % · RETIRO 7.9 % · REVERSO 1.0 % · AJUSTE 0.4 %) | PASS
+ Casos extremos | Cuentas usando sobregiro hoy (saldo negativo dentro del cupo)             | > 0 y < 5 % de las cuentas | 1000                                                                                                                          | PASS
+ Casos extremos | Días en que una cuenta retiró su límite diario completo                   | > 0                        | 4                                                                                                                             | PASS
+ Casos extremos | Cuentas cerradas que trasladaron su saldo antes del cierre                | > 0                        | 1192                                                                                                                          | PASS
+ Casos extremos | Reversos rechazados por cuenta bloqueada (RN-43)                          | > 0                        | 197                                                                                                                           | PASS
+ Veredicto      | QUALITY GATE G4                                                           | 0 FAIL                     | 0 FAIL de 48 métricas                                                                                                         | PASS
+
+Duraci�n: 72,892 ms
+Duraci�n: 69,145 ms
+Perfil guardado en evidence/g4_data_profile.csv
+######## 5/6 · Quality gate de G6
+Duraci�n: 72,555 ms
+Duraci�n: 71,945 ms
+Duraci�n: 72,692 ms
+Duraci�n: 89,448 ms
+Duraci�n: 75,112 ms
+Duraci�n: 104,000 ms
+Duraci�n: 75,837 ms
+Duraci�n: 1457,729 ms (00:01,458)
+Duraci�n: 228,776 ms
+Duraci�n: 114,290 ms
+Duraci�n: 303,993 ms
+Duraci�n: 75,132 ms
+Duraci�n: 74,904 ms
+Duraci�n: 72,343 ms
+Duraci�n: 73,244 ms
+Duraci�n: 182,919 ms
+Duraci�n: 202,410 ms
+Duraci�n: 75,945 ms
+Duraci�n: 72,604 ms
+Duraci�n: 93,151 ms
+Duraci�n: 421,320 ms
+Duraci�n: 72,106 ms
+Duraci�n: 74,376 ms
+Duraci�n: 74,663 ms
+Duraci�n: 96,647 ms
+Duraci�n: 1476,205 ms (00:01,476)
+Duraci�n: 742,475 ms
+Duraci�n: 95,873 ms
+Duraci�n: 76,464 ms
+Duraci�n: 94,227 ms
+Duraci�n: 75,233 ms
+Duraci�n: 298,144 ms
+Duraci�n: 130,797 ms
+Duraci�n: 115,658 ms
+Duraci�n: 73,768 ms
+Duraci�n: 81,311 ms
+Duraci�n: 79,525 ms
+Duraci�n: 72,633 ms
+Duraci�n: 73,809 ms
+Duraci�n: 72,182 ms
+Duraci�n: 523,209 ms
+Duraci�n: 359,058 ms
+Duraci�n: 424,241 ms
+Duraci�n: 82,194 ms
+Duraci�n: 83,156 ms
+Duraci�n: 574,781 ms
+Duraci�n: 369,965 ms
+Duraci�n: 126,861 ms
+Duraci�n: 2681,876 ms (00:02,682)
+Duraci�n: 253,581 ms
+Duraci�n: 1984,748 ms (00:01,985)
+Duraci�n: 76,365 ms
+Duraci�n: 336,377 ms
+Duraci�n: 365,119 ms
+Duraci�n: 374,879 ms
+Duraci�n: 865,904 ms
+Duraci�n: 1788,334 ms (00:01,788)
+Duraci�n: 172,049 ms
+Duraci�n: 289,288 ms
+Duraci�n: 86,335 ms
+Duraci�n: 108,266 ms
+Duraci�n: 123,904 ms
+Duraci�n: 78,302 ms
+Duraci�n: 175,502 ms
+Duraci�n: 159,382 ms
+Duraci�n: 71,740 ms
+Duraci�n: 93,913 ms
+Duraci�n: 80,376 ms
+Duraci�n: 76,463 ms
+Duraci�n: 108,570 ms
+Duraci�n: 522,847 ms
+Duraci�n: 576,978 ms
+Duraci�n: 84,207 ms
+Duraci�n: 79,490 ms
+Duraci�n: 76,218 ms
+Duraci�n: 74,604 ms
+Duraci�n: 73,731 ms
+Duraci�n: 74,187 ms
+Duraci�n: 75,931 ms
+Duraci�n: 79,846 ms
+Duraci�n: 73,058 ms
+Duraci�n: 73,702 ms
+Duraci�n: 72,727 ms
+Duraci�n: 72,009 ms
+Duraci�n: 71,866 ms
+Duraci�n: 224,476 ms
+Duraci�n: 72,823 ms
+Duraci�n: 74,713 ms
+== Pruebas de calidad (G6)
+ test_id |       categoria        |                                     regla                                      |         esperado          |             obtenido              | severidad | resultado 
+---------+------------------------+--------------------------------------------------------------------------------+---------------------------+-----------------------------------+-----------+-----------
+ C04     | Completitud            | Clientes sin correo electrónico (campo opcional)                               | ≤ 5 %                     | 7.1 %                             | BAJA      | WARNING
+ DS05    | Diseño                 | Claves foráneas sin índice que las soporte                                     | 0                         | 29                                | BAJA      | WARNING
+ A01     | Auditoría              | Triggers de auditoría activos en las tablas críticas (RN-52)                   | 8 de 8                    | 8 de 8                            | CRITICA   | PASS
+ A02     | Auditoría              | Triggers de inmutabilidad activos (RN-40, RN-53)                               | 6 de 6                    | 6 de 6                            | CRITICA   | PASS
+ A03     | Auditoría              | Registros de auditoría incompletos (quién, qué, cuándo, registro, valores)     | 0                         | 0                                 | ALTA      | PASS
+ A04     | Auditoría              | Cargas masivas sin rastro en la auditoría (quién cargó, cuándo, cuántas filas) | 0                         | 0                                 | ALTA      | PASS
+ A05     | Auditoría              | Transacciones sin usuario interno que las registró o con usuario sin rol       | 0                         | 0                                 | ALTA      | PASS
+ A06     | Auditoría              | Asignaciones de rol hechas por el mismo usuario (RN-50)                        | 0                         | 0                                 | ALTA      | PASS
+ C01     | Completitud            | Campos críticos vacíos en cliente (documento, municipio, vinculación)          | 0                         | 0                                 | CRITICA   | PASS
+ C02     | Completitud            | Nombres o apellidos vacíos en personas naturales                               | 0                         | 0                                 | ALTA      | PASS
+ C03     | Completitud            | Razón social o actividad económica vacías en personas jurídicas                | 0                         | 0                                 | ALTA      | PASS
+ C05     | Completitud            | Transacciones POSTED sin fecha contable o de contabilización                   | 0                         | 0                                 | CRITICA   | PASS
+ C06     | Completitud            | Transacciones REJECTED sin motivo (RN-45)                                      | 0                         | 0                                 | ALTA      | PASS
+ D01     | Distribución           | Clientes por departamento no uniformes                                         | mayor / promedio > 3      | 9.6                               | MEDIA     | PASS
+ D02     | Distribución           | Cuentas por cliente con cola larga                                             | máximo / mediana ≥ 10     | 100.0                             | MEDIA     | PASS
+ D03     | Distribución           | Patrón horario de transacciones                                                | pico / valle ≥ 5          | 22.7                              | MEDIA     | PASS
+ D04     | Distribución           | Montos sesgados: mediana < promedio                                            | mediana < promedio        | 837000 < 1767799                  | MEDIA     | PASS
+ D05     | Distribución           | Mayoría de cuentas ACTIVAS y minorías en otros estados                         | ACTIVA > 50 % y 4 estados | 87.1 % activas · 4 estados        | MEDIA     | PASS
+ DS01    | Diseño                 | Columnas float, real o money (dinero debe ser NUMERIC)                         | 0                         | 0                                 | ALTA      | PASS
+ DS02    | Diseño                 | Tablas sin clave primaria                                                      | 0                         | 0                                 | ALTA      | PASS
+ DS03    | Diseño                 | Tablas sin comentario (documentación en la base)                               | 0                         | 0                                 | BAJA      | PASS
+ DS04    | Diseño                 | Momentos (eventos) guardados sin zona horaria                                  | 0                         | 0                                 | MEDIA     | PASS
+ DS06    | Diseño                 | Funciones SECURITY DEFINER sin search_path fijo                                | 0                         | 0                                 | ALTA      | PASS
+ DS07    | Diseño                 | Funciones del banco ejecutables por PUBLIC                                     | 0                         | 0                                 | ALTA      | PASS
+ DS08    | Diseño                 | Roles de la aplicación con escritura directa en tablas de dinero               | 0                         | 0                                 | CRITICA   | PASS
+ F01     | Financiera             | Transacciones POSTED cuadradas: Σ débitos = Σ créditos (RN-47)                 | 100 %                     | 100.0000 %                        | CRITICA   | PASS
+ F02     | Financiera             | Transacciones REJECTED o PENDING con asientos (RN-45)                          | 0                         | 0                                 | CRITICA   | PASS
+ F03     | Financiera             | Momentos con saldo por debajo del cupo de sobregiro (RN-31)                    | 0                         | 0                                 | CRITICA   | PASS
+ F04     | Financiera             | Cuentas CERRADAS con saldo (RN-20)                                             | 0                         | 0                                 | CRITICA   | PASS
+ F05     | Financiera             | Cuenta-día con retiros por encima del límite vigente (RN-37)                   | 0                         | 0                                 | CRITICA   | PASS
+ F06     | Financiera             | Transferencias a la misma cuenta o entre monedas distintas (RN-32, RN-33)      | 0                         | 0                                 | CRITICA   | PASS
+ F07     | Financiera             | Reversos con monto o cuentas distintos de la original (RN-41)                  | 0                         | 0                                 | CRITICA   | PASS
+ G01     | Geográfica             | Municipios cuyo código no empieza por el del departamento (RN-07)              | 0                         | 0                                 | ALTA      | PASS
+ G02     | Geográfica             | Clientes u oficinas en municipios fuera del catálogo DIVIPOLA                  | 0                         | 0                                 | ALTA      | PASS
+ G03     | Geográfica             | Departamentos del catálogo sin ningún municipio                                | 0                         | 0                                 | BAJA      | PASS
+ N01     | Reglas de negocio      | Producto no permitido para el tipo de titular (RN-14, RN-15)                   | 0                         | 0                                 | ALTA      | PASS
+ N02     | Reglas de negocio      | Cuentas con más titulares vigentes que el máximo del producto (RN-16)          | 0                         | 0                                 | ALTA      | PASS
+ N03     | Reglas de negocio      | Cupo de sobregiro fuera de cuentas CORRIENTE (RN-17)                           | 0                         | 0                                 | ALTA      | PASS
+ N04     | Reglas de negocio      | Ajustes POSTED sin aprobación de otro SUPERVISOR (RN-44)                       | 0                         | 0                                 | CRITICA   | PASS
+ N05     | Reglas de negocio      | Reversos registrados por usuarios sin rol SUPERVISOR (RN-51)                   | 0                         | 0                                 | ALTA      | PASS
+ N06     | Reglas de negocio      | Usuarios que operaron cuentas de las que son titulares (RN-54)                 | 0                         | 0                                 | ALTA      | PASS
+ N07     | Reglas de negocio      | Desbloqueos, cierres o cambios de límite sin SUPERVISOR (RN-28)                | 0                         | 0                                 | ALTA      | PASS
+ N08     | Reglas de negocio      | Bloqueos sin motivo (RN-29)                                                    | 0                         | 0                                 | MEDIA     | PASS
+ R01     | Integridad referencial | Titularidades con cliente o cuenta inexistente                                 | 0                         | 0                                 | CRITICA   | PASS
+ R02     | Integridad referencial | Asientos sin transacción o con cuenta inexistente                              | 0                         | 0                                 | CRITICA   | PASS
+ R03     | Integridad referencial | Transacciones con cuenta origen/destino o usuario inexistente                  | 0                         | 0                                 | CRITICA   | PASS
+ R04     | Integridad referencial | Eventos de cuenta huérfanos                                                    | 0                         | 0                                 | CRITICA   | PASS
+ R05     | Integridad referencial | Clientes sin subtipo o con los dos (RN-02)                                     | 0                         | 0                                 | CRITICA   | PASS
+ R06     | Integridad referencial | Cuentas no cerradas sin titular principal vigente (RN-13)                      | 0                         | 0                                 | CRITICA   | PASS
+ R07     | Integridad referencial | Claves foráneas o CHECK sin validar (NOT VALID)                                | 0                         | 0                                 | ALTA      | PASS
+ S01     | Reconciliación         | Saldo almacenado = saldo según el ledger en cada cuenta (RN-48)                | 0 diferencias             | 0 cuentas · diferencia total 0.00 | CRITICA   | PASS
+ S02     | Reconciliación         | Σ saldos por cuenta contable y moneda = Σ del ledger                           | 0 diferencias             | 0                                 | CRITICA   | PASS
+ S03     | Reconciliación         | Estado de la cuenta distinto de su último evento (RN-25)                       | 0                         | 0                                 | ALTA      | PASS
+ S04     | Reconciliación         | Límite diario distinto del último cambio registrado (RN-27)                    | 0                         | 0                                 | ALTA      | PASS
+ S05     | Reconciliación         | Fecha de cierre distinta del evento CIERRE                                     | 0                         | 0                                 | MEDIA     | PASS
+ T01     | Temporal               | Movimientos antes de la apertura o después del cierre (RN-36)                  | 0                         | 0                                 | CRITICA   | PASS
+ T02     | Temporal               | Débitos de cuentas que no estaban ACTIVAS (RN-34)                              | 0                         | 0                                 | CRITICA   | PASS
+ T03     | Temporal               | Créditos a cuentas que no estaban ACTIVAS ni BLOQUEADAS (RN-35)                | 0                         | 0                                 | CRITICA   | PASS
+ T04     | Temporal               | Primer evento distinto de CREACION (RN-23)                                     | 0                         | 0                                 | ALTA      | PASS
+ T05     | Temporal               | Eventos cuyo estado anterior no es el estado previo real de la cuenta          | 0                         | 0                                 | ALTA      | PASS
+ T06     | Temporal               | Fecha contable distinta del día de contabilización (hora Colombia)             | 0                         | 0                                 | MEDIA     | PASS
+ T07     | Temporal               | Reversos registrados antes de la transacción original                          | 0                         | 0                                 | CRITICA   | PASS
+ T08     | Temporal               | Cuentas abiertas antes de la vinculación del titular                           | 0                         | 0                                 | MEDIA     | PASS
+ U01     | Unicidad               | Documentos de cliente duplicados (RN-01)                                       | 0                         | 0                                 | CRITICA   | PASS
+ U02     | Unicidad               | NIT duplicados                                                                 | 0                         | 0                                 | CRITICA   | PASS
+ U03     | Unicidad               | Números de cuenta duplicados (RN-11)                                           | 0                         | 0                                 | CRITICA   | PASS
+ U04     | Unicidad               | Claves de idempotencia duplicadas (RN-38)                                      | 0                         | 0                                 | CRITICA   | PASS
+ U05     | Unicidad               | Usuarios internos con login o documento duplicado                              | 0                         | 0                                 | ALTA      | PASS
+ U06     | Unicidad               | Posibles personas repetidas (mismo nombre, apellidos y fecha de nacimiento)    | 0                         | 0                                 | BAJA      | PASS
+ U07     | Unicidad               | Transacciones reversadas más de una vez (RN-42)                                | 0                         | 0                                 | CRITICA   | PASS
+ V01     | Validez                | Montos ≤ 0 o con más de 2 decimales (RN-30)                                    | 0                         | 0                                 | CRITICA   | PASS
+ V02     | Validez                | NIT con dígito de verificación incorrecto (RN-04)                              | 0                         | 0                                 | ALTA      | PASS
+ V03     | Validez                | Titulares naturales menores de 18 años al abrir (RN-08)                        | 0                         | 0                                 | ALTA      | PASS
+ V04     | Validez                | Fechas de nacimiento imposibles (futuras o edad > 110 años)                    | 0                         | 0                                 | MEDIA     | PASS
+ V05     | Validez                | Teléfonos que no son celulares colombianos de 10 dígitos                       | 0                         | 0                                 | BAJA      | PASS
+ V06     | Validez                | Saldo retenido negativo o mayor que el saldo contable positivo                 | 0                         | 0                                 | ALTA      | PASS
+
+Duraci�n: 69,175 ms
+== Puntajes por dimensión
+    dimension    | pruebas | pass | warning | fail | puntaje 
+-----------------+---------+------+---------+------+---------
+ Auditability    |       6 |    6 |       0 |    0 |   100.0
+ Data Quality    |      35 |   34 |       1 |    0 |    99.5
+ Database Design |       8 |    7 |       1 |    0 |    97.5
+ Integrity       |      27 |   27 |       0 |    0 |   100.0
+ OVERALL         |      76 |   74 |       2 |    0 |    99.6
+
+Duraci�n: 71,918 ms
+== Veredicto
+ fails_criticos |    quality_gate     
+----------------+---------------------
+              0 | QUALITY_GATE = PASS
+
+Duraci�n: 71,761 ms
+Duraci�n: 71,630 ms
+######## 6/6 · Permisos por rol de G7
+Duraci�n: 72,611 ms
+Duraci�n: 81,265 ms
+Duraci�n: 116,098 ms
+Duraci�n: 72,198 ms
+Duraci�n: 71,519 ms
+Duraci�n: 336,909 ms
+Duraci�n: 71,887 ms
+Duraci�n: 74,101 ms
+Duraci�n: 73,509 ms
+Duraci�n: 76,999 ms
+Duraci�n: 72,522 ms
+Duraci�n: 71,804 ms
+Duraci�n: 75,483 ms
+Duraci�n: 72,545 ms
+Duraci�n: 77,612 ms
+Duraci�n: 79,583 ms
+Duraci�n: 72,660 ms
+Duraci�n: 71,681 ms
+Duraci�n: 71,906 ms
+Duraci�n: 69,261 ms
+Duraci�n: 74,553 ms
+Duraci�n: 72,239 ms
+Duraci�n: 72,347 ms
+Duraci�n: 72,332 ms
+Duraci�n: 72,073 ms
+Duraci�n: 70,818 ms
+Duraci�n: 71,909 ms
+Duraci�n: 70,926 ms
+Duraci�n: 77,111 ms
+Duraci�n: 72,367 ms
+Duraci�n: 71,770 ms
+Duraci�n: 71,989 ms
+== G7 · Pruebas de acceso por rol
+ prueba |     usuario     |                accion                 |    esperado    |    obtenido    | resultado 
+--------+-----------------+---------------------------------------+----------------+----------------+-----------
+ S01    | demo_consulta   | Leer saldos de cuentas                | PERMITIDO      | PERMITIDO      | PASS
+ S02    | demo_consulta   | Leer la auditoría                     | DENEGADO       | DENEGADO       | PASS
+ S03    | demo_consulta   | Leer usuarios internos (seguridad)    | DENEGADO       | DENEGADO       | PASS
+ S04    | demo_consulta   | Cambiar un saldo directamente         | DENEGADO       | DENEGADO       | PASS
+ S05    | demo_consulta   | Hacer un retiro                       | DENEGADO       | DENEGADO       | PASS
+ S06    | demo_cajero     | Consignar con la función segura       | PERMITIDO      | PERMITIDO      | PASS
+ S07    | demo_cajero     | Retirar con la función segura         | PERMITIDO      | PERMITIDO      | PASS
+ S08    | demo_cajero     | Insertar una transacción a mano       | DENEGADO       | DENEGADO       | PASS
+ S09    | demo_cajero     | Cambiar un saldo directamente         | DENEGADO       | DENEGADO       | PASS
+ S10    | demo_cajero     | Reversar una transacción              | DENEGADO       | DENEGADO       | PASS
+ S11    | demo_cajero     | Leer la auditoría                     | DENEGADO       | DENEGADO       | PASS
+ S12    | demo_supervisor | Reversar (usuario interno SUPERVISOR) | PERMITIDO      | PERMITIDO      | PASS
+ S13    | demo_supervisor | Reversar (usuario interno CAJERO)     | DENEGADO (app) | DENEGADO (app) | PASS
+ S14    | demo_auditor    | Leer la auditoría                     | PERMITIDO      | PERMITIDO      | PASS
+ S15    | demo_auditor    | Leer usuarios y roles internos        | PERMITIDO      | PERMITIDO      | PASS
+ S16    | demo_auditor    | Leer el ledger                        | PERMITIDO      | PERMITIDO      | PASS
+ S17    | demo_auditor    | Modificar la auditoría                | DENEGADO       | DENEGADO       | PASS
+ S18    | demo_auditor    | Borrar asientos contables             | DENEGADO       | DENEGADO       | PASS
+ S19    | demo_auditor    | Consignar                             | DENEGADO       | DENEGADO       | PASS
+ S20    | demo_admin_seg  | Administrar usuarios internos         | PERMITIDO      | PERMITIDO      | PASS
+ S21    | demo_admin_seg  | Ver saldos de cuentas                 | DENEGADO       | DENEGADO       | PASS
+ S22    | demo_sin_rol    | Leer cuentas                          | DENEGADO       | DENEGADO       | PASS
+ S23    | demo_sin_rol    | Ejecutar una función del banco        | DENEGADO       | DENEGADO       | PASS
+
+Duraci�n: 73,048 ms
+== Detalle de los accesos denegados (mensaje de PostgreSQL)
+ prueba |                      detalle                       
+--------+----------------------------------------------------
+ S02    | permission denied for schema aud
+ S03    | permission denied for schema seg
+ S04    | permission denied for table cuenta
+ S05    | permission denied for function fn_retirar
+ S08    | permission denied for table transaccion_financiera
+ S09    | permission denied for table cuenta
+ S10    | permission denied for function fn_reversar
+ S11    | permission denied for schema aud
+ S13    | El usuario 10 no tiene el permiso TX_REVERSAR
+ S17    | permission denied for table log_auditoria
+ S18    | permission denied for table asiento_contable
+ S19    | permission denied for function fn_consignar
+ S21    | permission denied for schema core
+ S22    | permission denied for schema core
+ S23    | permission denied for schema ref
+
+Duraci�n: 71,616 ms
+== Matriz de privilegios de los roles de base de datos
+       rol        | cuenta_select | cuenta_update | tx_insert | asiento_delete | auditoria_select | usuario_update | retirar | reversar 
+------------------+---------------+---------------+-----------+----------------+------------------+----------------+---------+----------
+ banco_consulta   | t             | f             | f         | f              | f                | f              | f       | f
+ banco_cajero     | t             | f             | f         | f              | f                | f              | t       | f
+ banco_supervisor | t             | f             | f         | f              | f                | f              | t       | t
+ banco_auditor    | t             | f             | f         | f              | t                | f              | f       | f
+ banco_admin_seg  | f             | f             | f         | f              | f                | t              | f       | f
+
+Duraci�n: 72,721 ms
+== Veredicto
+ pruebas | permitidos | denegados | fallas |   resultado    
+---------+------------+-----------+--------+----------------
+      23 |          8 |        15 |      0 | G7 RBAC = PASS
+
+Duraci�n: 69,092 ms
+Duraci�n: 105,043 ms
+Usuarios de prueba borrados; la base no cambió.
+Duraci�n: 69,704 ms
+######## RESUMEN FINAL G8
+                   control                    | esperado  | obtenido | resultado 
+----------------------------------------------+-----------+----------+-----------
+ Tablas del modelo (ERD final)                | 28        | 28       | PASS
+ Claves foráneas (ERD final)                  | 42        | 42       | PASS
+ Clientes                                     | 10.000    | 10000    | PASS
+ Cuentas                                      | 50.000    | 50000    | PASS
+ Transacciones POSTED                         | 1.000.000 | 1000000  | PASS
+ Asientos contables                           | 2.000.000 | 2000000  | PASS
+ Índices de G7                                | 6         | 6        | PASS
+ Cargas registradas en la auditoría (G6, A04) | 15        | 15       | PASS
+ G6 · fallas críticas del quality gate        | 0         | 0        | PASS
+ G6 · puntaje general                         | ≥ 99      | 99.6     | PASS
+ G7 · fallas en las pruebas de permisos       | 0         | 0        | PASS
+
+Duraci�n: 380,024 ms
+        veredicto         |  duracion   
+--------------------------+-------------
+ G8 RECONSTRUCCIÓN = PASS | 03 min 32 s
+
+Duraci�n: 140,278 ms
+
+===== fase-bi\B2_modelo_estrella\sql\b2_01_esquema_bi.sql =====
+SET
+SET
+DROP SCHEMA
+psql:fase-bi/B2_modelo_estrella/sql/b2_01_esquema_bi.sql:11: NOTICE:  schema "bi" does not exist, skipping
+CREATE SCHEMA
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+CREATE VIEW
+CREATE PROCEDURE
+COMMENT
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+CREATE INDEX
+Esquema bi creado.
+
+===== fase-bi\B2_modelo_estrella\sql\b2_02_cargar_bi.sql =====
+SET
+SET
+El despliegue de duraci�n est� activado.
+TRUNCATE TABLE
+Duraci�n: 104,555 ms
+COPY 76
+Duraci�n: 154,240 ms
+CALL
+Duraci�n: 61000,243 ms (01:01,000)
+ANALYZE
+Duraci�n: 580,662 ms
+== Última carga
+ carga_id | fecha_corte | filas_fact_transaccion | filas_fact_saldo | segundos 
+----------+-------------+------------------------+------------------+----------
+        1 | 2026-08-31  |                1024178 |            50000 |     60.8
+(1 fila)
+
+Duraci�n: 76,329 ms
+
+===== fase-bi\B2_modelo_estrella\sql\b2_03_rol_powerbi.sql =====
+SET
+DO
+COMMENT
+GRANT
+GRANT
+GRANT
+REVOKE
+GRANT ROLE
+== Prueba de permisos de banco_bi
+SET
+         prueba          | resultado 
+-------------------------+-----------
+ Lee bi.fact_transaccion | PERMITIDO
+(1 fila)
+
+psql:fase-bi/B2_modelo_estrella/sql/b2_03_rol_powerbi.sql:43: NOTICE:  Lee core.cuenta: DENEGADO (correcto)
+psql:fase-bi/B2_modelo_estrella/sql/b2_03_rol_powerbi.sql:43: NOTICE:  Escribe en bi: DENEGADO (correcto)
+DO
+RESET
+Rol banco_bi y usuario powerbi_lector listos. Falta ponerle contraseña a powerbi_lector en cada PC.
+
+===== fase-bi\B2_modelo_estrella\sql\b2_04_validar_bi.sql =====
+SET
+SET
+CREATE TABLE
+INSERT 0 13
+CALL
+INSERT 0 1
+UPDATE 14
+== Validación del modelo estrella
+ id  |                             control                             |             esperado             |             obtenido             | resultado 
+-----+-----------------------------------------------------------------+----------------------------------+----------------------------------+-----------
+ V01 | Filas de fact_transaccion = transacciones del banco             | 1024178                          | 1024178                          | PASS
+ V02 | Transacciones contabilizadas (POSTED)                           | 1000000                          | 1000000                          | PASS
+ V03 | Monto POSTED en COP igual al del banco                          | 1767796946066.07                 | 1767796946066.07                 | PASS
+ V04 | Monto POSTED en USD igual al del banco                          | 1768114.58                       | 1768114.58                       | PASS
+ V05 | Monto POSTED por tipo igual al del banco (tipos distintos)      | 0                                | 0                                | PASS
+ V06 | Rechazadas y pendientes                                         | 24178                            | 24178                            | PASS
+ V07 | Cuentas en dim_cuenta y en fact_saldo_cuenta                    | 50000 / 50000                    | 50000 / 50000                    | PASS
+ V08 | Saldo contable total COP igual al del banco                     | 1004471074520.73                 | 1004471074520.73                 | PASS
+ V09 | Saldo contable total USD igual al del banco                     | 1051931.27                       | 1051931.27                       | PASS
+ V10 | Clientes y oficinas                                             | 10000 / 87                       | 10000 / 87                       | PASS
+ V11 | Cuentas sin titular principal en dim_cuenta                     | 0                                | 0                                | PASS
+ V12 | Días del calendario sin hueco (de la primera a la última fecha) | 4260                             | 4260                             | PASS
+ V13 | Controles de cuadre y calidad en PASS                           | 6                                | 6                                | PASS
+ V14 | Repetir la carga da exactamente lo mismo (huella md5)           | 4149f55080d618b5aed9a6ea3414eef5 | 4149f55080d618b5aed9a6ea3414eef5 | PASS
+
+== Veredicto
+ pass | fail |         veredicto         
+------+------+---------------------------
+   14 |    0 | B2 MODELO ESTRELLA = PASS
+
+
+===== fase-bi\B2_modelo_estrella\sql\b2_05_kpi_referencia.sql =====
+SET
+SET
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE VIEW
+CREATE TABLE
+INSERT 0 13
+== Valores oficiales de los indicadores (A: todo · B: 2026-08 y AHORROS)
+ id  |               indicador               |   escenario_a    |   escenario_b   
+-----+---------------------------------------+------------------+-----------------
+ K01 | Transacciones contabilizadas          |          1000000 |           11834
+ K02 | Monto movido COP                      | 1767796946066.07 |  12643399220.02
+ K03 | Monto movido USD                      |       1768114.58 |        18151.07
+ K04 | Ticket promedio COP                   |       1775276.18 |      1077317.59
+ K05 | Tasa de rechazo %                     |             2.35 |            6.94
+ K06 | Reversos                              |             9530 |             135
+ K07 | Clientes con movimientos              |             9070 |            3947
+ K08 | Cuentas activas (al corte)            |            43557 |           17851
+ K09 | Saldo total COP (al corte)            | 1004471074520.73 | 126700742889.73
+ K10 | Saldo total USD (al corte)            |       1051931.27 |       253402.31
+ K11 | Cuentas en sobregiro (al corte)       |             1000 |               0
+ K12 | Puntaje del quality gate              |             99.6 |            99.6
+ K13 | Controles de cuadre y calidad en PASS |                6 |               6
+
+
+===== fase-bi\B4_tableros_app\sql\b4_01_funciones_estadisticas.sql =====
+SET
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+Funciones de Estadísticas creadas en el esquema bi.
+
+===== fase-bi\B4_tableros_app\sql\b4_02_validar_estadisticas.sql =====
+SET
+SET
+CREATE TABLE
+INSERT 0 3
+SELECT 39
+SELECT 45
+CREATE TABLE
+INSERT 0 39
+INSERT 0 27
+INSERT 0 3
+== Detalle
+            prueba            |                             detalle                              |     esperado     |     obtenido     | resultado 
+------------------------------+------------------------------------------------------------------+------------------+------------------+-----------
+ Gráfica A cuentas_estado     | suma de la serie = CTA                                           |            50000 |            50000 | PASS
+ Gráfica A cuentas_producto   | suma de la serie = CTA                                           |            50000 |            50000 | PASS
+ Gráfica A monto_mes          | suma de la serie = K02                                           | 1767796946066.07 | 1767796946066.07 | PASS
+ Gráfica A monto_tipo         | suma de la serie = K02                                           | 1767796946066.07 | 1767796946066.07 | PASS
+ Gráfica A rechazo_motivo     | suma de la serie = TXR                                           |            24104 |            24104 | PASS
+ Gráfica A saldo_departamento | suma de la serie = K09                                           | 1004471074520.73 | 1004471074520.73 | PASS
+ Gráfica A tx_dia             | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica A tx_hora            | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica A tx_tipo            | suma de la serie = K01                                           |          1000000 |          1000000 | PASS
+ Gráfica B cuentas_estado     | suma de la serie = CTA                                           |            20547 |            20547 | PASS
+ Gráfica B cuentas_producto   | suma de la serie = CTA                                           |            20547 |            20547 | PASS
+ Gráfica B monto_mes          | suma de la serie = K02                                           |   12643399220.02 |   12643399220.02 | PASS
+ Gráfica B monto_tipo         | suma de la serie = K02                                           |   12643399220.02 |   12643399220.02 | PASS
+ Gráfica B rechazo_motivo     | suma de la serie = TXR                                           |              883 |              883 | PASS
+ Gráfica B saldo_departamento | suma de la serie = K09                                           |  126700742889.73 |  126700742889.73 | PASS
+ Gráfica B tx_dia             | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica B tx_hora            | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica B tx_tipo            | suma de la serie = K01                                           |            11834 |            11834 | PASS
+ Gráfica C cuentas_estado     | suma de la serie = CTA                                           |              956 |              956 | PASS
+ Gráfica C cuentas_producto   | suma de la serie = CTA                                           |              956 |              956 | PASS
+ Gráfica C monto_mes          | suma de la serie = K02                                           |    1895119129.88 |    1895119129.88 | PASS
+ Gráfica C monto_tipo         | suma de la serie = K02                                           |    1895119129.88 |    1895119129.88 | PASS
+ Gráfica C rechazo_motivo     | suma de la serie = TXR                                           |               25 |               25 | PASS
+ Gráfica C saldo_departamento | suma de la serie = K09                                           |   18093249066.05 |   18093249066.05 | PASS
+ Gráfica C tx_dia             | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Gráfica C tx_hora            | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Gráfica C tx_tipo            | suma de la serie = K01                                           |             1130 |             1130 | PASS
+ Indicador A K01              | Transacciones contabilizadas                                     |          1000000 |          1000000 | PASS
+ Indicador A K02              | Monto movido COP                                                 | 1767796946066.07 | 1767796946066.07 | PASS
+ Indicador A K03              | Monto movido USD                                                 |       1768114.58 |       1768114.58 | PASS
+ Indicador A K04              | Ticket promedio COP                                              |       1775276.18 |       1775276.18 | PASS
+ Indicador A K05              | Tasa de rechazo %                                                |             2.35 |             2.35 | PASS
+ Indicador A K06              | Reversos                                                         |             9530 |             9530 | PASS
+ Indicador A K07              | Clientes con movimientos                                         |             9070 |             9070 | PASS
+ Indicador A K08              | Cuentas activas                                                  |            43557 |            43557 | PASS
+ Indicador A K09              | Saldo total COP                                                  | 1004471074520.73 | 1004471074520.73 | PASS
+ Indicador A K10              | Saldo total USD                                                  |       1051931.27 |       1051931.27 | PASS
+ Indicador A K11              | Cuentas en sobregiro                                             |             1000 |             1000 | PASS
+ Indicador A K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador A K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Indicador B K01              | Transacciones contabilizadas                                     |            11834 |            11834 | PASS
+ Indicador B K02              | Monto movido COP                                                 |   12643399220.02 |   12643399220.02 | PASS
+ Indicador B K03              | Monto movido USD                                                 |         18151.07 |         18151.07 | PASS
+ Indicador B K04              | Ticket promedio COP                                              |       1077317.59 |       1077317.59 | PASS
+ Indicador B K05              | Tasa de rechazo %                                                |             6.94 |             6.94 | PASS
+ Indicador B K06              | Reversos                                                         |              135 |              135 | PASS
+ Indicador B K07              | Clientes con movimientos                                         |             3947 |             3947 | PASS
+ Indicador B K08              | Cuentas activas                                                  |            17851 |            17851 | PASS
+ Indicador B K09              | Saldo total COP                                                  |  126700742889.73 |  126700742889.73 | PASS
+ Indicador B K10              | Saldo total USD                                                  |        253402.31 |        253402.31 | PASS
+ Indicador B K11              | Cuentas en sobregiro                                             |                0 |                0 | PASS
+ Indicador B K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador B K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Indicador C K01              | Transacciones contabilizadas                                     |             1130 |             1130 | PASS
+ Indicador C K02              | Monto movido COP                                                 |    1895119129.88 |    1895119129.88 | PASS
+ Indicador C K03              | Monto movido USD                                                 |          1114.66 |          1114.66 | PASS
+ Indicador C K04              | Ticket promedio COP                                              |       1680070.15 |       1680070.15 | PASS
+ Indicador C K05              | Tasa de rechazo %                                                |             2.16 |             2.16 | PASS
+ Indicador C K06              | Reversos                                                         |               11 |               11 | PASS
+ Indicador C K07              | Clientes con movimientos                                         |              131 |              131 | PASS
+ Indicador C K08              | Cuentas activas                                                  |              825 |              825 | PASS
+ Indicador C K09              | Saldo total COP                                                  |   18093249066.05 |   18093249066.05 | PASS
+ Indicador C K10              | Saldo total USD                                                  |         29378.10 |         29378.10 | PASS
+ Indicador C K11              | Cuentas en sobregiro                                             |               16 |               16 | PASS
+ Indicador C K12              | Puntaje del quality gate                                         |             99.6 |             99.6 | PASS
+ Indicador C K13              | Controles en PASS                                                |                6 |                6 | PASS
+ Permiso PUBLIC no ejecuta    | ningún otro usuario puede ejecutar las funciones de Estadísticas |                1 |                1 | PASS
+ Permiso banco_bi ejecuta     | banco_bi puede ejecutar bi.fn_indicadores                        |                1 |                1 | PASS
+ Permiso banco_bi solo lee    | banco_bi no puede escribir en bi.fact_transaccion                |                1 |                1 | PASS
+
+== Resumen B4
+ pass | fail | total |       veredicto        
+------+------+-------+------------------------
+   69 |    0 |    69 | B4 ESTADÍSTICAS = PASS
+
+
+===== fase-bi\B5_servidor\sql\b5_01_esquema_app.sql =====
+SET
+SET
+CREATE SCHEMA
+COMMENT
+CREATE TABLE
+COMMENT
+CREATE TABLE
+COMMENT
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+SELECT 5
+INSERT 0 5
+CREATE FUNCTION
+CREATE FUNCTION
+COMMENT
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+DO
+COMMENT
+COMMENT
+COMMENT
+REVOKE
+REVOKE
+REVOKE
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT
+GRANT ROLE
+DO
+== Accesos de demostración
+      login      |    perfil     | corresponde_a |                   contrasena                    
+-----------------+---------------+---------------+-------------------------------------------------
+ demo.supervisor | SUPERVISOR    | aarango       | pendiente (la genera el aplicativo al arrancar)
+ demo.cajero     | CAJERO        | fcardenas     | pendiente (la genera el aplicativo al arrancar)
+ demo.auditor    | AUDITOR       | dmoreno       | pendiente (la genera el aplicativo al arrancar)
+ demo.admin      | ADMINISTRADOR | aperez        | pendiente (la genera el aplicativo al arrancar)
+ demo.cliente    | CLIENTE       | cliente 13    | pendiente (la genera el aplicativo al arrancar)
+(5 filas)
+
+Esquema app, usuario del canal digital y app_servidor listos.
+
+===== fase-bi\B5_servidor\sql\b5_02_pruebas_bd.sql =====
+SET
+SET
+CREATE TABLE
+GRANT
+CREATE PROCEDURE
+CALL
+CALL
+INSERT 0 1
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+CALL
+== Detalle
+ n  |                               prueba                                |        rol        |      esperado       |      obtenido       | resultado 
+----+---------------------------------------------------------------------+-------------------+---------------------+---------------------+-----------
+  1 | app_servidor sin SET ROLE no lee cuentas                            | app_servidor      | 42501               | 42501               | PASS
+  2 | app_servidor sin SET ROLE no consigna                               | app_servidor      | 42501               | 42501               | PASS
+  3 | app_servidor puede ponerse banco_cajero pero no hereda sus permisos | app_servidor      | SET sí, herencia no | SET sí, herencia no | PASS
+  4 | Cajero no reversa                                                   | banco_cajero      | 42501               | 42501               | PASS
+  5 | Cajero no desbloquea                                                | banco_cajero      | 42501               | 42501               | PASS
+  6 | Cajero no aprueba ajustes                                           | banco_cajero      | 42501               | 42501               | PASS
+  7 | Cajero no administra usuarios                                       | banco_cajero      | 42501               | 42501               | PASS
+  8 | Cajero no lee la auditoría                                          | banco_cajero      | 42501               | 42501               | PASS
+  9 | Cajero sí consigna (se deshace)                                     | banco_cajero      | OK                  | OK                  | PASS
+ 10 | Rol supervisor con usuario cajero no reversa (permiso del banco)    | banco_supervisor  | BA001               | BA001               | PASS
+ 11 | El usuario del canal digital no consigna (solo transfiere)          | banco_cajero      | BA001               | BA001               | PASS
+ 12 | Auditor no consigna                                                 | banco_auditor     | 42501               | 42501               | PASS
+ 13 | Auditor no escribe en la auditoría                                  | banco_auditor     | 42501               | 42501               | PASS
+ 14 | Auditor no ve contraseñas del aplicativo                            | banco_auditor     | 42501               | 42501               | PASS
+ 15 | Auditor sí lee la auditoría                                         | banco_auditor     | OK                  | OK                  | PASS
+ 16 | Administrador no ve cuentas                                         | banco_admin_seg   | 42501               | 42501               | PASS
+ 17 | Administrador no consigna                                           | banco_admin_seg   | 42501               | 42501               | PASS
+ 18 | Administrador no se asigna roles a sí mismo (RN-50)                 | banco_admin_seg   | 23514               | 23514               | PASS
+ 19 | Administrador no borra asignaciones (se revocan con fecha)          | banco_admin_seg   | 42501               | 42501               | PASS
+ 20 | Cliente no lee la tabla de cuentas                                  | banco_cliente_app | 42501               | 42501               | PASS
+ 21 | Cliente no llama directo a fn_transferir                            | banco_cliente_app | 42501               | 42501               | PASS
+ 22 | Cliente no ve movimientos de una cuenta ajena                       | banco_cliente_app | BA010               | BA010               | PASS
+ 23 | Cliente no transfiere desde una cuenta ajena                        | banco_cliente_app | BA010               | BA010               | PASS
+ 24 | Cliente no transfiere un monto inválido                             | banco_cliente_app | BA005               | BA005               | PASS
+ 25 | Cliente sí ve sus cuentas                                           | banco_cliente_app | OK                  | OK                  | PASS
+ 26 | Cliente sí transfiere desde su cuenta (se deshace)                  | banco_cliente_app | OK                  | OK                  | PASS
+ 27 | El rol de acceso no lee la tabla de accesos                         | banco_app_acceso  | 42501               | 42501               | PASS
+ 28 | El rol de acceso no consigna                                        | banco_app_acceso  | 42501               | 42501               | PASS
+ 29 | Cinco contraseñas malas seguidas bloquean el acceso (se deshace)    | banco_app_acceso  | OK                  | OK                  | PASS
+ 30 | Estadísticas (banco_bi) no usa funciones del cliente                | banco_bi          | 42501               | 42501               | PASS
+
+== Resumen B5 (base)
+ pass | fail | total |           veredicto           
+------+------+-------+-------------------------------
+   30 |    0 |    30 | B5 PERMISOS EN LA BASE = PASS
+
+
+===== fase-bi\B6_interfaces\sql\b6_01_accesos_admin.sql =====
+SET
+SET
+CREATE FUNCTION
+CREATE FUNCTION
+CREATE FUNCTION
+REVOKE
+GRANT
+GRANT
+== Pruebas de las funciones de acceso del administrador
+CREATE TABLE
+GRANT
+DO
+                   prueba                    | esperado | obtenido | resultado 
+---------------------------------------------+----------+----------+-----------
+ El cajero no da accesos                     | 42501    | 42501    | PASS
+ Rol admin con usuario cajero no da accesos  | BA001    | BA001    | PASS
+ El administrador no se da acceso a sí mismo | BA001    | BA001    | PASS
+ No se da un perfil sin el rol vigente       | BA001    | BA001    | PASS
+(4 filas)
+
+     veredicto     
+-------------------
+ B6 ACCESOS = PASS
+(1 fila)
+
+
+Revise arriba: G8 RECONSTRUCCION = PASS, B2, B4, B5 en PASS y B6 ACCESOS = PASS.
+Despues: git status no debe mostrar cambios en evidence\g4_data_profile.csv (base identica a la local).
+
+RESULTADO: OK
+Salida guardada en: C:\Users\Juandi\Documents\GitHub\Proyecto-BD-Banco\fase-bi\despliegue\salidas\salida_b7_1_montaje.txt
