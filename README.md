@@ -8,6 +8,13 @@ personas reales.
 **Integrantes:** Juan Diego Ortiz, Adrian Daniel Argotte, Miguel Andrés Pava, Jerónimo Soto y
 David González.
 
+**El proyecto tiene dos etapas:**
+
+| Etapa | Gates | Cuándo | Qué es |
+|---|---|---|---|
+| Inicial | **G0 a G8** | Septiembre y comienzos de octubre de 2026 | La base de datos del banco en PostgreSQL: modelo, datos sintéticos, consultas, calidad, rendimiento y seguridad |
+| Nueva | **B0 a B9** | Noviembre de 2026 | Lo que construimos con todo lo que aprendimos en el curso: modelo estrella, Power BI, aplicativo web por perfiles, despliegue en la nube y evaluación con personas |
+
 ## Empiece aquí: la entrega de la fase BI
 
 Después de G8 llevamos el banco a un modelo estrella, a tableros en Power BI y a un aplicativo web
