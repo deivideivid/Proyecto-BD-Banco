@@ -157,8 +157,8 @@
       Banco.mostrar("Últimos movimientos de " + cu.numero_cuenta, Banco.tabla([
         { titulo: "N.º", campo: "transaccion_id" },
         { titulo: "Fecha", valor: (m) => fecha(m.fecha) },
-        { titulo: "Tipo", valor: (m) => m.tipo_codigo },
-        { titulo: "Estado", valor: (m) => chip(m.estado_codigo) },
+        { titulo: "Tipo", valor: (m) => Banco.tipoTexto(m.tipo_codigo) },
+        { titulo: "Estado", valor: (m) => Banco.chipEstado(m.estado_codigo) },
         { titulo: "Detalle", valor: (m) => m.motivo_rechazo || m.descripcion || "—" },
         { titulo: "Valor", num: true, valor: (m) => el("span", { class: m.sentido === "ENTRA" ? "positivo" : "negativo", text: (m.sentido === "ENTRA" ? "+" : "−") + dinero(m.monto, d.moneda_codigo) }) }
       ], d.movimientos, { vacio: "La cuenta no tiene movimientos." }));

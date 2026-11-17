@@ -68,6 +68,9 @@ def traducir(error: psycopg.Error) -> HTTPException:
     if estado in MENSAJES:
         http, mensaje = MENSAJES[estado]
         detalle_base = error.diag.message_primary if error.diag else None
+        # B8 (Adrián): en la transferencia del cliente, decir qué no se encontró
+        if estado == "BA016" and (detalle_base or "").startswith("No existe la cuenta"):
+            mensaje = "No existe una cuenta del Banco Andino con ese número. Revise la cuenta destino."
         return HTTPException(status_code=http, detail={"mensaje": mensaje, "codigo": estado, "detalle": detalle_base})
     log.exception("Error de base no previsto (%s)", estado)
     return HTTPException(status_code=500, detail={"mensaje": "No pudimos completar la operación.", "codigo": estado})

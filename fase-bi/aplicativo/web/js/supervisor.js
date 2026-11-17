@@ -55,18 +55,19 @@
     boton.addEventListener("click", async () => {
       const d = await Banco.pedirDatos({ titulo: "Reversar la transacción " + t.transaccion_id, campos: [{ nombre: "motivo", etiqueta: "Motivo", tipo: "textarea", requerido: true, minimo: 3, max: 140 }], boton: "Revisar", peligro: true });
       if (!d) return;
-      const ok = await Banco.confirmar({ titulo: "Confirme el reverso", datos: [["Transacción", String(t.transaccion_id)], ["Tipo", t.tipo_codigo], ["Monto", dinero(t.monto)], ["Motivo", d.motivo]], boton: "Reversar", peligro: true });
+      const ok = await Banco.confirmar({ titulo: "Confirme el reverso", datos: [["Transacción", String(t.transaccion_id)], ["Tipo", Banco.tipoTexto(t.tipo_codigo)], ["Monto", dinero(t.monto)], ["Motivo", d.motivo]], boton: "Reversar", peligro: true });
       if (!ok) return;
       const r = await Banco.enviar(boton, () => BancoAPI.post("api/supervisor/transacciones/" + t.transaccion_id + "/reversar", { motivo: d.motivo, clave: Banco.clave() }));
       if (r) { await Banco.exito({ titulo: "Transacción reversada", numero: r.reverso_id }); caja.hidden = true; }
     });
     const fila = (k, v) => [el("dt", { text: k }), el("dd", { text: v })];
-    caja.replaceChildren(
-      el("div", { class: "fila" }, el("h2", { text: "Transacción " + t.transaccion_id }), chip(t.estado_codigo)),
-      el("dl", { class: "detalle" }, fila("Tipo", t.tipo_codigo), fila("Monto", dinero(t.monto)), fila("Origen", t.cuenta_origen || "—"),
+    // replaceChildren escribe "null" si le llega un null: por eso filtramos lo vacío (lo vimos en la evaluación de B8)
+    caja.replaceChildren(...[
+      el("div", { class: "fila" }, el("h2", { text: "Transacción " + t.transaccion_id }), Banco.chipEstado(t.estado_codigo)),
+      el("dl", { class: "detalle" }, fila("Tipo", Banco.tipoTexto(t.tipo_codigo)), fila("Monto", dinero(t.monto)), fila("Origen", t.cuenta_origen || "—"),
         fila("Destino", t.cuenta_destino || "—"), fila("Descripción", t.descripcion || "—"), fila("Fecha", fecha(t.fecha_contabilizacion || t.fecha_solicitud))),
       reversable ? null : el("p", { class: "suave", text: t.ya_reversada ? "Esta transacción ya fue reversada." : "Solo se pueden reversar transacciones aplicadas que no sean reversos." }),
-      el("div", { class: "fila" }, boton));
+      el("div", { class: "fila" }, boton)].filter(Boolean));
     caja.hidden = false;
   });
 

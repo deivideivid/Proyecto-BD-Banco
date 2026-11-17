@@ -27,7 +27,16 @@ def bitacora(tabla: str | None = Query(None, max_length=63), operacion: str | No
              login: str | None = Query(None, max_length=40), desde: date | None = None, hasta: date | None = None,
              limite: int = Query(50, ge=1, le=500), s: Sesion = Depends(auditor)):
     return filas(s, """
-      SELECT a.auditoria_id, a.ocurrido_en, u.login, a.usuario_bd, a.esquema || '.' || a.tabla AS tabla, a.operacion, a.registro
+      SELECT a.auditoria_id, a.ocurrido_en, u.login, a.usuario_bd, a.esquema || '.' || a.tabla AS tabla, a.operacion, a.registro,
+             -- B8 (sugerencia de Miguel): en los UPDATE, qué campos cambiaron y cómo [antes, después]
+             CASE WHEN a.operacion = 'UPDATE' THEN (
+               SELECT jsonb_object_agg(k, jsonb_build_array(a.valores_antes -> k, a.valores_despues -> k))
+               FROM jsonb_object_keys(a.valores_despues) AS k
+               WHERE a.valores_antes -> k IS DISTINCT FROM a.valores_despues -> k) END AS cambios,
+             -- y a quién se refiere el registro, con nombre y no solo con el número
+             (SELECT x.login FROM seg.usuario x WHERE x.usuario_id = (a.registro ->> 'usuario_id')::bigint) AS usuario_afectado,
+             (SELECT r.codigo FROM seg.rol r WHERE r.rol_id = (a.registro ->> 'rol_id')::int) AS rol_afectado,
+             (SELECT c.numero_cuenta FROM core.cuenta c WHERE c.cuenta_id = (a.registro ->> 'cuenta_id')::bigint) AS cuenta_afectada
       FROM aud.log_auditoria a LEFT JOIN seg.usuario u ON u.usuario_id = a.usuario_id
       WHERE (%(tabla)s::text IS NULL OR a.tabla = %(tabla)s)
         AND (%(op)s::text IS NULL OR a.operacion = %(op)s)

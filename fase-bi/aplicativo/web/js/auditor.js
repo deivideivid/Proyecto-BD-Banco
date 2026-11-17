@@ -41,10 +41,29 @@
         { titulo: "N.º", campo: "auditoria_id" }, { titulo: "Cuándo", valor: (b) => fecha(b.ocurrido_en) },
         { titulo: "Empleado", valor: (b) => b.login || "—" }, { titulo: "Conexión", campo: "usuario_bd" },
         { titulo: "Tabla", campo: "tabla" }, { titulo: "Operación", valor: (b) => chip(b.operacion, "neutro") },
-        { titulo: "Registro", valor: (b) => Object.entries(b.registro || {}).map(([k, v]) => k + " " + v).join(" · ") }
+        { titulo: "Registro", valor: registroTexto },
+        { titulo: "Cambios", valor: cambiosTexto }
       ], filas, { vacio: "No hay registros con esos filtros." }));
     } catch (e) { caja.replaceChildren(el("p", { class: "vacio", text: e.message })); }
     finally { caja.classList.remove("cargando"); }
+  }
+  /* B8 (sugerencia de Miguel): el registro con nombres y, en los UPDATE, qué cambió */
+  function registroTexto(b) {
+    return Object.entries(b.registro || {}).filter(([k]) => k !== "vigente_desde").map(([k, v]) =>
+      k === "usuario_id" && b.usuario_afectado ? "usuario " + b.usuario_afectado + " (n.º " + v + ")"
+      : k === "rol_id" && b.rol_afectado ? "rol " + b.rol_afectado
+      : k === "cuenta_id" && b.cuenta_afectada ? "cuenta " + b.cuenta_afectada
+      : k + " " + v).join(" · ");
+  }
+  function valorCorto(v) {
+    if (v === null || v === undefined) return "vacío";
+    const t = typeof v === "object" ? JSON.stringify(v) : String(v);
+    return t.length > 40 ? t.slice(0, 39) + "…" : t;
+  }
+  function cambiosTexto(b) {
+    if (!b.cambios) return "—";
+    const lista = Object.entries(b.cambios).map(([k, [antes, despues]]) => k + ": " + valorCorto(antes) + " → " + valorCorto(despues));
+    return lista.length ? lista.join(" · ") : "Sin cambios de valor";
   }
   async function cargarIngresos() {
     const filas = await BancoAPI.get("api/auditor/ingresos?limite=100");

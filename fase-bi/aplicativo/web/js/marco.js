@@ -333,6 +333,12 @@
     return caja;
   }
   function chip(texto, clase) { return el("span", { class: "chip " + (clase || texto), text: texto }); }
+  /* Estados y tipos de transacción en español (la base guarda el código; el color sale del código) */
+  const ESTADO_TX = { POSTED: "Aplicada", REJECTED: "Rechazada", PENDING_APPROVAL: "Pendiente de aprobación" };
+  const TIPO_TX = { CONSIGNACION: "Consignación", RETIRO: "Retiro", TRANSFERENCIA: "Transferencia", AJUSTE: "Ajuste",
+                    REVERSO: "Reverso", CREDITO: "Crédito", DEBITO: "Débito" };
+  function chipEstado(codigo) { return chip(ESTADO_TX[codigo] || codigo, codigo); }
+  function tipoTexto(codigo) { return TIPO_TX[codigo] || codigo || "—"; }
 
   /* ---------- Secciones por la dirección (#seccion) ---------- */
   function secciones(alCambiar) {
@@ -449,5 +455,5 @@
   }
 
   window.Banco = { iniciar, secciones, icono, el, dinero, entero, numero, fecha, clave, contar, aviso, confirmar, exito,
-                   enviar, datosDe, montoTexto, tabla, chip, pedirDatos, mostrar, INICIO, NOMBRE_PERFIL };
+                   enviar, datosDe, montoTexto, tabla, chip, chipEstado, tipoTexto, pedirDatos, mostrar, INICIO, NOMBRE_PERFIL };
 })();
