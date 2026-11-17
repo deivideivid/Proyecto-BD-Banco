@@ -41,3 +41,19 @@ El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, e
 - `despliegue/` - dónde y cómo publicamos el aplicativo (gate B7: Jerónimo comparó los proveedores y David lo montó; el paso a paso está en `despliegue/GUIA_B7.md`).
 - `equipo/` - los datos del equipo (`equipo.json`) y las hojas de vida en PDF, solo con datos profesionales.
 - `IA/` - el registro de cómo usamos la IA en esta fase.
+
+## Cómo montarlo en otro computador
+
+Lo probamos en Windows con PostgreSQL 18 y Python 3.13.
+
+1. Montamos la base del banco con G8, como dice el [README principal](../README.md).
+2. Corremos, en este orden, `B2_modelo_estrella/ejecutar_b2.bat`, `B4_tableros_app/ejecutar_b4.bat`,
+   `B5_servidor/ejecutar_b5.bat` y `B6_interfaces/ejecutar_b6.bat`. Cada uno pide la contraseña de
+   `postgres` y termina en PASS. Al final, `ejecutar_b5.bat` pide inventar la contraseña de
+   `app_servidor`, el usuario con el que el aplicativo entra a la base.
+3. Abrimos `aplicativo/iniciar_local.bat`: crea el entorno de Python, crea los accesos de prueba
+   (quedan en `aplicativo/accesos_demo.local.txt`, que no se sube) y abre `http://localhost:8000`.
+4. El tablero de Power BI se abre con Power BI Desktop desde `B3_powerbi/BancoAndino.pbix`, con el
+   usuario de solo lectura `powerbi_lector` (ver `B3_powerbi/README.md`).
+
+Para la nube seguimos `despliegue/GUIA_B7.md`.
