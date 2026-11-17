@@ -7,7 +7,8 @@ En esta fase tomamos la base del laboratorio (G0 a G8) y la llevamos a dos cosas
    una sección de estadísticas con los tableros, el equipo con sus hojas de vida y las
    tecnologías que usamos.
 
-Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entrega-final`.
+El aplicativo está publicado en **https://banco-andino.onrender.com** (si estaba dormido, tarda
+cerca de un minuto en abrir). Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entrega-final`.
 
 ## Cómo vamos
 
@@ -20,7 +21,7 @@ Trabajamos en la rama `fase-bi`. Lo de G0 a G8 quedó congelado en el tag `entre
 | B4 | Tableros dentro del aplicativo | Listo |
 | B5 | Servidor del aplicativo y permisos | Listo |
 | B6 | Interfaces por perfil | Listo |
-| B7 | Despliegue en la nube (Neon + Render) | En curso (lo lleva David) |
+| B7 | Despliegue en la nube (Neon + Render) | Listo: https://banco-andino.onrender.com |
 | B8 | Pruebas y evaluación con el grupo | Pendiente |
 | B9 | Cierre | Pendiente |
 

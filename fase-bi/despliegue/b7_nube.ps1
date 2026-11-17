@@ -11,7 +11,7 @@
  Las cadenas de conexión y las contraseñas se piden en la ventana sin mostrarse y no quedan en
  ningún archivo. Lo que sale en pantalla se guarda en despliegue\salidas\ (sin contraseñas).
 #>
-param([Parameter(Mandatory = $true)][ValidateSet("1", "2", "3")][string]$Paso)
+param([Parameter(Mandatory = $true)][ValidateSet("1", "2", "3", "4")][string]$Paso)
 
 $ErrorActionPreference = "Continue"
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -21,7 +21,7 @@ Set-Location $raiz
 
 $carpetaSalidas = Join-Path $PSScriptRoot "salidas"
 New-Item -ItemType Directory -Force -Path $carpetaSalidas | Out-Null
-$nombres = @{ "1" = "salida_b7_1_montaje.txt"; "2" = "salida_b7_2_clave_y_medida.txt"; "3" = "salida_b7_3_pruebas_nube.txt" }
+$nombres = @{ "1" = "salida_b7_1_montaje.txt"; "2" = "salida_b7_2_clave_y_medida.txt"; "3" = "salida_b7_3_pruebas_nube.txt"; "4" = "salida_b7_4_diagnostico_accesos.txt" }
 $rutaSalida = Join-Path $carpetaSalidas $nombres[$Paso]
 ("Banco Andino - B7 paso " + $Paso + " - " + (Get-Date -Format "yyyy-MM-dd HH:mm:ss") + " - equipo " + $env:COMPUTERNAME) |
     Out-File -FilePath $rutaSalida -Encoding utf8
@@ -196,4 +196,15 @@ if ($Paso -eq "3") {
     $ok = ($LASTEXITCODE -eq 0)
     Log "El detalle queda en fase-bi\B5_servidor\salidas\salida_pruebas_perfiles_nube.txt"
     Terminar $ok
+}
+
+# =====================================================================================
+if ($Paso -eq "4") {
+    # Diagnostico de los accesos de demostracion en Neon (solo lee; no muestra contrasenas).
+    if (-not (Test-Path $venvPy)) { Log "FALLO: falta el entorno de Python del aplicativo (iniciar_local.bat una vez)."; Terminar $false }
+    $url = LeerCadenaNeon
+    $env:DATABASE_URL = $url
+    $env:PYTHONIOENCODING = "utf-8"
+    & $venvPy "fase-bi\despliegue\diagnostico_accesos.py" 2>&1 | ForEach-Object { Log ([string]$_) }
+    Terminar ($LASTEXITCODE -eq 0)
 }

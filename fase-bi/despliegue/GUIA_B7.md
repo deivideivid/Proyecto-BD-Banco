@@ -131,3 +131,4 @@ Si algo sale con `FALLO`, paramos y revisamos `salida_b7_1_montaje.txt` antes de
 | Render: `Could not open requirements file` | Revisamos que *Root Directory* esté vacío y el *Build Command* tal cual |
 | Render: `password authentication failed` | La `DATABASE_URL` quedó mal: corremos otra vez el paso 3 y pegamos la nueva en Render (*Environment* → *Save, rebuild and deploy*) |
 | El enlace tarda casi un minuto | Es normal: Render se duerme a los 15 min sin visitas. Antes de la sustentación lo abrimos 5 min antes |
+| En la página sale "Usuario o contraseña incorrectos" con los accesos de prueba | Revisamos que sea `accesos_demo_nube.local.txt` (el de la nube) y no `accesos_demo.local.txt` (el de la base local): se parecen mucho y nos pasó. `b7_4_diagnostico_accesos.bat` muestra si las contraseñas del archivo coinciden con la base y los últimos intentos de ingreso, sin mostrar contraseñas |

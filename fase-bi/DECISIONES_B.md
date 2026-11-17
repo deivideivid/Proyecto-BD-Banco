@@ -81,3 +81,6 @@ Lo que fuimos decidiendo en grupo y por qué.
     PostgreSQL sin superusuario: todo en PASS, `evidence/` sin cambios y 784 MB de 1 GB.
 34. **Render usa la cadena directa de Neon** (sin `-pooler`) con el usuario `app_servidor`, y el
     servidor revisa cada conexión antes de usarla porque Neon las corta cuando la base se duerme.
+35. **En Neon la contraseña de `app_servidor` la ponemos con `ALTER ROLE`** por la conexión cifrada,
+    porque Neon no acepta el `\password` de psql. Exigimos 20 o más caracteres, solo letras y números,
+    para que también sirva dentro de la `DATABASE_URL` de Render.

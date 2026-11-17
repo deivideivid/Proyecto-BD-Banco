@@ -228,6 +228,30 @@ Lo aprobamos en grupo con esta comparación al arrancar B7 (17/11/2026):
   guarda las cadenas de conexión. Al grupo solo le pasa por mensaje privado lo que necesite cada
   uno. Nunca van al repositorio ni al chat del grupo.
 
+## Cómo quedó (B7, 16/11/2026)
+
+Lo montamos con los `.bat` de esta carpeta: David creó las cuentas de Neon y Render y Juan Diego
+corrió los scripts desde su computador.
+
+- **Enlace:** https://banco-andino.onrender.com (Render Free, Virginia; se duerme a los 15 min sin
+  visitas).
+- **Base:** Neon Free, AWS US East (N. Virginia), base `banco_andino_lab` completa. G3, G4, G6
+  (quality gate), G7 y G8 en PASS; la reconstrucción tardó 3 min 32 s. Encima, B2 (14/14), B4
+  (69/69), B5 (30/30) y B6 en PASS (`salidas/salida_b7_1_montaje.txt`).
+- **Espacio:** 781 MB de 1 GB (76,3 %, "CABE JUSTO"): `fin` 532 MB, `bi` 189 MB y `core` 50 MB
+  (`salidas/salida_b7_2_clave_y_medida.txt`).
+- **Pruebas contra el enlace publicado:** 110 de 110 en PASS con los 5 perfiles
+  (`salidas/salida_b7_3_pruebas_nube.txt` y `B5_servidor/salidas/salida_pruebas_perfiles_nube.txt`).
+- **Desde el navegador y el celular:** entramos con los accesos de la nube y revisamos las
+  pantallas y Estadísticas. Al principio no entrábamos porque usábamos el archivo de accesos de la
+  base local; lo encontramos con `b7_4_diagnostico_accesos.bat`.
+- **Capturas:** `capturas/b7_neon_proyecto.png` (la base en Neon), `capturas/b7_render_live.png`
+  (el despliegue en *Live*) y `capturas/b7_celular_supervisor_estadisticas.png` (el supervisor en
+  Estadísticas desde el celular).
+- **Lo que encontramos:** Neon no acepta el `\password` de psql, porque manda la contraseña ya
+  cifrada y Neon la quiere en texto para cifrarla él. Cambiamos el paso 2 para que la ponga con
+  `ALTER ROLE` por la conexión cifrada.
+
 ## Fuentes (consultadas el 12/11/2026)
 
 - Neon: [límites del plan Free](https://neon.com/faqs/free-plan-limits-and-quotas) y [precios](https://neon.com/pricing).
