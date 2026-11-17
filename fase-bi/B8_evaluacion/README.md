@@ -16,10 +16,11 @@ por los cinco y cada hallazgo de gravedad Alta o Media quedó corregido (o expli
 
 | Parte | Estado |
 |---|---|
-| Pruebas automáticas contra la nube | 110/110 PASS (16/11/2026) |
+| Pruebas automáticas contra la nube | 110/110 PASS al cerrar B7 (16/11/2026) y otra vez 110/110 PASS con todas las correcciones de B8 publicadas (17/11/2026) |
 | Guía y planilla | Listas |
 | Evaluación del grupo | Los 5 probamos. Juan Diego (Administrador) y Miguel (Auditor) completas; David (Cajero), Jerónimo (Supervisor) y Adrián (Cliente) casi completas: dejamos 2 tareas sin hacer y de 3 no hay captura |
 | Correcciones | 7 hallazgos corregidos (mensaje de RN-50, vista de celular, estados en español, un "null" en Reversar, las dos sugerencias de Miguel para la bitácora y el mensaje de cuenta destino inexistente). Después de los dos primeros: 50/50 en la revisión de pantallas y 110/110 en las pruebas de perfiles |
+| **B8** | **Listo (17/11/2026)** |
 
 Cambiamos la forma de evaluar: en vez de una llamada con todos, cada uno prueba su perfil cuando
 puede y le manda sus respuestas a Juan Diego. Para que no dependiéramos tanto unos de otros, el

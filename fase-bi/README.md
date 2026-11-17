@@ -22,7 +22,7 @@ cerca de un minuto en abrir). Trabajamos en la rama `fase-bi`. Lo de G0 a G8 que
 | B5 | Servidor del aplicativo y permisos | Listo |
 | B6 | Interfaces por perfil | Listo |
 | B7 | Despliegue en la nube (Neon + Render) | Listo: https://banco-andino.onrender.com |
-| B8 | Pruebas y evaluación con el grupo | En curso |
+| B8 | Pruebas y evaluación con el grupo | Listo: los 5 evaluamos, 7 hallazgos corregidos y 110/110 en la nube |
 | B9 | Cierre | Pendiente |
 
 El detalle de cada gate está en `PLAN_GATES_B.md` y lo que fuimos decidiendo, en `DECISIONES_B.md`.

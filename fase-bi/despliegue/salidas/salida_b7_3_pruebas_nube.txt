@@ -1,4 +1,4 @@
-﻿Banco Andino - B7 paso 3 - 2026-11-17 00:20:36 - equipo DESKTOP-F1GG12C
+﻿Banco Andino - B7 paso 3 - 2026-11-17 13:47:55 - equipo DESKTOP-F1GG12C
 Servidor: https://banco-andino.onrender.com
 Despertando el servidor (si estaba dormido tarda cerca de 1 minuto)...
 Servidor despierto. Corremos las pruebas de los 5 perfiles (hacen operaciones pequenas reales, 'Prueba B5').
@@ -50,8 +50,8 @@ PASS  [Matriz] ADMINISTRADOR → Administrador: esperado 200, obtenido 200
 PASS  [Matriz] ADMINISTRADOR → Estadísticas: Resumen: esperado 200, obtenido 200
 PASS  [Matriz] ADMINISTRADOR → Estadísticas: Control: esperado 200, obtenido 200
 PASS  [Cajero] Consigna 50.000: esperado 200, obtenido 200
-PASS  [Cajero] El saldo sube exactamente 50.000: esperado 2871567.00, obtenido 2871567.00
-PASS  [Cajero] Repetir la misma solicitud no cobra dos veces (idempotencia): esperado 1024184 2871567.00, obtenido 1024184 2871567.00
+PASS  [Cajero] El saldo sube exactamente 50.000: esperado 2891567.00, obtenido 2891567.00
+PASS  [Cajero] Repetir la misma solicitud no cobra dos veces (idempotencia): esperado 1024208 2891567.00, obtenido 1024208 2891567.00
 PASS  [Cajero] Retira 20.000: esperado 200, obtenido 200
 PASS  [Cajero] Retiro imposible: rechazado y registrado (RN-45): esperado 409 con rechazo, obtenido 409 con rechazo
 PASS  [Cajero] Transfiere 10.000 entre cuentas del cliente: esperado 200, obtenido 200
