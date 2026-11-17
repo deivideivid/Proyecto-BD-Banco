@@ -8,9 +8,31 @@ personas reales.
 **Integrantes:** Juan Diego Ortiz, Adrian Daniel Argotte, Miguel Andrés Pava, Jerónimo Soto y
 David González.
 
-> **Fase BI:** después de G8 llevamos el banco a un modelo estrella, a Power BI y a un
-> aplicativo web por perfiles, publicado en https://banco-andino.onrender.com. Todo eso está en
-> la carpeta [`fase-bi/`](fase-bi/README.md).
+## Empiece aquí: la entrega de la fase BI
+
+Después de G8 llevamos el banco a un modelo estrella, a tableros en Power BI y a un aplicativo web
+con una pantalla para cada perfil, que funciona en el celular.
+
+- **Aplicativo publicado:** https://banco-andino.onrender.com (si nadie lo ha abierto en 15 minutos,
+  la primera carga tarda cerca de un minuto). La documentación de la API está en `/docs`.
+- **Perfiles para probar:** cliente, cajero, supervisor, auditor de datos y administrador. Los
+  usuarios de prueba y sus contraseñas los damos por mensaje privado a quien vaya a evaluar; no van
+  en el repositorio.
+
+| Para revisar | Dónde está |
+|---|---|
+| Qué hicimos, gate por gate (B0 a B9) | [`fase-bi/README.md`](fase-bi/README.md) |
+| Código del aplicativo (FastAPI + HTML/CSS/JS) | [`fase-bi/aplicativo/`](fase-bi/aplicativo/README.md) |
+| Seguridad: quién puede qué y cómo lo impone la base | [`fase-bi/B5_servidor/matriz_permisos.md`](fase-bi/B5_servidor/matriz_permisos.md) |
+| Pruebas de los 5 perfiles contra el enlace publicado (110/110) | [`fase-bi/B5_servidor/salidas/salida_pruebas_perfiles_nube.txt`](fase-bi/B5_servidor/salidas/salida_pruebas_perfiles_nube.txt) |
+| Las cifras dan igual en SQL, Power BI y el aplicativo (69/69) | [`fase-bi/B4_tableros_app/`](fase-bi/B4_tableros_app/README.md) |
+| Revisión de pantallas en computador, tablet y celular (50/50) | [`fase-bi/B6_interfaces/README.md`](fase-bi/B6_interfaces/README.md) |
+| Evaluación con personas: 7 hallazgos corregidos | [`fase-bi/B8_evaluacion/README.md`](fase-bi/B8_evaluacion/README.md) |
+| Uso responsable de la IA: qué hizo la IA y qué decidimos nosotros | [`fase-bi/IA/registro_ia_bi.md`](fase-bi/IA/registro_ia_bi.md) |
+| Despliegue en la nube (Neon + Render) | [`fase-bi/despliegue/DESPLIEGUE.md`](fase-bi/despliegue/DESPLIEGUE.md) |
+| Modelo estrella y Power BI | [`fase-bi/B2_modelo_estrella/`](fase-bi/B2_modelo_estrella/README.md) y [`fase-bi/B3_powerbi/`](fase-bi/B3_powerbi/README.md) |
+
+Lo que sigue en este README es la base de datos que construimos antes, en los gates G0 a G8.
 
 ## Cómo organizamos el repositorio
 
